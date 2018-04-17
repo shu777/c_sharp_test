@@ -373,7 +373,7 @@ namespace ConsoleApplication_MyLibs
                     // client. Display it on the console.  
                     Console.WriteLine("Read {0} bytes from socket. \n Data : {1}",
                         content.Length, content);
-                    // Echo the data back to the client.  
+                    // 받은 메세지를 다시 client로 보낸다.
                     Send_Server(handler, content);
                 }
                 else
@@ -1348,8 +1348,117 @@ namespace ConsoleApplication_MyLibs
             return strings.ToArray();
         }
     }//end class
+    /// <summary>
+    /// 링크드 리스트의 예
+    /// </summary>
+    public class MyClass_linkedList
+    {
+      
+        public void test()
+        {
+            LinkedList<string> list = new LinkedList<string>();
+            list.AddLast("ZApple");
+            list.AddLast("CBanana");
+            list.AddLast("Lemon");
+
+            LinkedListNode<string> node = list.Find("Banana");
+            LinkedListNode<string> newNode = new LinkedListNode<string>("Grape");
+
+            // 새 Grape 노드를 Banana 노드 뒤에 추가
+            list.AddAfter(node, newNode);
+
+            // 리스트 출력
+            list.ToList().ForEach(p => Console.WriteLine(p));
+
+            // Enumerator를 이용한 리스트 출력
+            foreach (var m in list)
+            {
+                Console.WriteLine(m);
+            }
+        }
+
+    }
+    public class MyClass_coinChangeCount
+    {
+        public void Test()
+        {
+            int[] coins = { 1, 10, 50, 100 };
+
+            // CoinChangeCount c = new CoinChangeCount();
+            int ans = this.Count(coins, 4, 90);
+            Console.WriteLine("Count={0}", ans);
+
+            Dictionary<Tuple<int, int>, int> hash = new Dictionary<Tuple<int, int>, int>();
+            ans = this.DPCount(coins, 4, 90, hash);
+            Console.WriteLine("Count={0}", ans);
+        }
+
+        public int Count(int[] coins, int m, int n)
+        {
+            if (n == 0) return 1;
+            if (n < 0) return 0;
+            if (m <= 0) return 0;
+            Console.WriteLine("m:{0}, n:{1}", m, n);
+
+            return Count(coins, m - 1, n) + Count(coins, m, n - coins[m - 1]);
+        }
+
+        public int DPCount(int[] coins, int m, int n, Dictionary<Tuple<int, int>, int> hash)
+        {
+            if (n == 0) return 1;
+            if (n < 0) return 0;
+            if (m <= 0) return 0;
+
+            Tuple<int, int> pair = new Tuple<int, int>(m, n);
+            if (!hash.ContainsKey(pair))
+            {
+                int result = DPCount(coins, m - 1, n, hash) + DPCount(coins, m, n - coins[m - 1], hash);
+                hash.Add(pair, result);
+            }
+            return hash[pair];
+        }
 
 
+    }
+    /// <summary>
+    /// 2차원 배열을 사용한 sort
+    /// </summary>
+    public class MyClass_array_sort
+    {
+        // 2차원 배열 input 받아 sorting 후 2차원 배열로 output
+        public int[][]sortedArray(int [][]inData)
+        {
+            int ln = inData.GetLength(0); // 배열 크기
+            int ln2 = inData[0].GetLength(0); // 배열 크기
+
+            Comparer<int> comparer = Comparer<int>.Default;
+            Array.Sort<int[]>(inData, (x, y) => comparer.Compare(x[1], y[1])); // 오름차순 정렬
+            Array.Reverse(inData); // 내림차순 정렬로 변환
+
+            // 이중 for문으로 detail하게..
+            for(int i=0;i<inData.GetLength(0); i++)
+            {
+                for(int ii=0; ii< inData[0].GetLength(0); ii++)
+                {
+                    Console.WriteLine(">"+inData[i][ii]);
+                }
+                Console.WriteLine("###");
+            }
+            return inData;
+        }
+        public void test()
+        {
+            // could just as easily be string...
+            int[][] data = new int[][] {
+                new int[] {1,100},
+                new int[] {2,30},
+                new int[] {3,50},
+                new int[] {4,70}
+            };
+            int[][] outData = this.sortedArray(data);
+            int test = 0;
+        }
+    }
     public class MyTest
     {
         public MyTest()
@@ -1358,6 +1467,7 @@ namespace ConsoleApplication_MyLibs
         }
         ~MyTest() { }
 
+        // run tcp socket server thread
         static private void ThreaRun()
         {
 #if DEBUG
@@ -1367,7 +1477,13 @@ namespace ConsoleApplication_MyLibs
         }
         public void run_Test()
         {
+            MyClass_array_sort sortTest = new MyClass_array_sort();
+            sortTest.test();
 
+            MyClass_linkedList list = new MyClass_linkedList();
+            list.test();
+            MyClass_coinChangeCount cnt = new MyClass_coinChangeCount();
+            cnt.Test();
             // MyClass_Parse_Log parse = new MyClass_Parse_Log('#'); // delimitor
             // 문제 sample //
             // parse.MyClass_Parse_And_Report1("LOGFILE_A.TXT", "REPORT_1.TXT");            // 문제 2
@@ -1384,8 +1500,8 @@ namespace ConsoleApplication_MyLibs
             Console.WriteLine("Decrypted Text is " + de);
             // TCP 소켓 server/client sample //
             //MyClass_Networks.StartListeningAsync();
-            var t = new System.Threading.Thread(() => ThreaRun()); // thread에서 실행
-            t.Start();
+            var t = new System.Threading.Thread(() => ThreaRun()); // 서버는 별도 thread에서 실행
+            t.Start(); // 시작
 #if DEBUG
             Console.WriteLine("start StartClientSync");
 #endif
@@ -1395,8 +1511,9 @@ namespace ConsoleApplication_MyLibs
 #endif
             MyClass_Networks.StartAsyncClient();
 
-            // file scan sample //
+            // 폴더 스캔 샘픔 //
             MyClass_Files.TreeScan(".\\..");
+            // 지정한 확장자를 가진 파일을 폴더내에서 찾아 list로 update
             string[] resultt = MyClass_Files.scanFolderAndUpdate_Filelists(".", "cs");
             MyClass_Logger log = new MyClass_Logger("restLog.txt");
             log.WriteEntry("TTTTTTTTTTTTTTTTTTTTTTTTT");
@@ -1414,6 +1531,7 @@ namespace ConsoleApplication_MyLibs
 
             //CollectionAssert.AreEqual(data, ret);
             //Assert.IsTrue(buffer.Size == 0);
+            t.Join();
             int test = 2;
         }
         protected static byte[] GenerateRandomData(int length)
