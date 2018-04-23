@@ -652,6 +652,10 @@ namespace ConsoleApplication_MyLibs
 
         }
     }
+    /// <summary> 
+    /// 링버퍼
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class MyClass_CircularBuffer<T> : ICollection<T>, IEnumerable<T>, ICollection, IEnumerable
     {
         private int capacity;
@@ -1420,6 +1424,180 @@ namespace ConsoleApplication_MyLibs
 
 
     }
+    public class SimpleHashTable
+    {
+        private const int INITIAL_SIZE = 16;
+        private int size;
+        private Node[] buckets;
+
+        public SimpleHashTable()
+        {
+            this.size = INITIAL_SIZE;
+            this.buckets = new Node[size];
+        }
+
+        public SimpleHashTable(int capacity)
+        {
+            this.size = capacity;
+            this.buckets = new Node[size];
+        }
+
+        public void Put(object key, object value)
+        {
+            int index = HashFunction(key);
+            if (buckets[index] == null)
+            {
+                buckets[index] = new Node(key, value);
+            }
+            else
+            {
+                Node newNode = new Node(key, value);
+                newNode.Next = buckets[index];
+                buckets[index] = newNode;
+            }
+        }
+
+        public object Get(object key)
+        {
+            int index = HashFunction(key);
+
+            if (buckets[index] != null)
+            {
+                for (Node n = buckets[index]; n != null; n = n.Next)
+                {
+                    if (n.Key == key)
+                    {
+                        return n.Value;
+                    }
+                }
+            }
+            return null;
+        }
+
+        public bool Contains(object key)
+        {
+            int index = HashFunction(key);
+            if (buckets[index] != null)
+            {
+                for (Node n = buckets[index]; n != null; n = n.Next)
+                {
+                    if (n.Key == key)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        protected virtual int HashFunction(object key)
+        {
+            return Math.Abs(key.GetHashCode() + 1 +
+                (((key.GetHashCode() >> 5) + 1) % (size))) % size;
+        }
+
+        private class Node
+        {
+            public object Key { get; set; }
+            public object Value { get; set; }
+            public Node Next { get; set; }
+
+            public Node(object key, object value)
+            {
+                this.Key = key;
+                this.Value = value;
+                this.Next = null;
+            }
+        }
+    }
+    /// <summary>
+    /// 해시 테이블 사용
+    /// </summary>
+    public class MyClass_hashMap
+    {
+        struct Gameharacter
+        {
+            //Gameharacter(){ }
+            public Gameharacter(int CharCd, int Level, int Money)
+            {
+                _CharCd = CharCd;
+                _Level = Level;
+                _Money = Money;
+            }
+            public int _CharCd;
+            public int _Level;
+            public int _Money;
+        };
+
+        //create comparer
+        internal class PersonComparer : IComparer<Gameharacter>
+        {
+            public int Compare(Gameharacter x, Gameharacter y)
+            {
+                //first by age
+                int result = x._CharCd.CompareTo(y._CharCd);
+
+                //then name
+                if (result == 0)
+                    result = x._Level.CompareTo(y._Level);
+
+                //a third sort
+                if (result == 0)
+                    result = x._Money.CompareTo(y._Money);
+
+                return result;
+            }
+        }
+        public void test()
+        {
+            Hashtable ht = new Hashtable();
+            ht.Add("irina", "Irina SP");
+            ht.Add("tom", "Tom Cr");
+
+            if (ht.Contains("tom"))
+            {
+                Console.WriteLine(ht["tom"]);
+            }
+            ///////////////////////////////
+
+            Hashtable htt = new Hashtable(); // 해시 테이블 생성
+            Gameharacter Character1 = new Gameharacter(12, 7, 1000); // 구조체1
+            htt.Add(12, Character1); // 추가
+            Gameharacter Character2 = new Gameharacter(5, 200, 111000); // 구조체  2
+            htt.Add(15, Character2); // 추가
+            Gameharacter Character3 = new Gameharacter(200, 34, 3345000); // 구조체 3
+            htt.Add(200, Character3); // 추가
+
+            Console.WriteLine("before");
+            foreach (DictionaryEntry entry in htt) // 상태 출력
+            {
+                Gameharacter getStr = (Gameharacter)entry.Value;
+                Console.WriteLine(entry.Key + ":" + getStr._CharCd);
+            }
+            htt.Remove(200); // key 200 제거
+            Console.WriteLine("after");
+            foreach (DictionaryEntry entry in htt) // 상태 출력
+            {
+                Gameharacter getStr = (Gameharacter)entry.Value;
+                Console.WriteLine(entry.Key + ":" + getStr._CharCd);
+            }
+            // IDictionary<string, Gameharacter> d = htt; // your hash table
+            //var ordered = d.OrderBy(p => p.Key).ToList();
+            // foreach (var p in ordered)
+            // {
+            //    Console.WriteLine("Key: {0} Value: {1}", p.Key, p.Value);
+            //  }
+            SortedList sorter2 = new SortedList(htt);
+            foreach (DictionaryEntry entry in htt) // 상태 출력
+            {
+                Gameharacter getStr = (Gameharacter)entry.Value;
+                Console.WriteLine(entry.Key + ":" + getStr._CharCd + "|" + getStr._Level + ":"+getStr._Money);
+            }
+
+
+            int test = 0;
+        }
+    }
     /// <summary>
     /// 2차원 배열을 사용한 sort
     /// </summary>
@@ -1479,6 +1657,9 @@ namespace ConsoleApplication_MyLibs
         {
             MyClass_array_sort sortTest = new MyClass_array_sort();
             sortTest.test();
+
+            MyClass_hashMap hashTest = new MyClass_hashMap();
+            hashTest.test();
 
             MyClass_linkedList list = new MyClass_linkedList();
             list.test();
