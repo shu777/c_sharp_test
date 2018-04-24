@@ -599,7 +599,10 @@ namespace ConsoleApplication_MyLibs
 
         }
     }
-
+    /// <summary>
+    /// 
+    /// 최대 100 개의 thread를 생성하고, thread safe하게 파일에 결과 값을 쓰는 예제
+    /// </summary>
     class MyClass_Thread
     {
         private int max_thread;
@@ -942,6 +945,9 @@ namespace ConsoleApplication_MyLibs
 
         #endregion
     }
+    /// <summary>
+    /// 외부 프로그램을 argument와 함께 실행하여 결과 값을 string으로 return 한다.
+    /// </summary>
     class MyClass_Program
     {
         public MyClass_Program()
@@ -976,7 +982,7 @@ namespace ConsoleApplication_MyLibs
 
     /// <summary>
     /// 
-    /// 로그를 파싱 하는 test sample.
+    /// 로그를 파싱 하는 test sample. 파싱 구분자 # 으로 고정
     /// </summary>
     class MyClass_Parse_Log
     {
@@ -1528,7 +1534,7 @@ namespace ConsoleApplication_MyLibs
             public int _Level;
             public int _Money;
         };
-
+        /*
         //create comparer
         internal class PersonComparer : IComparer<Gameharacter>
         {
@@ -1548,6 +1554,7 @@ namespace ConsoleApplication_MyLibs
                 return result;
             }
         }
+        */
         public void test()
         {
             Hashtable ht = new Hashtable();
@@ -1599,7 +1606,58 @@ namespace ConsoleApplication_MyLibs
         }
     }
     /// <summary>
-    /// 2차원 배열을 사용한 sort
+    /// 
+    /// array를 list로 변환하여 핸들링
+    /// </summary>
+    public class MyClass_list_sort<T>// : ICollection<T>, IEnumerable<T>, ICollection, IEnumerable
+    {
+        class Product
+        {
+            public int ProductID { get; set; }
+            public string ProductName { get; set; }
+            public decimal UnitPrice { get; set; }
+
+        }
+        List<T> listHandle;
+        public MyClass_list_sort()
+        {
+            listHandle = new List<T>();
+        }
+        public void add(T items)
+        {
+            listHandle.Add(items);
+        }
+        public void sort(T p1, T p2)
+        {
+            
+        }
+        public void test()
+        {
+            List<Product> product = new List<Product>();
+            //product.Add();
+            var tmp = new Product();
+            tmp.ProductID = 001;
+            tmp.ProductName = "바둑이";
+            product.Add(tmp);
+            var tmp2 = new Product();
+            tmp2.ProductID = 010;
+            tmp2.ProductName = "다람쥐";
+            product.Add(tmp2);
+
+            //람다식 sort
+            product.Sort((p1, p2) => p1.ProductName.CompareTo(p2.ProductName));
+            //람다식 sort2
+            product.Sort((p1, p2) => p1.ProductID.CompareTo(p2.ProductID));
+
+            List<Product> _product = new List<Product>();
+            _product = product.OrderBy(order => order.ProductName).ToList(); // IEnumerable을 반환하니 list로 변환
+
+        }
+
+
+    }
+    /// <summary>
+    /// 2차원 배열을 사용한 sort 
     /// </summary>
     public class MyClass_array_sort
     {
@@ -1610,7 +1668,9 @@ namespace ConsoleApplication_MyLibs
             int ln2 = inData[0].GetLength(0); // 배열 크기
 
             Comparer<int> comparer = Comparer<int>.Default;
-            Array.Sort<int[]>(inData, (x, y) => comparer.Compare(x[1], y[1])); // 오름차순 정렬
+            // 람다식을 이용한 IComparer 구현
+            Array.Sort<int[]>(inData, (x, y) => comparer.Compare(x[1], y[1])); // 1번째 배열로 오름차순 정렬
+            //Array.Sort<int[]>(inData, (x, y) => comparer.Compare(x[0], y[0])); // 0번째 배열로 오름차순 정렬
             Array.Reverse(inData); // 내림차순 정렬로 변환
 
             // 이중 for문으로 detail하게..
@@ -1618,19 +1678,20 @@ namespace ConsoleApplication_MyLibs
             {
                 for(int ii=0; ii< inData[0].GetLength(0); ii++)
                 {
-                    Console.WriteLine(">"+inData[i][ii]);
+                    Console.WriteLine(">" + inData[i][ii]);
                 }
                 Console.WriteLine("###");
             }
             return inData;
         }
+        
         public void test()
         {
             // could just as easily be string...
             int[][] data = new int[][] {
-                new int[] {1,100},
+                new int[] {10,100},
                 new int[] {2,30},
-                new int[] {3,50},
+                new int[] {3,500},
                 new int[] {4,70}
             };
             int[][] outData = this.sortedArray(data);
@@ -1655,10 +1716,13 @@ namespace ConsoleApplication_MyLibs
         }
         public void run_Test()
         {
+
+            MyClass_list_sort<int> lSortTest = new MyClass_list_sort<int>();
+            lSortTest.test();
             MyClass_array_sort sortTest = new MyClass_array_sort();
             sortTest.test();
 
-            MyClass_hashMap hashTest = new MyClass_hashMap();
+            MyClass_hashMap hashTest = new MyClass_hashMap();  // TODO...
             hashTest.test();
 
             MyClass_linkedList list = new MyClass_linkedList();
@@ -1701,6 +1765,7 @@ namespace ConsoleApplication_MyLibs
 
             rnd = new Random(); // random 초기화..
             var data = GenerateRandomData(10); // 100개의 random 데이터 생성
+            // MyClass_CircularBuffer<타입>(갯수)
             var buffer = new MyClass_CircularBuffer<byte>(100); // 링버퍼 생성
             buffer.Put(data); // 10 byte push
             data = GenerateRandomData(10);
