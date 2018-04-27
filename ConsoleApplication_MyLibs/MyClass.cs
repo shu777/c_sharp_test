@@ -431,6 +431,8 @@ namespace ConsoleApplication_MyLibs
             this.filePath = filePath;
 
         }
+        public string customNewLine = string.Empty;
+
         private static System.Threading.ReaderWriterLockSlim _readWriteLock = new System.Threading.ReaderWriterLockSlim();
         // thread safe한 file write.
         public void WriteToFile(string text)
@@ -438,7 +440,9 @@ namespace ConsoleApplication_MyLibs
             _readWriteLock.EnterWriteLock();
             using (System.IO.StreamWriter sw = new System.IO.StreamWriter(this.filePath, true))
             {
-                sw.NewLine = "\n"; // 기본은 \r\n 이다. // user defined newline symbol.
+                if (!customNewLine.Equals(string.Empty))
+                    sw.NewLine = customNewLine;
+                //sw.NewLine = "\n"; // 기본은 \r\n 이다. // user defined newline symbol.
                 sw.WriteLine(text);
                 sw.Close();
             }
@@ -474,9 +478,15 @@ namespace ConsoleApplication_MyLibs
             System.Console.WriteLine("readAllText : {0} ", text);
             return text;
         }
+        /// <summary>
+        ///  파일 내 모든 string lines 읽어온다.
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns>string array</returns>
         public string[] readLines(string filePath)
         {
             string[] lines = System.IO.File.ReadAllLines(filePath);
+            //lines[0].
             return lines;
         }
 
@@ -1170,6 +1180,11 @@ namespace ConsoleApplication_MyLibs
                 // Letter.
                 char letter = buffer[i];
                 isLowLetter = char.IsLower(letter);
+                if(!char.IsLetter(letter)) // encrypt only letter 
+                {
+                    buffer[i] = letter;
+                    continue;
+                }
                 // Add shift to all.
                 letter = (char)(letter + shift);
                 // Subtract 26 on overflow.
@@ -1356,6 +1371,41 @@ namespace ConsoleApplication_MyLibs
 #endif
                 TreeScan(d); // recursive call to get files of directory
             }
+        }
+        /// <summary> 
+        /// 서브 폴더에서 입력한 이름의 file의 전체경로 제공
+        /// 조건 : 해당 폴더들 내에서 file 이른은 단일 존재한다.
+        /// </summary>
+        /// <param name="targetPath"></param>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
+        public static string findFileFromSubFolder(string targetPath, string fileName)
+        {
+            string res = string.Empty;
+            string scanedFileName = string.Empty;
+            foreach (string f in System.IO.Directory.GetFiles(targetPath))
+            {
+#if DEBUG
+                Console.WriteLine("File: " + f); // or some other file processing
+                                                 // 파일 name 출력
+#endif
+                scanedFileName = System.IO.Path.GetFileName(f); 
+                if(scanedFileName.Equals(fileName))
+                {
+                    return f;
+                }
+            }
+
+            foreach (string d in System.IO.Directory.GetDirectories(targetPath))
+            {
+#if DEBUG
+                Console.WriteLine("dir: " + d); // 디렉토리 name 출력
+#endif
+                string resSub = findFileFromSubFolder(d, fileName); // recursive call to get files of directory
+                if (!resSub.Equals(string.Empty))
+                    return resSub;
+            }
+            return res;
         }
         /// <summary>
         /// 지정된 폴더 내의 지정된 형식(filePrefix_x.x.x) 지정한 확장자의 파일 들을 스캔
@@ -1766,14 +1816,29 @@ namespace ConsoleApplication_MyLibs
         private static Random rnd;
         public void run_Test()
         {
+            string fullPath = MyClass_Files.findFileFromSubFolder(".", "test.txt");
             MyClass_Files_Writer fileWriter = new MyClass_Files_Writer("fileWrite.TXT");
+            //fileWriter.customNewLine = "\n";
             fileWriter.WriteToFile("asdfasdfasdfasdf");
             fileWriter.WriteToFile("asdfasdfasdfasdf");
             fileWriter.WriteToFile("asdfasdfasdfasdf");
 
-            string str_test = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            
+            MyClass_Files_Reader reader = new MyClass_Files_Reader("fileWrite.TXT");
+            string[] readStr = reader.readLines("fileWrite.TXT");
+            string res = reader.readAllText("fileWrite.TXT");
+            if (res.Contains("\r\n"))
+            {
+                Console.WriteLine(" new line with carriage return.");
+            }
+            else if (res.Contains("\n"))
+            {
+                Console.WriteLine(" new line");
+            }
+
+            string str_test = "3#ABCDEFGHIJKLMNOPQRSTUVWXYZ";            
             string str_Enc = MyClass_Security.CaesarCipherEncrypt(str_test, 20);
-            string str_test2 = "abcdefghijklmnopqrstuvwxyz";
+            string str_test2 = "21#abcdefghijklmnopqrstuvwxyz";
             string str_Enc2 = MyClass_Security.CaesarCipherEncrypt(str_test2, 20);
             MyClass_list_sort<int> lSortTest = new MyClass_list_sort<int>();
             lSortTest.test();
