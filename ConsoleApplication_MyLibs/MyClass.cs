@@ -367,7 +367,7 @@ namespace ConsoleApplication_MyLibs
                 // Check for end-of-file tag. If it is not there, read   
                 // more data.  
                 content = state.sb.ToString();
-                if (content.IndexOf("<EOF>") > -1)
+                if (content.IndexOf("<EOF>") > -1) // stream end DETECT ***
                 {
                     // All the data has been read from the   
                     // client. Display it on the console.  
@@ -438,6 +438,7 @@ namespace ConsoleApplication_MyLibs
             _readWriteLock.EnterWriteLock();
             using (System.IO.StreamWriter sw = new System.IO.StreamWriter(this.filePath, true))
             {
+                sw.NewLine = "\n"; // 기본은 \r\n 이다. // user defined newline symbol.
                 sw.WriteLine(text);
                 sw.Close();
             }
@@ -1765,6 +1766,10 @@ namespace ConsoleApplication_MyLibs
         private static Random rnd;
         public void run_Test()
         {
+            MyClass_Files_Writer fileWriter = new MyClass_Files_Writer("fileWrite.TXT");
+            fileWriter.WriteToFile("asdfasdfasdfasdf");
+            fileWriter.WriteToFile("asdfasdfasdfasdf");
+            fileWriter.WriteToFile("asdfasdfasdfasdf");
 
             string str_test = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
             string str_Enc = MyClass_Security.CaesarCipherEncrypt(str_test, 20);
