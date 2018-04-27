@@ -1159,6 +1159,47 @@ namespace ConsoleApplication_MyLibs
         {
 
         }
+        public static string CaesarCipherEncrypt(string value, int shift)
+        {
+            bool isLowLetter = false;
+
+            char[] buffer = value.ToCharArray();
+            for (int i = 0; i < buffer.Length; i++)
+            {
+                // Letter.
+                char letter = buffer[i];
+                isLowLetter = char.IsLower(letter);
+                // Add shift to all.
+                letter = (char)(letter + shift);
+                // Subtract 26 on overflow.
+                // Add 26 on underflow.
+                if (isLowLetter)
+                {
+                    if (letter > 'z')
+                    {
+                        letter = (char)(letter - 26);
+                    }
+                    else if (letter < 'a')
+                    {
+                        letter = (char)(letter + 26);
+                    }
+                }
+                else
+                {
+                    if (letter > 'Z')
+                    {
+                        letter = (char)(letter - 26);
+                    }
+                    else if (letter < 'A')
+                    {
+                        letter = (char)(letter + 26);
+                    }
+                }
+                // Store.
+                buffer[i] = letter;
+            }
+            return new string(buffer);
+        }
         public static string Decrypt(string textToDecrypt, string key)
         {
             RijndaelManaged rijndaelCipher = new RijndaelManaged();
@@ -1714,9 +1755,21 @@ namespace ConsoleApplication_MyLibs
 #endif
             MyClass_Networks.StartListeningAsync();
         }
+
+        protected static byte[] GenerateRandomData(int length)
+        {
+            var data = new byte[length];
+            rnd.NextBytes(data);
+            return data;
+        }
+        private static Random rnd;
         public void run_Test()
         {
 
+            string str_test = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            string str_Enc = MyClass_Security.CaesarCipherEncrypt(str_test, 20);
+            string str_test2 = "abcdefghijklmnopqrstuvwxyz";
+            string str_Enc2 = MyClass_Security.CaesarCipherEncrypt(str_test2, 20);
             MyClass_list_sort<int> lSortTest = new MyClass_list_sort<int>();
             lSortTest.test();
             MyClass_array_sort sortTest = new MyClass_array_sort();
@@ -1780,13 +1833,6 @@ namespace ConsoleApplication_MyLibs
             t.Join();
             int test = 2;
         }
-        protected static byte[] GenerateRandomData(int length)
-        {
-            var data = new byte[length];
-            rnd.NextBytes(data);
-            return data;
-        }
-        private static Random rnd;
 
     }// end class
 }// end namespace
