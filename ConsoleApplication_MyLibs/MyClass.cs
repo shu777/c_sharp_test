@@ -55,19 +55,65 @@ namespace ConsoleApplication_MyLibs
             try
             {
                 // Establish the remote endpoint for the socket.  
-                // This example uses port 11000 on the local computer.
-                /*
-				IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName());
-				IPAddress ipAddress = ipHostInfo.AddressList[0];
-				  */
+                // This example uses port 2012 on the local computer.
                 IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName());
                 //IPAddress ipAddress = ipHostInfo.AddressList[0];  // ipv6
                 IPAddress ipAddress = ipHostInfo.AddressList[1]; // ipv4
-                IPEndPoint remoteEP = new IPEndPoint(ipAddress, 2012);
-
+                IPEndPoint remoteEP = new IPEndPoint(ipAddress, port);
                 // Create a TCP/IP  socket.  
                 Socket sender = new Socket(ipAddress.AddressFamily,
                     SocketType.Stream, ProtocolType.Tcp);
+                // Connect the socket to the remote endpoint. Catch any errors.  
+                try
+                {
+                    sender.Connect(remoteEP);
+                    Console.WriteLine("Socket connected to {0}", sender.RemoteEndPoint.ToString());
+                    // Encode the data string into a byte array.  
+                    byte[] msg = Encoding.ASCII.GetBytes("This is a test<EOF>");
+                    // Send the data through the socket.  
+                    int bytesSent = sender.Send(msg);
+                    // Receive the response from the remote device.  
+                    int bytesRec = sender.Receive(bytes);
+                    Console.WriteLine("Echoed test = {0}", Encoding.ASCII.GetString(bytes, 0, bytesRec));
+                    // Release the socket.  
+                    sender.Shutdown(SocketShutdown.Both);
+                    sender.Close();
+                }
+                catch (ArgumentNullException ane)
+                {
+                    Console.WriteLine("ArgumentNullException : {0}", ane.ToString());
+                }
+                catch (SocketException se)
+                {
+                    Console.WriteLine("SocketException : {0}", se.ToString());
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Unexpected exception : {0}", e.ToString());
+                }
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+        }
+        public static string StartClientSync(string data)
+        {
+            // Data buffer for incoming data.  
+            byte[] bytes = new byte[1024];
+            string res = string.Empty;
+            // Connect to a remote device.  
+            try
+            {
+                // Establish the remote endpoint for the socket.  
+                // This example uses port 2012 on the local computer.
+                IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName());
+                IPAddress ipAddress = ipHostInfo.AddressList[1]; // ipv4
+                IPEndPoint remoteEP = new IPEndPoint(ipAddress, port);
+
+                // Create a TCP/IP  socket.  
+                Socket sender = new Socket(ipAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
 
                 // Connect the socket to the remote endpoint. Catch any errors.  
                 try
@@ -77,7 +123,7 @@ namespace ConsoleApplication_MyLibs
                     Console.WriteLine("Socket connected to {0}", sender.RemoteEndPoint.ToString());
 
                     // Encode the data string into a byte array.  
-                    byte[] msg = Encoding.ASCII.GetBytes("This is a test<EOF>");
+                    byte[] msg = Encoding.ASCII.GetBytes(data);
 
                     // Send the data through the socket.  
                     int bytesSent = sender.Send(msg);
@@ -85,7 +131,7 @@ namespace ConsoleApplication_MyLibs
                     // Receive the response from the remote device.  
                     int bytesRec = sender.Receive(bytes);
                     Console.WriteLine("Echoed test = {0}", Encoding.ASCII.GetString(bytes, 0, bytesRec));
-
+                    res = Encoding.ASCII.GetString(bytes, 0, bytesRec);
                     // Release the socket.  
                     sender.Shutdown(SocketShutdown.Both);
                     sender.Close();
@@ -109,10 +155,77 @@ namespace ConsoleApplication_MyLibs
             {
                 Console.WriteLine(e.ToString());
             }
+            return res;
         }
+        public static string StartClientSync(string data, bool recvReply)
+        {
+            // Data buffer for incoming data.  
+            byte[] bytes = new byte[1024];
+            string res = string.Empty;
+            // Connect to a remote device.  
+            try
+            {
+                // Establish the remote endpoint for the socket.  
+                // This example uses port 2012 on the local computer.
+                IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName());
+                //IPAddress ipAddress = ipHostInfo.AddressList[0];  // ipv6
+                IPAddress ipAddress = ipHostInfo.AddressList[1]; // ipv4
+                IPEndPoint remoteEP = new IPEndPoint(ipAddress, port);
 
+                // Create a TCP/IP  socket.  
+                Socket sender = new Socket(ipAddress.AddressFamily,
+                    SocketType.Stream, ProtocolType.Tcp);
 
+                // Connect the socket to the remote endpoint. Catch any errors.  
+                try
+                {
+                    sender.Connect(remoteEP);
 
+                    Console.WriteLine("[Client] Socket connected to {0}", sender.RemoteEndPoint.ToString());
+                    Console.WriteLine("[Client] Send data [{0}] to server", data);
+                    // Encode the data string into a byte array.  
+                    byte[] msg = Encoding.ASCII.GetBytes(data);
+
+                    // Send the data through the socket.  
+                    int bytesSent = sender.Send(msg);
+
+                    if (recvReply == true)
+                    {
+                        // Receive the response from the remote device.
+                        Console.WriteLine("[Client] wait reply...");
+                        int bytesRec = sender.Receive(bytes);
+                        Console.WriteLine("[Client] Echoed data : {0}", Encoding.ASCII.GetString(bytes, 0, bytesRec));
+                        res = Encoding.ASCII.GetString(bytes, 0, bytesRec);
+                    }
+                    // Release the socket.  
+                    sender.Shutdown(SocketShutdown.Both);
+                    sender.Close();
+
+                }
+                catch (ArgumentNullException ane)
+                {
+                    Console.WriteLine("[Client] ArgumentNullException : {0}", ane.ToString());
+                }
+                catch (SocketException se)
+                {
+                    Console.WriteLine("[Client] SocketException : {0}", se.ToString());
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("[Client] Unexpected exception : {0}", e.ToString());
+                }
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("[Client] {0}", e.ToString());
+            }
+            return res;
+        }
+        
+        /// <summary>
+        /// recv packet 부분이 분리되서 처리
+        /// </summary>
         public static void StartAsyncClient()
         {
             // Connect to a remote device.  
@@ -162,6 +275,111 @@ namespace ConsoleApplication_MyLibs
             {
                 Console.WriteLine(e.ToString());
             }
+        }
+        public static void StartAsyncClient(string data)
+        {
+            // Connect to a remote device.  
+            try
+            {
+                // Establish the remote endpoint for the socket.  
+                // The name of the   
+                /*
+				// remote device is "host.contoso.com".  
+				IPHostEntry ipHostInfo = Dns.GetHostEntry("localhost");// ("host.contoso.com");
+				IPAddress ipAddress = ipHostInfo.AddressList[0];
+				*/
+                //현재 PC의 IP로 대체 
+
+                IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName());
+                //IPAddress ipAddress = ipHostInfo.AddressList[0];  // ipv6
+                IPAddress ipAddress = ipHostInfo.AddressList[1]; // ipv4
+
+                IPEndPoint remoteEP = new IPEndPoint(ipAddress, port);
+
+                // Create a TCP/IP socket.  
+                Socket client = new Socket(ipAddress.AddressFamily,
+                    SocketType.Stream, ProtocolType.Tcp);
+
+                // Connect to the remote endpoint.  
+                client.BeginConnect(remoteEP,
+                    new AsyncCallback(ConnectCallback_client_async), client);
+                connectDone_client_async.WaitOne();
+
+                // Send test data to the remote device.  
+                Send_client_async(client, data);
+                sendDone_client_async.WaitOne();
+
+                // Receive the response from the remote device.  
+                Receive_client_async(client);
+                receiveDone_client_async.WaitOne();
+
+                // Write the response to the console.  
+                Console.WriteLine("Response received : {0}", response);
+
+                // Release the socket.  
+                client.Shutdown(SocketShutdown.Both);
+                client.Close();
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+        }
+        public static string StartAsyncClient(string data, bool recvReply)
+        {
+            string result = string.Empty;
+            // Connect to a remote device.  
+            try
+            {
+                // Establish the remote endpoint for the socket.  
+                // The name of the   
+                /*
+				// remote device is "host.contoso.com".  
+				IPHostEntry ipHostInfo = Dns.GetHostEntry("localhost");// ("host.contoso.com");
+				IPAddress ipAddress = ipHostInfo.AddressList[0];
+				*/
+                //현재 PC의 IP로 대체 
+
+                IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName());
+                //IPAddress ipAddress = ipHostInfo.AddressList[0];  // ipv6
+                IPAddress ipAddress = ipHostInfo.AddressList[1]; // ipv4
+
+                IPEndPoint remoteEP = new IPEndPoint(ipAddress, port);
+
+                // Create a TCP/IP socket.  
+                Socket client = new Socket(ipAddress.AddressFamily,
+                    SocketType.Stream, ProtocolType.Tcp);
+
+                // Connect to the remote endpoint.  
+                client.BeginConnect(remoteEP,
+                    new AsyncCallback(ConnectCallback_client_async), client);
+                connectDone_client_async.WaitOne();
+
+                // Send test data to the remote device.  
+                Send_client_async(client, data);
+                sendDone_client_async.WaitOne();
+
+                if (recvReply == true)
+                {
+                    // Receive the response from the remote device.  
+                    Receive_client_async(client);
+                    receiveDone_client_async.WaitOne();
+
+                    // Write the response to the console.  
+                    Console.WriteLine("Response received : {0}", response); // 별도 recv thread
+                    result = response;
+                }
+                // Release the socket.  
+                client.Shutdown(SocketShutdown.Both);
+                client.Close();
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+            return result;
         }
 
         private static void ConnectCallback_client_async(IAsyncResult ar)
@@ -277,11 +495,10 @@ namespace ConsoleApplication_MyLibs
         // Thread signal.  
         public static ManualResetEvent allDone_server = new ManualResetEvent(false);
 
-        public static void StartListeningAsync()
+        public static void StartServerListeningAsync()
         {
             // Data buffer for incoming data.  
             byte[] bytes = new Byte[1024];
-
             // Establish the local endpoint for the socket.  
             // The DNS name of the computer  
             // running the listener is "host.contoso.com".  
@@ -307,7 +524,7 @@ namespace ConsoleApplication_MyLibs
 
                     // Start an asynchronous socket to listen for connections.  
 #if DEBUG
-                    Console.WriteLine("Waiting for a connection...");
+                    Console.WriteLine("[Server] Waiting for a connection...");
 #endif
                     listener.BeginAccept(
                         new AsyncCallback(AcceptCallback_server),
@@ -324,7 +541,7 @@ namespace ConsoleApplication_MyLibs
             }
 #if DEBUG
             //Console.WriteLine("\nPress ENTER to continue...");
-            Console.WriteLine("\nEnd server...");
+            Console.WriteLine("[Server]  \nEnd server...");
 #endif
             //			Console.Read();  
 
@@ -346,7 +563,11 @@ namespace ConsoleApplication_MyLibs
                 new AsyncCallback(ReadCallback_server), state);
         }
 
-        public static void ReadCallback_server(IAsyncResult ar)
+        /// <summary>
+        /// 클라이언트로 부터 recv 처리 callback
+        /// </summary>
+        /// <param name="ar"></param>
+        public static void ReadCallback_server(IAsyncResult ar) // reveive file 
         {
             String content = String.Empty;
 
@@ -368,11 +589,16 @@ namespace ConsoleApplication_MyLibs
                 // more data.  
                 content = state.sb.ToString();
                 if (content.IndexOf("<EOF>") > -1) // stream end DETECT ***
+                //if(content.IndexOf("\r\n") > -1 || content.IndexOf("\n") > -1  || content.IndexOf("\r") > -1)
                 {
                     // All the data has been read from the   
                     // client. Display it on the console.  
-                    Console.WriteLine("Read {0} bytes from socket. \n Data : {1}",
+                    Console.WriteLine("[Server] Read {0} bytes from socket. \n Data : {1}",
                         content.Length, content);
+                    if(content.Contains("test"))
+                    {
+                        Console.WriteLine("[Server] test command received! ");
+                    }
                     // 받은 메세지를 다시 client로 보낸다.
                     Send_Server(handler, content);
                 }
@@ -389,7 +615,9 @@ namespace ConsoleApplication_MyLibs
         {
             // Convert the string data to byte data using ASCII encoding.  
             byte[] byteData = Encoding.ASCII.GetBytes(data);
-
+#if DEBUG
+            Console.WriteLine("[Server] send data:[{0}] to client", data);
+#endif
             // Begin sending the data to the remote device.  
             handler.BeginSend(byteData, 0, byteData.Length, 0,
                 new AsyncCallback(SendCallback_Server), handler);
@@ -404,15 +632,16 @@ namespace ConsoleApplication_MyLibs
 
                 // Complete sending the data to the remote device.  
                 int bytesSent = handler.EndSend(ar);
+#if DEBUG
                 Console.WriteLine("Sent {0} bytes to client.", bytesSent);
-
+#endif
                 handler.Shutdown(SocketShutdown.Both);
                 handler.Close();
 
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
+                Console.WriteLine("[Server] {0}", e.ToString());
             }
         }
     }
@@ -422,17 +651,42 @@ namespace ConsoleApplication_MyLibs
     class MyClass_Files_Writer
     {
         private string filePath;
+        private bool appendWriteOpen = true;
 
-        //System.IO.StreamReader file = null;
         public MyClass_Files_Writer(string filePath)
         {
             string current_path = System.IO.Directory.GetCurrentDirectory();
-            //file = new System.IO.StreamReader(filePath);
-            this.filePath = filePath;
+            if(System.IO.File.Exists(filePath))
+            {
+                if(appendWriteOpen)
+                {
 
+                }
+                else
+                {
+                    System.IO.File.Delete(filePath);
+                }
+            }
+            this.filePath = filePath;
+        }
+        public MyClass_Files_Writer(string filePath, bool appendWriteOpen)
+        {
+            string current_path = System.IO.Directory.GetCurrentDirectory();
+            if (System.IO.File.Exists(filePath))
+            {
+                if (appendWriteOpen)
+                {
+
+                }
+                else
+                {
+                    System.IO.File.Delete(filePath);
+                }
+            }
+            this.filePath = filePath;
         }
         public string customNewLine = string.Empty;
-
+ 
         private static System.Threading.ReaderWriterLockSlim _readWriteLock = new System.Threading.ReaderWriterLockSlim();
         // thread safe한 file write.
         public void WriteToFile(string text)
@@ -460,11 +714,33 @@ namespace ConsoleApplication_MyLibs
     class MyClass_Files_Reader
     {
         System.IO.StreamReader file = null;
+        private string mFilePath = string.Empty;
         public MyClass_Files_Reader(string filePath)
         {
             string current_path = System.IO.Directory.GetCurrentDirectory();
             file = new System.IO.StreamReader(filePath);
+            mFilePath = filePath;
 
+        }
+        /// <summary>
+        /// 파일 전체를 읽어서 new line 타입을 최초에 detect 되는 타입으로 판단/return 한다. // 2종류가 혼재되어 있지 않은 것을 전제한다.
+        /// </summary>
+        /// <returns></returns>
+        public string getNewLine()
+        {
+            //string[] readStr = this.readLines(mFilePath);
+            string res = this.readAllText(mFilePath);
+            if (res.Contains("\r\n"))
+            {
+                Console.WriteLine(" new line with carriage return.");
+                return "\r\n"; // 캐리지 리턴이 포함됨.
+            }
+            else if (res.Contains("\n"))
+            {
+                Console.WriteLine(" new line");
+                return "\n";
+            }
+            return string.Empty;
         }
         public string readLine()
         {
@@ -1443,7 +1719,7 @@ namespace ConsoleApplication_MyLibs
             if (strings.Count <= 0)
             {
 #if DEBUG
-                Console.WriteLine("error. no file sound in dir. ");
+                Console.WriteLine("[scanFolder] error. no file in dir. ");
 #endif
                 return strings.ToArray();
             }
@@ -1467,7 +1743,8 @@ namespace ConsoleApplication_MyLibs
             LinkedListNode<string> newNode = new LinkedListNode<string>("Grape");
 
             // 새 Grape 노드를 Banana 노드 뒤에 추가
-            list.AddAfter(node, newNode);
+            if(node != null)
+                list.AddAfter(node, newNode);
 
             // 리스트 출력
             list.ToList().ForEach(p => Console.WriteLine(p));
@@ -1731,19 +2008,41 @@ namespace ConsoleApplication_MyLibs
             tmp.ProductID = 001;
             tmp.ProductName = "바둑이";
             product.Add(tmp);
+            var tmp1 = new Product();
+            tmp1.ProductID = 001;
+            tmp1.ProductName = "바둑이2";
+            product.Add(tmp1);
             var tmp2 = new Product();
             tmp2.ProductID = 010;
             tmp2.ProductName = "다람쥐";
             product.Add(tmp2);
+            var tmp22 = new Product();
+            tmp22.ProductID = 010;
+            tmp22.ProductName = "다람쥐2";
+            product.Add(tmp22);
 
             //람다식 sort
             product.Sort((p1, p2) => p1.ProductName.CompareTo(p2.ProductName));
             //람다식 sort2
             product.Sort((p1, p2) => p1.ProductID.CompareTo(p2.ProductID));
-
+            // 또 다른 방식의 sort // 지정한 structure member를 기준으로 sorting
             List<Product> _product = new List<Product>();
             _product = product.OrderBy(order => order.ProductName).ToList(); // IEnumerable을 반환하니 list로 변환
 
+            // list내 중복 제거 // 전체가 완전히 같은 경우만 제거
+            List<Product> _product1 = new List<Product>();
+            _product1 = product.Distinct().ToList();
+
+            // list내 중복 제거 with ramda // 지정한 structure member를 기준으로 중복확인/제거
+            List<Product> _product2 = new List<Product>();
+            _product2 = product.GroupBy(c => c.ProductID).Select(grp => grp.First()).ToList();
+
+            // list 내 검색 방법
+            Product result = _product.Find(x => x.ProductID == 001);
+
+            // list 내 검색 + 제거 
+            _product.RemoveAll(x => x.ProductID == 001);
+            int test_break = 0;
         }
 
 
@@ -1799,12 +2098,12 @@ namespace ConsoleApplication_MyLibs
         ~MyTest() { }
 
         // run tcp socket server thread
-        static private void ThreaRun()
+        static private void serverThreaRun()
         {
 #if DEBUG
             Console.WriteLine("start listening");
 #endif
-            MyClass_Networks.StartListeningAsync();
+            MyClass_Networks.StartServerListeningAsync();
         }
 
         protected static byte[] GenerateRandomData(int length)
@@ -1816,30 +2115,23 @@ namespace ConsoleApplication_MyLibs
         private static Random rnd;
         public void run_Test()
         {
-            string fullPath = MyClass_Files.findFileFromSubFolder(".", "test.txt");
-            MyClass_Files_Writer fileWriter = new MyClass_Files_Writer("fileWrite.TXT");
-            //fileWriter.customNewLine = "\n";
-            fileWriter.WriteToFile("asdfasdfasdfasdf");
-            fileWriter.WriteToFile("asdfasdfasdfasdf");
-            fileWriter.WriteToFile("asdfasdfasdfasdf");
 
-            
+            string fullPath = MyClass_Files.findFileFromSubFolder(".", "test.txt"); // recursive하게 sub folder에서 유일한 file 찾기.
+
+            MyClass_Files_Writer fileWriter = new MyClass_Files_Writer("fileWrite.TXT", false);
+            fileWriter.customNewLine = "\r\n";
+            fileWriter.WriteToFile("asdfasdfasdfasdf");
+            fileWriter.WriteToFile("asdfasdfasdfasdf");
+            fileWriter.WriteToFile("asdfasdfasdfasdf");            
             MyClass_Files_Reader reader = new MyClass_Files_Reader("fileWrite.TXT");
-            string[] readStr = reader.readLines("fileWrite.TXT");
-            string res = reader.readAllText("fileWrite.TXT");
-            if (res.Contains("\r\n"))
-            {
-                Console.WriteLine(" new line with carriage return.");
-            }
-            else if (res.Contains("\n"))
-            {
-                Console.WriteLine(" new line");
-            }
-
+            string getNewLineChar = reader.getNewLine(); // newLine 형식 읽어와서 file writer의 customNewLine에도 맞춰주면 된다.
+           
             string str_test = "3#ABCDEFGHIJKLMNOPQRSTUVWXYZ";            
             string str_Enc = MyClass_Security.CaesarCipherEncrypt(str_test, 20);
             string str_test2 = "21#abcdefghijklmnopqrstuvwxyz";
             string str_Enc2 = MyClass_Security.CaesarCipherEncrypt(str_test2, 20);
+
+
             MyClass_list_sort<int> lSortTest = new MyClass_list_sort<int>();
             lSortTest.test();
             MyClass_array_sort sortTest = new MyClass_array_sort();
@@ -1858,6 +2150,8 @@ namespace ConsoleApplication_MyLibs
             //parse.MyClass_Parse_And_Report2("LOGFILE_B.TXT", "REPORT_2.TXT");
             //parse.MyClass_Parse_And_Report3("LOGFILE_B.TXT", "REPORT_3.TXT");
             //parse.MyClass_Parse_And_Report4("LOGFILE_B.TXT", "REPORT_4.TXT");
+
+
             // 암호/복호화 sample //
             String originalText = "plain text";
             String key = "key";
@@ -1866,26 +2160,37 @@ namespace ConsoleApplication_MyLibs
             Console.WriteLine("Original Text is " + originalText);
             Console.WriteLine("Encrypted Text is " + en);
             Console.WriteLine("Decrypted Text is " + de);
+
+
             // TCP 소켓 server/client sample //
             //MyClass_Networks.StartListeningAsync();
-            var t = new System.Threading.Thread(() => ThreaRun()); // 서버는 별도 thread에서 실행
-            t.Start(); // 시작
+           // bool threadStop = false;
+            var server_t = new System.Threading.Thread(() => serverThreaRun()); // 서버는 별도 thread에서 실행
+            server_t.Start(); // 시작
 #if DEBUG
             Console.WriteLine("start StartClientSync");
 #endif
-            MyClass_Networks.StartClientSync();
+            //string testSend = MyClass_Networks.StartClientSync("1111111");
+            string testSend2 = MyClass_Networks.StartClientSync("111111 ", false);
+            testSend2 = MyClass_Networks.StartClientSync("test <EOF>", true);
 #if DEBUG
-            Console.WriteLine("start StartAsyncClient");
+            // Console.WriteLine("start StartAsyncClient");
 #endif
-            MyClass_Networks.StartAsyncClient();
+            //MyClass_Networks.StartAsyncClient("test <EOF>");
+            //MyClass_Networks.StartAsyncClient("<EOF>");
+            server_t.Abort(); // kill server thread.
+            server_t.Join();
 
-            // 폴더 스캔 샘픔 //
+
+            // 폴더 스캔 샘플 //
             MyClass_Files.TreeScan(".\\..");
             // 지정한 확장자를 가진 파일을 폴더내에서 찾아 list로 update
             string[] resultt = MyClass_Files.scanFolderAndUpdate_Filelists(".", "cs");
+
             MyClass_Logger log = new MyClass_Logger("restLog.txt");
             log.WriteEntry("TTTTTTTTTTTTTTTTTTTTTTTTT");
 
+            // 링버퍼 샘플 //
             rnd = new Random(); // random 초기화..
             var data = GenerateRandomData(10); // 100개의 random 데이터 생성
             // MyClass_CircularBuffer<타입>(갯수)
@@ -1900,7 +2205,7 @@ namespace ConsoleApplication_MyLibs
 
             //CollectionAssert.AreEqual(data, ret);
             //Assert.IsTrue(buffer.Size == 0);
-            t.Join();
+
             int test = 2;
         }
 
