@@ -11,6 +11,7 @@ using System.Collections;
 using System.Diagnostics;
 using System.Text.RegularExpressions;//정규표현식
 
+
 namespace ConsoleApplication_MyLibs
 {
 
@@ -68,35 +69,35 @@ namespace ConsoleApplication_MyLibs
                 try
                 {
                     sender.Connect(remoteEP);
-                    MyClass_print_log.debugPrint("Socket connected to {0}", sender.RemoteEndPoint.ToString());
+                    MyClass_Dprint.debugPrint("Socket connected to {0}", sender.RemoteEndPoint.ToString());
                     // Encode the data string into a byte array.  
                     byte[] msg = Encoding.ASCII.GetBytes("This is a test<EOF>");
                     // Send the data through the socket.  
                     int bytesSent = sender.Send(msg);
                     // Receive the response from the remote device.  
                     int bytesRec = sender.Receive(bytes);
-                    MyClass_print_log.debugPrint("Echoed test = {0}", Encoding.ASCII.GetString(bytes, 0, bytesRec));
+                    MyClass_Dprint.debugPrint("Echoed test = {0}", Encoding.ASCII.GetString(bytes, 0, bytesRec));
                     // Release the socket.  
                     sender.Shutdown(SocketShutdown.Both);
                     sender.Close();
                 }
                 catch (ArgumentNullException ane)
                 {
-                    MyClass_print_log.debugPrint("ArgumentNullException : {0}", ane.ToString());
+                    MyClass_Dprint.debugPrint("ArgumentNullException : {0}", ane.ToString());
                 }
                 catch (SocketException se)
                 {
-                    MyClass_print_log.debugPrint("SocketException : {0}", se.ToString());
+                    MyClass_Dprint.debugPrint("SocketException : {0}", se.ToString());
                 }
                 catch (Exception e)
                 {
-                    MyClass_print_log.debugPrint("Unexpected exception : {0}", e.ToString());
+                    MyClass_Dprint.debugPrint("Unexpected exception : {0}", e.ToString());
                 }
 
             }
             catch (Exception e)
             {
-                MyClass_print_log.debugPrint(e.ToString());
+                MyClass_Dprint.debugPrint(e.ToString());
             }
         }
         public static string StartClientSync(string data)
@@ -121,7 +122,7 @@ namespace ConsoleApplication_MyLibs
                 {
                     sender.Connect(remoteEP);
 
-                    MyClass_print_log.debugPrint("Socket connected to {0}", sender.RemoteEndPoint.ToString());
+                    MyClass_Dprint.debugPrint("Socket connected to {0}", sender.RemoteEndPoint.ToString());
 
                     // Encode the data string into a byte array.  
                     byte[] msg = Encoding.ASCII.GetBytes(data);
@@ -131,7 +132,7 @@ namespace ConsoleApplication_MyLibs
 
                     // Receive the response from the remote device.  
                     int bytesRec = sender.Receive(bytes);
-                    MyClass_print_log.debugPrint("Echoed test = {0}", Encoding.ASCII.GetString(bytes, 0, bytesRec));
+                    MyClass_Dprint.debugPrint("Echoed test = {0}", Encoding.ASCII.GetString(bytes, 0, bytesRec));
                     res = Encoding.ASCII.GetString(bytes, 0, bytesRec);
                     // Release the socket.  
                     sender.Shutdown(SocketShutdown.Both);
@@ -140,21 +141,21 @@ namespace ConsoleApplication_MyLibs
                 }
                 catch (ArgumentNullException ane)
                 {
-                    MyClass_print_log.debugPrint("ArgumentNullException : {0}", ane.ToString());
+                    MyClass_Dprint.debugPrint("ArgumentNullException : {0}", ane.ToString());
                 }
                 catch (SocketException se)
                 {
-                    MyClass_print_log.debugPrint("SocketException : {0}", se.ToString());
+                    MyClass_Dprint.debugPrint("SocketException : {0}", se.ToString());
                 }
                 catch (Exception e)
                 {
-                    MyClass_print_log.debugPrint("Unexpected exception : {0}", e.ToString());
+                    MyClass_Dprint.debugPrint("Unexpected exception : {0}", e.ToString());
                 }
 
             }
             catch (Exception e)
             {
-                MyClass_print_log.debugPrint(e.ToString());
+                MyClass_Dprint.debugPrint(e.ToString());
             }
             return res;
         }
@@ -181,8 +182,8 @@ namespace ConsoleApplication_MyLibs
                 try
                 {
                     sender.Connect(remoteEP);
-                    MyClass_print_log.debugPrint("[Client] Socket connected to {0}", sender.RemoteEndPoint.ToString());
-                    MyClass_print_log.debugPrint("[Client] Send data [{0}] to server", data);
+                    MyClass_Dprint.debugPrint("[Client] Socket connected to {0}", sender.RemoteEndPoint.ToString());
+                    MyClass_Dprint.debugPrint("[Client] Send data [{0}] to server", data);
                     // Encode the data string into a byte array.  
                     byte[] msg = Encoding.ASCII.GetBytes(data);
 
@@ -192,9 +193,9 @@ namespace ConsoleApplication_MyLibs
                     if (recvReply == true) // 서버로 부터 reply 받는 경우
                     {
                         // Receive the response from the remote device.
-                        MyClass_print_log.debugPrint("[Client] wait reply...");
+                        MyClass_Dprint.debugPrint("[Client] wait reply...");
                         int bytesRec = sender.Receive(bytes);
-                        MyClass_print_log.debugPrint("[Client] Echoed data : {0}", Encoding.ASCII.GetString(bytes, 0, bytesRec));
+                        MyClass_Dprint.debugPrint("[Client] Echoed data : {0}", Encoding.ASCII.GetString(bytes, 0, bytesRec));
                         res = Encoding.ASCII.GetString(bytes, 0, bytesRec);
                     }
                     // Release the socket.  
@@ -204,21 +205,21 @@ namespace ConsoleApplication_MyLibs
                 }
                 catch (ArgumentNullException ane)
                 {
-                    MyClass_print_log.debugPrint("[Client] ArgumentNullException : {0}", ane.ToString());
+                    MyClass_Dprint.debugPrint("[Client] ArgumentNullException : {0}", ane.ToString());
                 }
                 catch (SocketException se)
                 {
-                    MyClass_print_log.debugPrint("[Client] SocketException : {0}", se.ToString());
+                    MyClass_Dprint.debugPrint("[Client] SocketException : {0}", se.ToString());
                 }
                 catch (Exception e)
                 {
-                    MyClass_print_log.debugPrint("[Client] Unexpected exception : {0}", e.ToString());
+                    MyClass_Dprint.debugPrint("[Client] Unexpected exception : {0}", e.ToString());
                 }
 
             }
             catch (Exception e)
             {
-                MyClass_print_log.debugPrint("[Client] {0}", e.ToString());
+                MyClass_Dprint.debugPrint("[Client] {0}", e.ToString());
             }
             return res;
         }
@@ -264,7 +265,7 @@ namespace ConsoleApplication_MyLibs
                 receiveDone_client_async.WaitOne();
 
                 // Write the response to the console.  
-                MyClass_print_log.debugPrint("Response received : {0}", response);
+                MyClass_Dprint.debugPrint("Response received : {0}", response);
 
                 // Release the socket.  
                 client.Shutdown(SocketShutdown.Both);
@@ -273,7 +274,7 @@ namespace ConsoleApplication_MyLibs
             }
             catch (Exception e)
             {
-                MyClass_print_log.debugPrint(e.ToString());
+                MyClass_Dprint.debugPrint(e.ToString());
             }
         }
         public static void StartAsyncClient(string data)
@@ -314,7 +315,7 @@ namespace ConsoleApplication_MyLibs
                 receiveDone_client_async.WaitOne();
 
                 // Write the response to the console.  
-                MyClass_print_log.debugPrint("Response received : {0}", response);
+                MyClass_Dprint.debugPrint("Response received : {0}", response);
 
                 // Release the socket.  
                 client.Shutdown(SocketShutdown.Both);
@@ -323,7 +324,7 @@ namespace ConsoleApplication_MyLibs
             }
             catch (Exception e)
             {
-                MyClass_print_log.debugPrint(e.ToString());
+                MyClass_Dprint.debugPrint(e.ToString());
             }
         }
         public static string StartAsyncClient(string data, bool recvReply)
@@ -367,7 +368,7 @@ namespace ConsoleApplication_MyLibs
                     receiveDone_client_async.WaitOne();
 
                     // Write the response to the console.  
-                    MyClass_print_log.debugPrint("Response received : {0}", response); // 별도 recv thread
+                    MyClass_Dprint.debugPrint("Response received : {0}", response); // 별도 recv thread
                     result = response;
                 }
                 // Release the socket.  
@@ -377,7 +378,7 @@ namespace ConsoleApplication_MyLibs
             }
             catch (Exception e)
             {
-                MyClass_print_log.debugPrint(e.ToString());
+                MyClass_Dprint.debugPrint(e.ToString());
             }
             return result;
         }
@@ -392,7 +393,7 @@ namespace ConsoleApplication_MyLibs
                 // Complete the connection.  
                 client.EndConnect(ar);
 
-                MyClass_print_log.debugPrint("Socket connected to {0}",
+                MyClass_Dprint.debugPrint("Socket connected to {0}",
                     client.RemoteEndPoint.ToString());
 
                 // Signal that the connection has been made.  
@@ -400,7 +401,7 @@ namespace ConsoleApplication_MyLibs
             }
             catch (Exception e)
             {
-                MyClass_print_log.debugPrint(e.ToString());
+                MyClass_Dprint.debugPrint(e.ToString());
             }
         }
 
@@ -418,7 +419,7 @@ namespace ConsoleApplication_MyLibs
             }
             catch (Exception e)
             {
-                MyClass_print_log.debugPrint(e.ToString());
+                MyClass_Dprint.debugPrint(e.ToString());
             }
         }
 
@@ -456,7 +457,7 @@ namespace ConsoleApplication_MyLibs
             }
             catch (Exception e)
             {
-                MyClass_print_log.debugPrint(e.ToString());
+                MyClass_Dprint.debugPrint(e.ToString());
             }
         }
 
@@ -479,14 +480,14 @@ namespace ConsoleApplication_MyLibs
 
                 // Complete sending the data to the remote device.  
                 int bytesSent = client.EndSend(ar);
-                MyClass_print_log.debugPrint("Sent {0} bytes to server.", bytesSent);
+                MyClass_Dprint.debugPrint("Sent {0} bytes to server.", bytesSent);
 
                 // Signal that all bytes have been sent.  
                 sendDone_client_async.Set();
             }
             catch (Exception e)
             {
-                MyClass_print_log.debugPrint(e.ToString());
+                MyClass_Dprint.debugPrint(e.ToString());
             }
         }
         //////////////////////////////
@@ -524,7 +525,7 @@ namespace ConsoleApplication_MyLibs
 
                     // Start an asynchronous socket to listen for connections.  
 #if DEBUG
-                    MyClass_print_log.debugPrint("[Server] Waiting for a connection...");
+                    MyClass_Dprint.debugPrint("[Server] Waiting for a connection...");
 #endif
                     listener.BeginAccept(
                         new AsyncCallback(AcceptCallback_server),
@@ -537,11 +538,11 @@ namespace ConsoleApplication_MyLibs
             }
             catch (Exception e)
             {
-                MyClass_print_log.debugPrint(e.ToString());
+                MyClass_Dprint.debugPrint(e.ToString());
             }
 #if DEBUG
-            //MyClass_print_log.debugPrint("\nPress ENTER to continue...");
-            MyClass_print_log.debugPrint("[Server]  \nEnd server...");
+            //MyClass_Dprint.debugPrint("\nPress ENTER to continue...");
+            MyClass_Dprint.debugPrint("[Server]  \nEnd server...");
 #endif
             //			Console.Read();  
 
@@ -590,7 +591,7 @@ namespace ConsoleApplication_MyLibs
                 // more data.  
                 content = state.sb.ToString();
 #if DEBUG
-                MyClass_print_log.debugPrint("[server] Receved: {0}", content);
+                MyClass_Dprint.debugPrint("[server] Receved: {0}", content);
 #endif
                 if (content.IndexOf("<EOF>") > -1) // stream end DETECT ***
                 //if(content.IndexOf("\r\n") > -1 || content.IndexOf("\n") > -1  || content.IndexOf("\r") > -1)
@@ -598,11 +599,11 @@ namespace ConsoleApplication_MyLibs
                     // All the data has been read from the   
                     // client. Display it on the console.  
 #if DEBUG
-                    MyClass_print_log.debugPrint("[Server] Read {0} bytes from socket. \n Data : {1}", content.Length, content);
+                    MyClass_Dprint.debugPrint("[Server] Read {0} bytes from socket. \n Data : {1}", content.Length, content);
 #endif
                     if(content.Contains("test")) // check 샘플
                     {
-                        MyClass_print_log.debugPrint("[Server] test command received! ");
+                        MyClass_Dprint.debugPrint("[Server] test command received! ");
                     }
                     // 받은 메세지를 다시 client로 보낸다.
                     Send_Server(handler, content);
@@ -621,7 +622,7 @@ namespace ConsoleApplication_MyLibs
             // Convert the string data to byte data using ASCII encoding.  
             byte[] byteData = Encoding.ASCII.GetBytes(data);
 #if DEBUG
-            MyClass_print_log.debugPrint("[Server] send data:[{0}] to client", data);
+            MyClass_Dprint.debugPrint("[Server] send data:[{0}] to client", data);
 #endif
             // Begin sending the data to the remote device.  
             handler.BeginSend(byteData, 0, byteData.Length, 0,
@@ -638,7 +639,7 @@ namespace ConsoleApplication_MyLibs
                 // Complete sending the data to the remote device.  
                 int bytesSent = handler.EndSend(ar);
 #if DEBUG
-                MyClass_print_log.debugPrint("Sent {0} bytes to client.", bytesSent);
+                MyClass_Dprint.debugPrint("Sent {0} bytes to client.", bytesSent);
 #endif
                 handler.Shutdown(SocketShutdown.Both);
                 handler.Close();
@@ -646,7 +647,7 @@ namespace ConsoleApplication_MyLibs
             }
             catch (Exception e)
             {
-                MyClass_print_log.debugPrint("[Server] {0}", e.ToString());
+                MyClass_Dprint.debugPrint("[Server] {0}", e.ToString());
             }
         }
     }
@@ -737,12 +738,12 @@ namespace ConsoleApplication_MyLibs
             string res = this.readAllText(mFilePath);
             if (res.Contains("\r\n"))
             {
-                MyClass_print_log.debugPrint(" new line with carriage return.");
+                MyClass_Dprint.debugPrint(" new line with carriage return.");
                 return "\r\n"; // 캐리지 리턴이 포함됨.
             }
             else if (res.Contains("\n"))
             {
-                MyClass_print_log.debugPrint(" new line");
+                MyClass_Dprint.debugPrint(" new line");
                 return "\n";
             }
             return string.Empty;
@@ -750,13 +751,13 @@ namespace ConsoleApplication_MyLibs
         public string readLine()
         {
             string res = file.ReadLine();
-            MyClass_print_log.debugPrint("ReadLine : {0} ", res);
+            MyClass_Dprint.debugPrint("ReadLine : {0} ", res);
             return res;
         }
         public string readAllText(string filePath)
         {
             string text = System.IO.File.ReadAllText(filePath);
-            MyClass_print_log.debugPrint("readAllText : {0} ", text);
+            MyClass_Dprint.debugPrint("readAllText : {0} ", text);
             return text;
         }
         /// <summary>
@@ -805,6 +806,9 @@ namespace ConsoleApplication_MyLibs
                     return ch;
             }
 
+
+
+
             return '\0';
         }
         public static void getStringCombination(string s)
@@ -822,7 +826,7 @@ namespace ConsoleApplication_MyLibs
                 sb.Append(s[i]);
 
                 // 2) 구한 문자조합 출력
-                MyClass_print_log.debugPrint(sb.ToString());
+                MyClass_Dprint.debugPrint(sb.ToString());
 
                 // 3) 나머지 문자들에 대한 조합 구하기
                 StringCombination(s, sb, i + 1);
@@ -848,7 +852,7 @@ namespace ConsoleApplication_MyLibs
                 int index = target_tmp.IndexOf(c); // 일치하는 문자 위치 찾음
                 if(index != -1)
                 {
-                    MyClass_print_log.debugPrint("match index:{0}", index);
+                    MyClass_Dprint.debugPrint("match index:{0}", index);
                     target_tmp = target_tmp.Remove(index, 1); // 일치하는 문자 제거
                 }
                 else
@@ -1436,7 +1440,7 @@ namespace ConsoleApplication_MyLibs
             string res = srcFile.readLine(); // 1 line read
             string[] line = srcFile.readLines(inputLog); // read all lines
             int num = line.Count(); // total count
-            MyClass_print_log.debugPrint("read lines:" + num);
+            MyClass_Dprint.debugPrint("read lines:" + num);
             ///////////////////////////////////////////////////////
             int typeCount = strClass.countingAllTypes(line, delimiter, 1);
             string[] logTypes = { "EE", "WW", "SS" }; // 세개의 로그타입
@@ -1451,7 +1455,7 @@ namespace ConsoleApplication_MyLibs
                 {
                     //string[] data = strClass.StringSplit(s, delimiter);
                     int cnt = strClass.getCountOfType(line, delimiter, 1, s);
-                    MyClass_print_log.debugPrint("type:" + s + " total num:" + cnt);
+                    MyClass_Dprint.debugPrint("type:" + s + " total num:" + cnt);
                     outFile.WriteLine(s + "#" + cnt);
                 }
             }
@@ -1465,7 +1469,7 @@ namespace ConsoleApplication_MyLibs
             string res = srcFile.readLine(); // 1 line read
             string[] line = srcFile.readLines(inputLog); // read all lines
             int num = line.Count(); // total count
-            MyClass_print_log.debugPrint("read lines:" + num);
+            MyClass_Dprint.debugPrint("read lines:" + num);
 
             int typeCount = strClass.countingAllTypes(line, delimiter, 1);
             string[] logTypes = strClass.getAllTypes(line, delimiter, 1);
@@ -1482,7 +1486,7 @@ namespace ConsoleApplication_MyLibs
                 {
                     //string[] data = strClass.StringSplit(s, delimiter);
                     int cnt = strClass.getCountOfType(line, delimiter, 1, s);
-                    MyClass_print_log.debugPrint("type:" + s + " total num:" + cnt);
+                    MyClass_Dprint.debugPrint("type:" + s + " total num:" + cnt);
                     outFile.WriteLine(s + "#" + cnt);
                 }
             }
@@ -1496,7 +1500,7 @@ namespace ConsoleApplication_MyLibs
             string res = srcFile.readLine(); // 1 line read
             string[] line = srcFile.readLines(inputLog); // read all lines
             int num = line.Count(); // total count
-            MyClass_print_log.debugPrint("read lines:" + num);
+            MyClass_Dprint.debugPrint("read lines:" + num);
 
             int typeCount = strClass.countingAllTypes(line, delimiter, 1);
             string[] logTypes = strClass.getAllTypes(line, delimiter, 1);
@@ -1527,7 +1531,7 @@ namespace ConsoleApplication_MyLibs
                         }
 
                     }
-                    MyClass_print_log.debugPrint("type:" + s + " total num:" + cnt);
+                    MyClass_Dprint.debugPrint("type:" + s + " total num:" + cnt);
                     outFile.WriteLine(s + "#" + cnt);
                 }
             }
@@ -1541,7 +1545,7 @@ namespace ConsoleApplication_MyLibs
             string res = srcFile.readLine(); // 1 line read
             string[] line = srcFile.readLines(inputLog); // read all lines
             int num = line.Count(); // total count
-            MyClass_print_log.debugPrint("read lines:" + num);
+            MyClass_Dprint.debugPrint("read lines:" + num);
 
             int typeCount = strClass.countingAllTypes(line, delimiter, 1);
             string[] logTypes = strClass.getAllTypes(line, delimiter, 1);
@@ -1564,11 +1568,11 @@ namespace ConsoleApplication_MyLibs
                     foreach (string _line in strResult)
                     {
                         // 이부분 multi thread로 바꾼다.
-                        MyClass_print_log.debugPrint("type: " + s);
-                        MyClass_print_log.debugPrint("line: " + _line);
+                        MyClass_Dprint.debugPrint("type: " + s);
+                        MyClass_Dprint.debugPrint("line: " + _line);
                         myThread.StartConvertAndWrite(fileWriter, _line, delimiter, 2);
                     }
-                    MyClass_print_log.debugPrint("type:" + s + " total num:" + cnt);
+                    MyClass_Dprint.debugPrint("type:" + s + " total num:" + cnt);
                     outFile.WriteLine(s + "#" + cnt);
                 }
             }
@@ -1584,6 +1588,14 @@ namespace ConsoleApplication_MyLibs
         ~MyClass_Security()
         {
 
+        }
+        public static string encodeBase64(string value)
+        {
+            return Convert.ToBase64String(Encoding.UTF8.GetBytes(value));
+        }
+        public static string decodeBase64(string value)
+        {
+            return Convert.FromBase64String(value).ToString();
         }
         public static string CaesarCipherEncrypt(string value, int shift)
         {
@@ -1686,11 +1698,11 @@ namespace ConsoleApplication_MyLibs
 		public MyClass_Logger(string name)
         {
 #if DEBUG
-            MyClass_print_log.debugPrint(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location));
-            MyClass_print_log.debugPrint(System.AppDomain.CurrentDomain.BaseDirectory);
-            MyClass_print_log.debugPrint(System.Environment.CurrentDirectory);
-            MyClass_print_log.debugPrint(System.IO.Directory.GetCurrentDirectory());
-            MyClass_print_log.debugPrint(Environment.CurrentDirectory);
+            MyClass_Dprint.debugPrint(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location));
+            MyClass_Dprint.debugPrint(System.AppDomain.CurrentDomain.BaseDirectory);
+            MyClass_Dprint.debugPrint(System.Environment.CurrentDirectory);
+            MyClass_Dprint.debugPrint(System.IO.Directory.GetCurrentDirectory());
+            MyClass_Dprint.debugPrint(Environment.CurrentDirectory);
 #endif
             //To get the location the assembly normally resides on disk or the install directory
             string _path = System.Reflection.Assembly.GetExecutingAssembly().CodeBase;
@@ -1728,7 +1740,7 @@ namespace ConsoleApplication_MyLibs
             }
             catch (Exception e)
             {
-                MyClass_print_log.debugPrint(e.Message);
+                MyClass_Dprint.debugPrint(e.Message);
             }
         }
 
@@ -1749,7 +1761,7 @@ namespace ConsoleApplication_MyLibs
             }
             catch (Exception e)
             {
-                MyClass_print_log.debugPrint(e.Message);
+                MyClass_Dprint.debugPrint(e.Message);
             }
         }
 
@@ -1775,14 +1787,14 @@ namespace ConsoleApplication_MyLibs
         {
             foreach (string f in System.IO.Directory.GetFiles(sDir))
             {
-                MyClass_print_log.debugPrint("File: " + f); // or some other file processing
+                MyClass_Dprint.debugPrint("File: " + f); // or some other file processing
                                                  // 파일 name 출력
             }
 
             foreach (string d in System.IO.Directory.GetDirectories(sDir))
             {
 #if DEBUG
-                MyClass_print_log.debugPrint("dir: " + d); // 디렉토리 name 출력
+                MyClass_Dprint.debugPrint("dir: " + d); // 디렉토리 name 출력
 #endif
                 TreeScan(d); // recursive call to get files of directory
             }
@@ -1801,7 +1813,7 @@ namespace ConsoleApplication_MyLibs
             foreach (string f in System.IO.Directory.GetFiles(targetPath))
             {
 #if DEBUG
-                MyClass_print_log.debugPrint("File: " + f); // or some other file processing
+                MyClass_Dprint.debugPrint("File: " + f); // or some other file processing
                                                  // 파일 name 출력
 #endif
                 scanedFileName = System.IO.Path.GetFileName(f); 
@@ -1814,7 +1826,7 @@ namespace ConsoleApplication_MyLibs
             foreach (string d in System.IO.Directory.GetDirectories(targetPath))
             {
 #if DEBUG
-                MyClass_print_log.debugPrint("dir: " + d); // 디렉토리 name 출력
+                MyClass_Dprint.debugPrint("dir: " + d); // 디렉토리 name 출력
 #endif
                 string resSub = findFileFromSubFolder(d, fileName); // recursive call to get files of directory
                 if (!resSub.Equals(string.Empty))
@@ -1831,7 +1843,7 @@ namespace ConsoleApplication_MyLibs
             if (!System.IO.Directory.Exists(targetPath)) // 없으면
             {
 #if DEBUG
-                MyClass_print_log.debugPrint("error. tar folder not found. ");
+                MyClass_Dprint.debugPrint("error. tar folder not found. ");
 #endif
                 return strings.ToArray();
             }
@@ -1858,7 +1870,7 @@ namespace ConsoleApplication_MyLibs
             if (strings.Count <= 0)
             {
 #if DEBUG
-                MyClass_print_log.debugPrint("[scanFolder] error. no file in dir. ");
+                MyClass_Dprint.debugPrint("[scanFolder] error. no file in dir. ");
 #endif
                 return strings.ToArray();
             }
@@ -1886,12 +1898,12 @@ namespace ConsoleApplication_MyLibs
                 list.AddAfter(node, newNode);
 
             // 리스트 출력
-            list.ToList().ForEach(p => MyClass_print_log.debugPrint(p));
+            list.ToList().ForEach(p => MyClass_Dprint.debugPrint(p));
 
             // Enumerator를 이용한 리스트 출력
             foreach (var m in list)
             {
-                MyClass_print_log.debugPrint(m);
+                MyClass_Dprint.debugPrint(m);
             }
         }
 
@@ -1910,12 +1922,12 @@ namespace ConsoleApplication_MyLibs
             // CoinChangeCount c = new CoinChangeCount();
             // 1.  Recursive 방식 해결
             int ans = this.Count(coins, 4, 90);
-            MyClass_print_log.debugPrint("Count={0}", ans);
+            MyClass_Dprint.debugPrint("Count={0}", ans);
 
             // 2. 중간 결과를 저장(Memoization)하여 Lookup하는 방식 해결
             Dictionary<Tuple<int, int>, int> hash = new Dictionary<Tuple<int, int>, int>();
             ans = this.DPCount(coins, 4, 90, hash);
-            MyClass_print_log.debugPrint("DPCount={0}", ans);
+            MyClass_Dprint.debugPrint("DPCount={0}", ans);
         }
 
         public int Count(int[] coins, int m, int n)
@@ -1923,7 +1935,7 @@ namespace ConsoleApplication_MyLibs
             if (n == 0) return 1;
             if (n < 0) return 0;
             if (m <= 0) return 0;
-            MyClass_print_log.debugPrint("m:{0}, n:{1}", m, n);
+            MyClass_Dprint.debugPrint("m:{0}, n:{1}", m, n);
 
             return Count(coins, m - 1, n) + Count(coins, m, n - coins[m - 1]);
         }
@@ -2076,7 +2088,7 @@ namespace ConsoleApplication_MyLibs
 
             if (ht.Contains("tom"))
             {
-                MyClass_print_log.debugPrint(ht["tom"]);
+                MyClass_Dprint.debugPrint(ht["tom"]);
             }
             ///////////////////////////////
 
@@ -2088,30 +2100,30 @@ namespace ConsoleApplication_MyLibs
             Gameharacter Character3 = new Gameharacter(200, 34, 3345000); // 구조체 3
             htt.Add(200, Character3); // 추가
 
-            MyClass_print_log.debugPrint("before");
+            MyClass_Dprint.debugPrint("before");
             foreach (DictionaryEntry entry in htt) // 상태 출력
             {
                 Gameharacter getStr = (Gameharacter)entry.Value;
-                MyClass_print_log.debugPrint(entry.Key + ":" + getStr._CharCd);
+                MyClass_Dprint.debugPrint(entry.Key + ":" + getStr._CharCd);
             }
             htt.Remove(200); // key 200 제거
-            MyClass_print_log.debugPrint("after");
+            MyClass_Dprint.debugPrint("after");
             foreach (DictionaryEntry entry in htt) // 상태 출력
             {
                 Gameharacter getStr = (Gameharacter)entry.Value;
-                MyClass_print_log.debugPrint(entry.Key + ":" + getStr._CharCd);
+                MyClass_Dprint.debugPrint(entry.Key + ":" + getStr._CharCd);
             }
             // IDictionary<string, Gameharacter> d = htt; // your hash table
             //var ordered = d.OrderBy(p => p.Key).ToList();
             // foreach (var p in ordered)
             // {
-            //    MyClass_print_log.debugPrint("Key: {0} Value: {1}", p.Key, p.Value);
+            //    MyClass_Dprint.debugPrint("Key: {0} Value: {1}", p.Key, p.Value);
             //  }
             SortedList sorter2 = new SortedList(htt);
             foreach (DictionaryEntry entry in htt) // 상태 출력
             {
                 Gameharacter getStr = (Gameharacter)entry.Value;
-                MyClass_print_log.debugPrint(entry.Key + ":" + getStr._CharCd + "|" + getStr._Level + ":"+getStr._Money);
+                MyClass_Dprint.debugPrint(entry.Key + ":" + getStr._CharCd + "|" + getStr._Level + ":"+getStr._Money);
             }
 
 
@@ -2121,7 +2133,7 @@ namespace ConsoleApplication_MyLibs
     /// <summary>
     /// writing log to output windows of VS
     /// </summary>
-    public class MyClass_print_log
+    public class MyClass_Dprint
     {
         public static void debugPrint(string str)
         {
@@ -2237,6 +2249,121 @@ namespace ConsoleApplication_MyLibs
 
 
     }
+    public class myClassBlockChainHeader
+    {
+        public myClassBlockChainHeader(byte[] previousBlockHash, object[] transactions)
+        {
+            this.previousBlockHash = previousBlockHash;
+            this.merkleRootHash = transactions.GetHashCode();
+        }
+        /// <summary>
+        /// 소프트웨어, 또는 프로토콜 등의 업그레이드를 추적하기 위해 사용되는 버전 정보
+        /// </summary>
+        private int version;
+        /// <summary>
+        /// 블록체인 상의 이전 블록(부모 블록)의 해시값
+        /// </summary>
+        private byte[] previousBlockHash;
+        /// <summary>
+        /// 머클트리의 루트에 대한 해시값
+        /// </summary>
+        private int merkleRootHash;
+        /// <summary>
+        /// 해당 블록의 생성 시각
+        /// </summary>
+        private int timestamp;
+        /// <summary>
+        ///  채굴과정에서 필요한 작업 증명(Proof of Work) 알고리즘의 난이도 목표
+        /// </summary>
+        private static uint difficultyTarget = 5;
+        /// <summary>
+        ///  채굴과정의 작업 증명에서 사용되는 카운터
+        /// </summary>
+        private static int nonce = 0;
+
+
+        /// <summary>
+        /// 작업증명
+        /// </summary>
+        public int ProofOfWorkCount()
+        {
+            using (SHA256Managed hashstring = new SHA256Managed())
+            {
+                byte[] bt;
+                string sHash = string.Empty;
+                while (sHash == string.Empty || sHash.Substring(0, (int)difficultyTarget) != ("").PadLeft((int)difficultyTarget, '0'))
+                {
+                    bt = Encoding.UTF8.GetBytes(merkleRootHash + nonce.ToString());
+                    sHash = MyClassBlockChain.ByteArrayToString(hashstring.ComputeHash(bt));
+                    nonce++;
+                }
+                return nonce;
+            }
+        }
+
+        /// <summary>
+        /// 거래내역을 byte로 반환한다.
+        /// </summary>
+        /// <returns></returns>
+        public byte[] toByteArray()
+        {
+            string tmpStr = "";
+            //이전 블록이 있다면 처음에 해시를 추가한다.
+            if (previousBlockHash != null)
+            {
+                tmpStr += Convert.ToBase64String(previousBlockHash);
+            }
+            tmpStr += merkleRootHash.ToString();
+            return Encoding.UTF8.GetBytes(tmpStr);
+        }
+
+    }
+    public class MyClassBlockChain
+    {
+        public MyClassBlockChain(myClassBlockChainHeader blockHeader, Object[] transactions)
+        {
+            this.blockHeader = blockHeader;
+            this.transactions = transactions;
+        }
+
+        private int blockSize;
+        private myClassBlockChainHeader blockHeader;
+        private int transactionCount;
+        private object[] transactions;
+
+        /// <summary>
+        /// 블록 헤더를 해시화하여 반환한다.
+        /// </summary>
+        /// <returns></returns>
+        public string getBlockHash()
+        {
+            byte[] bytes = blockHeader.toByteArray();
+            using (SHA256Managed hashstring = new SHA256Managed())
+            {
+                // 해시화를 두 번 연속으로 설정.
+                byte[] blockHash = hashstring.ComputeHash(bytes);
+                blockHash = hashstring.ComputeHash(blockHash);
+
+                return ByteArrayToString(blockHash);
+            }
+        }
+
+        /// <summary>
+        /// 바이트어레이를 String으로 변환
+        /// </summary>
+        /// <param name="bts"></param>
+        /// <returns></returns>
+        public static string ByteArrayToString(byte[] bts)
+        {
+            StringBuilder strBld = new StringBuilder();
+            foreach (byte bt in bts)
+                strBld.AppendFormat("{0:X2}", bt);
+
+            return strBld.ToString();
+        }
+    }
+        
+        
     /// <summary>
     /// 2차원 배열을 사용한 sort 
     /// </summary>
@@ -2265,9 +2392,9 @@ namespace ConsoleApplication_MyLibs
             {
                 for(int ii=0; ii< inData[0].GetLength(0); ii++)
                 {
-                    MyClass_print_log.debugPrint("sorted array>" + inData[i][ii]);
+                    MyClass_Dprint.debugPrint("sorted array>" + inData[i][ii]);
                 }
-                MyClass_print_log.debugPrint("###");
+                MyClass_Dprint.debugPrint("###");
             }
             return inData;
         }
@@ -2288,6 +2415,210 @@ namespace ConsoleApplication_MyLibs
             int test = 0;
         }
     }
+    public class MyClass_Book
+    {
+        public int BNum
+        {
+            get;
+            private set;
+        }
+        public string Title
+        {
+            get;
+            private set;
+        }
+        public string Author
+        {
+            get;
+            private set;
+        }
+        public string Publisher
+        {
+            get;
+            private set;
+        }
+        public int Price
+        {
+            get;
+            private set;
+        }
+        public MyClass_Book(int bnum, string title, string author, string pub, int price)
+        {
+            BNum = bnum;
+            Title = title;
+            Author = author;
+            Publisher = pub;
+            Price = price;
+        }
+        public override string ToString()
+        {
+            return Title;
+        }
+    }
+    class MyClass_Books
+    {
+        MyClass_Book[] books = new MyClass_Book[100];
+        public MyClass_Book this[int bnum]
+        {
+            get
+            {
+                int i = 0;
+                for (i = 0; i < books.Length; i++)
+                {
+                    if (books[i] == null)
+                    {
+                        break;
+                    }
+                    if (books[i].BNum == bnum)
+                    {
+                        return books[i];
+                    }
+                }
+                return null;
+            }
+            set
+            {
+                int i = 0;
+                for (i = 0; i < books.Length; i++)
+                {
+                    if ((books[i] == null) || (books[i].BNum == bnum))
+                    {
+                        break;
+                    }
+                }
+                if (i == books.Length)
+                {
+                    return;
+                }
+                books[i] = value;
+            }
+        }
+
+        internal void ViewAll()
+        {
+            for (int i = 0; i < books.Length; i++)
+            {
+                if (books[i] == null)
+                {
+                    break;
+                }
+                ViewBook(books[i]);
+            }
+        }
+
+        private void ViewBook(MyClass_Book book)
+        {
+            Console.WriteLine("<{0}>", book.BNum);
+            Console.WriteLine("\t제목:{0}", book.Title);
+            Console.WriteLine("\t출판사:{0}", book.Publisher);
+            Console.WriteLine("\t저자:{0}", book.Author);
+            Console.WriteLine("\t가격:{0}", book.Price);
+        }
+    }
+    internal class BookManager
+    {
+        MyClass_Books books = new MyClass_Books();
+        internal void Run()
+        {
+            ConsoleKey key = ConsoleKey.NoName;
+            while ((key = SelectMenu()) != ConsoleKey.Escape)//반복(메뉴 선택 한 것이 ESC가 아니라면)
+            {
+                switch (key)//선택한 메뉴에 따라
+                {
+                    case ConsoleKey.F1: Insert(); break;//F1이면 추가
+                    case ConsoleKey.F2: Delete(); break;//F2이면 삭제
+                    case ConsoleKey.F3: Search(); break;//F3이면 조회
+                    case ConsoleKey.F4: books.ViewAll(); break;//F4이면 전체 보기
+                    default: Console.WriteLine("잘못 선택하였습니다."); break;
+                }
+                Console.WriteLine("아무키나 누르세요.");
+                Console.ReadKey(true);
+            }
+
+        }
+
+
+
+        private void ViewBook(MyClass_Book book)
+        {
+            Console.WriteLine("<{0}>", book.BNum);
+            Console.WriteLine("\t제목:{0}", book.Title);
+            Console.WriteLine("\t출판사:{0}", book.Publisher);
+            Console.WriteLine("\t저자:{0}", book.Author);
+            Console.WriteLine("\t가격:{0}", book.Price);
+        }
+
+        private void Search()
+        {
+            //조회할 번호 입력
+            int num = 0;
+            Console.WriteLine("조회할 도서 번호를 입력:");
+            num = int.Parse(Console.ReadLine());
+
+            if (books[num] == null)
+            {
+                Console.WriteLine("{0}번: 입력하지 않음", num);
+            }
+            else
+            {
+                ViewBook(books[num]);
+            }
+        }
+
+        private void Delete()
+        {
+            //삭제할 번호 입력
+            int num = 0;
+            Console.WriteLine("삭제할 도서 번호를 입력:");
+            num = int.Parse(Console.ReadLine());
+
+            if (books[num] != null)
+            {
+                books[num] = null;
+            }
+        }
+
+        private void Insert()
+        {
+            //추가할 번호 입력
+            int num = 0;
+            Console.WriteLine("추가할 도서 번호를 입력:");
+            num = int.Parse(Console.ReadLine());
+
+            if (books[num] != null)
+            {
+                Console.WriteLine("이미 존재합니다.");
+                return;
+            }
+            string title;
+            Console.WriteLine("제목");
+            title = Console.ReadLine();
+            string author;
+            Console.WriteLine("저자");
+            author = Console.ReadLine();
+            string publisher;
+            Console.WriteLine("출판사");
+            publisher = Console.ReadLine();
+            int price = 0;
+            Console.WriteLine("가격");
+            int.TryParse(Console.ReadLine(), out price);
+            books[num] = new MyClass_Book(num, title, author, publisher, price);
+        }
+
+        private ConsoleKey SelectMenu()
+        {
+            Console.Clear();
+            Console.WriteLine("도서 관리 프로그램(인덱서 실습) 메뉴");
+            Console.WriteLine("F1: 도서 추가 F2:도서 삭제 F3:도서 조회 F4:전체 보기");
+            Console.WriteLine("ESC: 프로그램 종료");
+            return Console.ReadKey(true).Key;
+        }
+
+
+    }
+
+
+
     public class MyTest
     {
         public MyTest()
@@ -2299,7 +2630,7 @@ namespace ConsoleApplication_MyLibs
         // run tcp socket server thread
         static private void serverThreaRun()
         {
-            MyClass_print_log.debugPrint("start listening");
+            MyClass_Dprint.debugPrint("start listening");
             MyClass_Networks.StartServerListeningAsync();
         }
 
@@ -2312,6 +2643,40 @@ namespace ConsoleApplication_MyLibs
         private static Random rnd;
         public void run_Test()
         {
+
+            // 도서관리 sample
+            BookManager bm = new BookManager();
+            bm.Run();
+
+            // 100의 bitcoins 전송 sample //
+            List<MyClassBlockChain> blockchain = new List<MyClassBlockChain>();
+            // Genesis block
+            string[] transactions = { "Jone Sent 100 Bitcoins to Bob." };
+            // 최초 노드 : genesisBlock
+            myClassBlockChainHeader blockheader = new myClassBlockChainHeader(null, transactions);
+            MyClassBlockChain genesisBlock = new MyClassBlockChain(blockheader, transactions);
+            Console.WriteLine("Block Hash : {0}", genesisBlock.getBlockHash());
+
+            Stopwatch stopw = new Stopwatch();//시간 측정 클래스
+            MyClassBlockChain previousBlock = genesisBlock;
+            for (int i = 0; i < 5; i++)
+            {
+                myClassBlockChainHeader secondBlockheader = new myClassBlockChainHeader(Encoding.UTF8.GetBytes(previousBlock.getBlockHash()), transactions);
+                MyClassBlockChain nextBlock = new MyClassBlockChain(secondBlockheader, transactions);
+                stopw.Start();
+                int count = secondBlockheader.ProofOfWorkCount();
+                stopw.Stop();
+                Console.WriteLine("{0} th Block Hash : {1}", i.ToString(), nextBlock.getBlockHash());
+                Console.WriteLine("   └ COUNT of Proof of Work : {0} th loop", count);
+                Console.WriteLine("   └ Delay : {0} millisecond", stopw.ElapsedMilliseconds);
+                previousBlock = nextBlock;
+                stopw.Reset();
+            }
+
+            //Console.Write("Any key to exit");
+            //Console.ReadKey();
+
+
             // Array to List
             int[] ints = new[] { 10, 20, 10, 34, 113 };
             List<int> lst = ints.OfType<int>().ToList();
@@ -2319,10 +2684,10 @@ namespace ConsoleApplication_MyLibs
             // List to Array
             int [] intsArray = lst.ToArray();
 
-            //중복되지 않는 첫번째 문자 구하기
+            //중복되지 않는 첫번째 문자 구하기 // dictionary 사용
             string s = "abcabdefe";
             char ch = MyClass_Strings.GetFirstChar(s.ToCharArray());
-            MyClass_print_log.debugPrint(ch);
+            MyClass_Dprint.debugPrint(ch);
  
             // 문자열 내 문자로 가능한 조합 구하기
             MyClass_Strings.getStringCombination("ABC");
@@ -2355,6 +2720,9 @@ namespace ConsoleApplication_MyLibs
             string str_Enc = MyClass_Security.CaesarCipherEncrypt(str_test, 20);
             string str_test2 = "21#abcdefghijklmnopqrstuvwxyz";
             string str_Enc2 = MyClass_Security.CaesarCipherEncrypt(str_test2, 20);
+
+            //
+
 
             // 메서드로 바꿀것
             // ABC 부품을 갖고 A7 B7 C7이 순서대로 오면 제품 조립 ok 
@@ -2408,7 +2776,7 @@ namespace ConsoleApplication_MyLibs
                     }
                 }
             }
-            MyClass_print_log.debugPrint("totalProductCount: " + totalProductCount);
+            MyClass_Dprint.debugPrint("totalProductCount: " + totalProductCount);
 
 
             // 구조체 타입 list의 정렬 예
@@ -2443,24 +2811,24 @@ namespace ConsoleApplication_MyLibs
             String key = "key";
             String en = MyClass_Security.Encrypt(originalText, key);
             String de = MyClass_Security.Decrypt(en, key);
-            MyClass_print_log.debugPrint("Original Text is " + originalText);
-            MyClass_print_log.debugPrint("Encrypted Text is " + en);
-            MyClass_print_log.debugPrint("Decrypted Text is " + de);
+            MyClass_Dprint.debugPrint("Original Text is " + originalText);
+            MyClass_Dprint.debugPrint("Encrypted Text is " + en);
+            MyClass_Dprint.debugPrint("Decrypted Text is " + de);
 
             // TCP 소켓 server/client sample //
             //MyClass_Networks.StartListeningAsync();
             // bool threadStop = false;
             var server_t = new System.Threading.Thread(() => serverThreaRun()); // 서버는 별도 thread에서 실행
             server_t.Start(); // 시작
-            MyClass_print_log.debugPrint("start StartClientSync");
+            MyClass_Dprint.debugPrint("start StartClientSync");
             //string testSend = MyClass_Networks.StartClientSync("1111111");
             string testSend2 = MyClass_Networks.StartClientSync("send data 111111 ", false);
             //testSend2 = MyClass_Networks.StartClientSync("222222 ", false);
             testSend2 = MyClass_Networks.StartClientSync("test <EOF>", true);
-            // MyClass_print_log.debugPrint("start StartAsyncClient");
+            // MyClass_Dprint.debugPrint("start StartAsyncClient");
             //MyClass_Networks.StartAsyncClient("test <EOF>");
             //MyClass_Networks.StartAsyncClient("<EOF>");
-            MyClass_print_log.debugPrint("abort socket server thread");
+            MyClass_Dprint.debugPrint("abort socket server thread");
             server_t.Abort(); // kill server thread.
             server_t.Join();
 
