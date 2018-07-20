@@ -2515,7 +2515,7 @@ namespace ConsoleApplication_MyLibs
             Console.WriteLine("\t가격:{0}", book.Price);
         }
     }
-    internal class BookManager
+    public class MyClass_BookManager
     {
         MyClass_Books books = new MyClass_Books();
         internal void Run()
@@ -2645,7 +2645,7 @@ namespace ConsoleApplication_MyLibs
         {
 
             // 도서관리 sample
-            BookManager bm = new BookManager();
+            MyClass_BookManager bm = new MyClass_BookManager();
             bm.Run();
 
             // 100의 bitcoins 전송 sample //
