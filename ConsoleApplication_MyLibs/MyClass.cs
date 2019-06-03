@@ -2198,45 +2198,65 @@ namespace ConsoleApplication_MyLibs
         static public void test()
         {
             //Product_struct[] Product_structArray = new[24] Product_struct;
-            List<Product_struct> Product = new List<Product_struct>();
-            //Product_struct.Add();
+            List<Product_struct> Product = new List<Product_struct>();//정해지지 않은 길이로 생성
             var tmp = new Product_struct();
             tmp.ProductID = 001;
             tmp.ProductName = "바둑이";
+            tmp.UnitPrice = 0.0003M; 
             Product.Add(tmp);
             var tmp1 = new Product_struct();
             tmp1.ProductID = 001;
             tmp1.ProductName = "바둑이2";
+            tmp1.UnitPrice = 0.0001M;
             Product.Add(tmp1);
             var tmp2 = new Product_struct();
             tmp2.ProductID = 010;
-            tmp2.ProductName = "다람쥐";
+            tmp2.ProductName = "두더쥐";
+            tmp2.UnitPrice = 0.0013M;
             Product.Add(tmp2);
             var tmp22 = new Product_struct();
             tmp22.ProductID = 010;
-            tmp22.ProductName = "다람쥐2";
+            tmp22.ProductName = "다람쥐";
+            tmp22.UnitPrice = 0.1003M;
             Product.Add(tmp22);
+            var tmp33 = new Product_struct();
+            tmp33.ProductID = 011;
+            tmp33.ProductName = "고양이";
+            tmp33.UnitPrice = 0.00M;
+            Product.Add(tmp33);
 
             /// SORT
-            //람다식 sort
-            Product.Sort((p1, p2) => p1.ProductName.CompareTo(p2.ProductName));
-            //람다식 sort2
+            //람다식 sort // 이름을 비교 - 가나다 오름차순 정렬
+            Product.Sort((p1, p2) => p1.ProductName.CompareTo(p2.ProductName)); 
+            //람다식 sort2 // productID를 비교 - 1 2 3 오름차순 정렬
             Product.Sort((p1, p2) => p1.ProductID.CompareTo(p2.ProductID));
-            // 또 다른 방식의 sort // 지정한 structure member를 기준으로 sorting
+
+            // OrderBy 방식의 sort // 지정한 structure member를 기준으로 sorting
             List<Product_struct> _Product = new List<Product_struct>();
             _Product = Product.OrderBy(order => order.ProductName).ToList(); // IEnumerable을 반환하니 list로 변환
 
+            // delegate 방식으로 정렬 // 오름차순 정렬
+            Product.Sort(delegate(Product_struct A, Product_struct B)
+            {
+                // 복합적인 조건으로 compare해서 sort할때 적당하다.
+                if (A.UnitPrice > B.UnitPrice) // 뒤
+                    return 1;
+                else if(A.UnitPrice < B.UnitPrice) // 앞
+                    return -1;
+
+                return 0; // 동일
+            });
             /// 중복제거
-            // list내 중복 제거 // 전체가 완전히 같은 경우만 제거
-            List<Product_struct> _Product_struct1 = new List<Product_struct>();
+            // list내 중복 제거 // !!!전체가 완전히 같은 경우만 제거되는 문제 있음
+            List<Product_struct> _Product_struct1 = new List<Product_struct>(); // 중복 제거한 결과 저장할 리스트 생성
             _Product_struct1 = Product.Distinct().ToList();
 
-            // list내 중복 제거 with ramda // 지정한 structure member를 기준으로 중복확인/제거
+            // list내 중복 제거 with ramda // 지정한 structure member를 기준으로 람다식으로 중복확인/제거 후 새로운 struct에 저장
             List<Product_struct> _Product_struct2 = new List<Product_struct>();
             _Product_struct2 = Product.GroupBy(c => c.ProductID).Select(grp => grp.First()).ToList();
 
             /// 검색
-            // list 내 검색 방법
+            // list 내 검색 방법 // 람다식으로 검색
             Product_struct result = _Product.Find(x => x.ProductID == 001);
 
             /// 검색 & count // list내에서 다람쥐로 시작하는 data 갯수 구함
@@ -2643,11 +2663,12 @@ namespace ConsoleApplication_MyLibs
         private static Random rnd;
         public void run_Test()
         {
-
+#if false
             // 도서관리 sample
             MyClass_BookManager bm = new MyClass_BookManager();
             bm.Run();
-
+#endif
+#if false
             // 100의 bitcoins 전송 sample //
             List<MyClassBlockChain> blockchain = new List<MyClassBlockChain>();
             // Genesis block
@@ -2672,10 +2693,7 @@ namespace ConsoleApplication_MyLibs
                 previousBlock = nextBlock;
                 stopw.Reset();
             }
-
-            //Console.Write("Any key to exit");
-            //Console.ReadKey();
-
+#endif
 
             // Array to List
             int[] ints = new[] { 10, 20, 10, 34, 113 };
