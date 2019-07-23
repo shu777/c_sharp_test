@@ -19,7 +19,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;DEBUG_PRINT_ENABLE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -44,6 +44,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MyClass.cs" />
+    <Compile Include="MyClass_BlockChain.cs" />
+    <Compile Include="MyClass_Data_Structure.cs" />
+    <Compile Include="MyClass_Dir_File_Log.cs" />
+    <Compile Include="MyClass_Math.cs" />
+    <Compile Include="MyClass_Network.cs" />
+    <Compile Include="MyClass_Security.cs" />
+    <Compile Include="MyClass_String.cs" />
+    <Compile Include="MyClass_System_Program.cs" />
+    <Compile Include="MyClass_Thread.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
