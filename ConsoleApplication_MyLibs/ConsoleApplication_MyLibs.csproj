@@ -47,6 +47,7 @@
     <Compile Include="MyClass_BlockChain.cs" />
     <Compile Include="MyClass_Data_Structure.cs" />
     <Compile Include="MyClass_Dir_File_Log.cs" />
+    <Compile Include="MyClass_List_Array.cs" />
     <Compile Include="MyClass_Math.cs" />
     <Compile Include="MyClass_Network.cs" />
     <Compile Include="MyClass_Security.cs" />

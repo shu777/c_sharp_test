@@ -15,7 +15,13 @@ using System.Text.RegularExpressions;//정규표현식
 
 namespace ConsoleApplication_MyLibs
 {
+    class Address_struct
+    {
+        public string name { get; set; }
+        public List<string> phone { get; set; }
+        public List<string> email { get; set; }
 
+    }
     /// <summary>
     /// 문자열 처리 클래스
     /// 
@@ -125,9 +131,116 @@ namespace ConsoleApplication_MyLibs
             return (string[])newList.ToArray(typeof(string));
         }
         // 스트링을 숫자로 변환
-        public static int strToInt32(string numberStr)
+        public int strToInt32(string numberStr)
         {
             return int.Parse(numberStr);
+        }
+        // 스트링 리스트 오름차순 정렬
+        public string[] strOrderUP(string[] words)
+        {
+            //string[] words = inputData.Split('#');
+            // 정렬
+            var asc = from s in words
+                   orderby s ascending
+                   select s;
+            string[] result = asc.ToArray();
+            return result;
+        }
+        // 스트링 리스트 내림차순 정렬
+        public string[] strOrderDOWN(string[] words)
+        {
+            //string[] words = inputData.Split('#');
+            // 정렬
+            var desc = from s in words
+                      orderby s descending
+                      select s;
+            string[] result = desc.ToArray();
+            return result;
+        }
+        // 입력된 string이 전화번호 형식에 맞는지 확인
+        public Boolean strPhoneNumberValidation(string inputStr)
+        {
+            //check phone num or email 
+            Regex regex = new Regex(@"010-[0-9]{4}-[0-9]{4}");
+            Match m = regex.Match(inputStr);
+            if (m.Success)
+            {
+                // 휴대전화 번호임
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        // 입력된 string이 이메일 형식인지 체크
+        public Boolean strEmailValidation(string inputStr)
+        {
+            // check email
+            bool valid = Regex.IsMatch(inputStr, @"[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?");
+            if (valid)
+            {
+                // email
+                return true;
+            }
+            else
+            {
+                // invalid
+                // valid_res = false;
+                return false;
+            }
+        }
+        // 입력된 string이 a~z 정규식 조건에 맞는지 확인
+        public Boolean strNameValidation(string inputStr)
+        {
+            {
+                // name only
+                Regex regex = new Regex(@"[^a-z@_\.]");
+                Match m = regex.Match(inputStr);
+                if (m.Success)
+                {
+                    // invalid name
+                    return false; // skip...
+                }
+                else
+                {
+                    return true;
+                    // valid name
+
+                }
+            }
+
+        }
+
+        // 구조체 내에 해당 이름을 가진 data가 있는지 체크
+        public Boolean checkNameExists(List<Address_struct> inputData, string inputName)
+        {
+            if (inputData.Exists(x => x.name == inputName)) // already added
+            {
+                // exists
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        // 구조체 내 멤버의 중복데이터 제거
+        public void removeDuplication(List<Address_struct> inputData)
+        {
+            foreach (Address_struct tmp in inputData)
+                tmp.phone.Distinct();
+        }
+        /// <summary>
+        ///  지정한 위치에서 부터 지정한 길이까지 스트링을 자름
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="length"></param>
+        /// <returns></returns>
+        public string strDevideWithLength(string input, int length)
+        {
+            string result = input.Substring(0, length);
+            return result;
         }
         /// <summary>
         ///  string to char array
