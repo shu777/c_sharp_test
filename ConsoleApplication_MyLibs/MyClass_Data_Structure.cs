@@ -324,6 +324,61 @@ namespace ConsoleApplication_MyLibs
     }
 
 
+    public class Myclass_listData
+    {
+        public int nID;
+        string strName;
+        public Myclass_listData()
+        {
+
+        }
+        public Myclass_listData(int _nID, string _strName)
+        {
+            nID = _nID;
+            strName = _strName;
+        }
+        public void Print()
+        {
+            Debug.Print("ID : " + nID.ToString() + ", Name : " + strName);
+        }
+
+        public static void testClass()
+        {
+            List<Myclass_listData> IData = new List<Myclass_listData>();
+
+            // 정렬할 데이터 샘플 입력
+            Random r = new Random();
+            for(int nIndex = 0; nIndex < 5; nIndex++)
+            {                
+                r.Next();
+                int nID = r.Next(0, 101);//System.Random.(0, 101);
+                IData.Add(new Myclass_listData(nID, nID.ToString()));
+            }
+
+            Debug.Print("<color=red>정렬 전</color>");
+            for(int nIndex = 0; nIndex<IData.Count; nIndex++)
+            {
+                IData[nIndex].Print();
+            }
+            // 정렬
+            IData.Sort(delegate(Myclass_listData A, Myclass_listData B) // 오름차순 정렬 예제
+            {
+                if (A.nID > B.nID) return 1;
+                else if (A.nID < B.nID) return -1;
+                return 0;
+            });
+
+            Debug.Print("<color=red>정렬 후</color>");
+            for (int nIndex = 0; nIndex < IData.Count; nIndex++)
+            {
+                IData[nIndex].Print();
+            }
+        }
+    }
+
+
+   
+
     /// <summary>
     /// 링크드 리스트의 예
     /// </summary>
@@ -356,7 +411,6 @@ namespace ConsoleApplication_MyLibs
 #endif
             }
         }
-
     }
 
 }

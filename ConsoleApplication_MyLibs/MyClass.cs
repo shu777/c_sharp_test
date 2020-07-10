@@ -10,6 +10,9 @@ using System.Security.Cryptography;// 암호화
 using System.Collections;
 using System.Diagnostics;
 using System.Text.RegularExpressions;//정규표현식
+using System.IO;
+// string list가 string array 보다 사용하기 쉬운게 아닌가?
+
 
 namespace ConsoleApplication_MyLibs
 {
@@ -81,7 +84,7 @@ namespace ConsoleApplication_MyLibs
 #endif
             int typeCount = strClass.countingAllTypes(line, delimiter, 1);
             string[] logTypes = strClass.getAllTypes(line, delimiter, 1);
-
+            logTypes = strClass.getAllTypes_n(line, delimiter, 1);
             // Example #4: Append new text to an existing file.
             // The using statement automatically flushes AND CLOSES the stream and calls 
             // IDisposable.Dispose on the stream object.
@@ -800,9 +803,18 @@ namespace ConsoleApplication_MyLibs
         }
         ~MyTest() { }
 
-        
+
+        //@ 심벌을 문자열 앞에 사용하면, 해당 문자열 안의 Escape 문자를 무시하고 문자 그대로 인식하도록 한다.
+        //예를 들어, 파일 패스를 지정할 때, Backslash를 한번 지정하면 이는 Escape문자로 인식되기 때문에 2개의 Backslash를를 사용하게 되는데, 
+        //@ 심벌을 문자열 시작 부호전에 사용하면, Backslash를를 그대로 Backslash를로 인식하게 한다.
         public void run_Test()
         {
+            Myclass_listData.testClass();
+            //MyClass_ScanDirs.testClass();
+            string path = Directory.GetCurrentDirectory();
+            StringBuilder sb = new StringBuilder(path);
+            sb.Append("\\dll_test.dll");
+            MyClass_CallDll.testClass(sb.ToString());
 #if false
             // 도서관리 sample
             MyClass_BookManager bm = new MyClass_BookManager();
@@ -835,29 +847,16 @@ namespace ConsoleApplication_MyLibs
             }
 #endif
 
-            // Array to List
-            int[] ints = new[] { 10, 20, 10, 34, 113 };
-            List<int> lst = ints.OfType<int>().ToList();
-            lst.AddRange(new int[] { 10, 20, 10, 34, 113 });
-            // List to Array
-            int [] intsArray = lst.ToArray();
-
             //중복되지 않는 첫번째 문자 구하기 // dictionary 사용
             string s = "abcabdefe";
             char ch = MyClass_Strings.GetFirstChar(s.ToCharArray());
 #if DEBUG_PRINT_ENABLE
             MyClass_Dprint.debugPrint(ch);
-#endif
+#endif       
+            MyClass_Strings tmp = new MyClass_Strings();
+            tmp.testClass();
 
-            // 문자열 내 문자로 가능한 조합 구하기
-            MyClass_Strings.getStringCombination("ABC");
-
-            // string 내 패턴 스트링 카운팅
-            string sampleData = "asdfkk;lkasldfajsdlkfj999kajsdlfkjasdlfkj9999kljflaskdflkajsdlfkjasdlkfj999lkajsdlfkjasldfkja999";
-            // 정규식 매칭 확인 + count
-            //int countResult = System.Text.RegularExpressions.Regex.Matches(sampleData, "999").Count;
-            int countResult = MyClass_Strings.countMatches(sampleData, "999");
-            Match matchRes = Regex.Match(sampleData, "999");
+           
             // recursive하게 sub folder에서 유일한 file 찾기 예
             string fullPath = MyClass_Files.findFileFromSubFolder(".", "test.txt"); 
 
@@ -962,7 +961,7 @@ namespace ConsoleApplication_MyLibs
             // MyClass_Parse_Log parse = new MyClass_Parse_Log('#'); // delimitor
             // 문제 sample //
             // parse.MyClass_Parse_And_Report1("LOGFILE_A.TXT", "REPORT_1.TXT");            // 문제 2
-            //parse.MyClass_Parse_And_Report2("LOGFILE_B.TXT", "REPORT_2.TXT");
+           // parse.MyClass_Parse_And_Report2("LOGFILE_B.TXT", "REPORT_2.TXT");
             //parse.MyClass_Parse_And_Report3("LOGFILE_B.TXT", "REPORT_3.TXT");
             //parse.MyClass_Parse_And_Report4("LOGFILE_B.TXT", "REPORT_4.TXT");
 

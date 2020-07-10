@@ -104,5 +104,17 @@ namespace ConsoleApplication_MyLibs
             }
         }
 
+        public void test_class()
+        {
+
+            // Array to List
+            int[] ints = new[] { 10, 20, 10, 34, 113 };
+            List<int> lst = ints.OfType<int>().ToList();
+            lst.AddRange(new int[] { 10, 20, 10, 34, 113 }); // 리스트에 아이템들을 추가
+            // List to Array
+            int[] intsArray = lst.ToArray();
+
+        }
+
     }
 }

@@ -10,7 +10,7 @@ using System.Security.Cryptography;// 암호화
 using System.Collections;
 using System.Diagnostics;
 using System.Text.RegularExpressions;//정규표현식
-
+using System.IO;
 
 // 파일,디렉토리,로그에 대한 기능 분류
 
@@ -26,6 +26,44 @@ using System.Text.RegularExpressions;//정규표현식
 
 namespace ConsoleApplication_MyLibs
 {
+
+    class MyClass_ScanDirs
+    {
+        int count = 1;
+
+        void DirFileSearch(string path, string file)
+        {
+            try
+            {
+                string[] dirs = Directory.GetDirectories(path);
+                string[] files = Directory.GetFiles(path, $"*.{file}");
+                foreach(string f in files)
+                {
+                    // 이곳에 해당 파일을 찾아서 처리 할 코드 삽입
+                    Debug.Print($"[{count++}] path = {f}");
+                }
+                if(dirs.Length > 0)
+                {
+                    foreach(string dir in dirs)
+                    {
+                        DirFileSearch(dir, file);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.Print(ex.ToString());
+            }
+        }
+        public static void testClass()
+        {
+            MyClass_ScanDirs tmp = new MyClass_ScanDirs();
+            tmp.DirFileSearch(@"D:\", "doc");
+
+        }
+    }
+
+
     // 여러개 쓰레드에서 동시에 file 기록 시 사용
     // thread safe한 file writer // append모드로 동작한다. 매번 file open / close..
     class MyClass_Files_Writer

@@ -2,16 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using System.Net;
-using System.Net.Sockets;
-using System.Threading;
-using System.Security.Cryptography;// 암호화
-using System.Collections;
-using System.Diagnostics;
+//using System.Threading.Tasks;
+//using System.Net;
+//using System.Net.Sockets;
+//using System.Threading;
+//using System.Security.Cryptography;// 암호화
+//using System.Collections;
+//using System.Diagnostics;
 using System.Text.RegularExpressions;//정규표현식
 
 //1.MyClass_Strings :  문자열 처리하는 클래스
+//2.Address_struct : 전화번호부 관리 예
 
 namespace ConsoleApplication_MyLibs
 {
@@ -31,8 +32,10 @@ namespace ConsoleApplication_MyLibs
     {
         public MyClass_Strings()
         {
-
+            // 생성자 없음.. method 들은 static 으로 구현
         }
+
+        // 중복되지 않는 첫번째 문자 구해서 return하는 method
         public static char GetFirstChar(char[] S)
         {
             Dictionary<char, int> ht = new Dictionary<char, int>();
@@ -77,6 +80,7 @@ namespace ConsoleApplication_MyLibs
                 sb.Remove(sb.Length - 1, 1);
             }
         }
+        
         /// <summary>
         /// src string 내의 문자들이 target string 내에 순서와 상관없이 포함되어 있는지 확인 // coffee -> foecofee
         /// </summary>
@@ -117,7 +121,7 @@ namespace ConsoleApplication_MyLibs
             return res; // 문자 수가 일치하면 return 0
         }
         /// <summary>
-        ///  remove duplicates from string Array
+        ///  문자열의 배열 내에서 중복되는 문자열 제거
         /// </summary>
         /// <param name="myList"></param>
         /// <returns></returns>
@@ -130,11 +134,7 @@ namespace ConsoleApplication_MyLibs
                     newList.Add(str);
             return (string[])newList.ToArray(typeof(string));
         }
-        // 스트링을 숫자로 변환
-        public int strToInt32(string numberStr)
-        {
-            return int.Parse(numberStr);
-        }
+
         // 스트링 리스트 오름차순 정렬
         public string[] strOrderUP(string[] words)
         {
@@ -212,7 +212,7 @@ namespace ConsoleApplication_MyLibs
 
         }
 
-        // 구조체 내에 해당 이름을 가진 data가 있는지 체크
+        // 전화번호 구조체 내에 해당 이름을 가진 data가 있는지 체크
         public Boolean checkNameExists(List<Address_struct> inputData, string inputName)
         {
             if (inputData.Exists(x => x.name == inputName)) // already added
@@ -225,7 +225,7 @@ namespace ConsoleApplication_MyLibs
                 return false;
             }
         }
-        // 구조체 내 멤버의 중복데이터 제거
+        // 전화번호 구조체 내 멤버의 중복데이터 제거
         public void removeDuplication(List<Address_struct> inputData)
         {
             foreach (Address_struct tmp in inputData)
@@ -321,28 +321,43 @@ namespace ConsoleApplication_MyLibs
             {
                 string[] data = this.StringSplit(s, delimiter);
                 //Class_Strings.
-                if (types.Any(data[1].Contains)) // type list에 존재하는지 확인하고,
+                if (types.Any(data[1].Contains)) // types라는 [스트링 타입을 나열하는] 문자열 리스트상에 파싱한 type이 이미 존재하는지 확인하고,
                 {
                     // 중복되는 경우는 skip
                 }
                 else
                 {
-                    types.Add(data[1]); // 없으면 리스트에 추가.
+                    types.Add(data[1]); // 없으면 [스트링 타입을 나열하는] 문자열 리스트에 추가.
                 }
             }
-            return types.ToArray();
+            //types.Count
+            return types.ToArray(); // [스트링 타입을 나열하는] 문자열 리스트를 배열로 변환하여 출력
         }
+        public string[] getAllTypes_n(string[] src, char delimiter, int field_number)
+        {
+            //string[] types = new string[];
+            List<string> types = new List<string>();
+            // scan types
+            foreach (string s in src)
+            {
+                string[] data = this.StringSplit(s, delimiter);
+              
+                types.Add(data[1]); // 없으면 [스트링 타입을 나열하는] 문자열 리스트에 추가.
+               
+            }
+            return types.Distinct().ToArray(); // 중복 제거 후 [스트링 타입을 나열하는] 문자열 리스트를 배열로 변환하여 출력
+        }
+
         // 로그 내 특정 type의 발생 갯수 counting
         public int getCountOfType(string[] src, char delimiter, int field_number, string type)
         {
             int total = 0;
-            List<string> types = new List<string>();
+            List<string> types = new List<string>(); // 문자열 리스트
 
-            foreach (string s in src)
+            foreach (string s in src) // 문자열 배열 소스
             {
-                string[] data = this.StringSplit(s, delimiter);
-                //Class_Strings.
-                if (data[field_number].Equals(type))
+                string[] data = this.StringSplit(s, delimiter); // 문자열 파싱 분리
+                if (data[field_number].Equals(type)) // 샘플이 1번 필드가 type이어서 비교해서 카운팅 했음. // 범용으로 바꿔야함
                     total++;
             }
             return total;
@@ -381,6 +396,18 @@ namespace ConsoleApplication_MyLibs
         ~MyClass_Strings()
         {
 
+        }
+
+        public void testClass()
+        {
+            // 문자열 내 문자로 가능한 조합 구하기
+            MyClass_Strings.getStringCombination("ABC");
+            // string 내 패턴 스트링 카운팅
+            string sampleData = "asdfkk;lkasldfajsdlkfj999kajsdlfkjasdlfkj9999kljflaskdflkajsdlfkjasdlkfj999lkajsdlfkjasldfkja999";
+            // 정규식 매칭 확인 + count
+            //int countResult = System.Text.RegularExpressions.Regex.Matches(sampleData, "999").Count;
+            int countResult = MyClass_Strings.countMatches(sampleData, "999");
+            //Match matchRes = Regex.Match(sampleData, "999");
         }
     }
     /// <summary>
