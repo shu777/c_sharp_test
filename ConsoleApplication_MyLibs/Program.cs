@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 
+
 namespace ConsoleApplication_MyLibs
 {
     class Program
@@ -12,6 +13,7 @@ namespace ConsoleApplication_MyLibs
         static void Main(string[] args)
         {
             Project_example1.runExample1();
+            Project_example2.runExample2();
 
             MyTest handle = new MyTest();
             handle.run_Test();

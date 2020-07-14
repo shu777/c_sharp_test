@@ -205,7 +205,7 @@ namespace ConsoleApplication_MyLibs
             {
                 wfile.WriteLine(t.logType + "#" + t.count.ToString());
                 Debug.WriteLine(t.logType + "#" + t.count.ToString());
-                t.wfile_output = new System.IO.StreamWriter(String.Format(outputTypeLg, "1", t.logType), false);
+                t.wfile_output = new System.IO.StreamWriter(String.Format(outputTypeLg, "1", t.logType), false); // 타입별 쓰기 핸들 미리열기//
             }
             //wfile.WriteLineAsync
             wfile.Close();
