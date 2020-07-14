@@ -11,8 +11,11 @@ namespace ConsoleApplication_MyLibs
     {
         static void Main(string[] args)
         {
+            Project_example1.runExample1();
+
             MyTest handle = new MyTest();
             handle.run_Test();
+            
         }
     }
 }
