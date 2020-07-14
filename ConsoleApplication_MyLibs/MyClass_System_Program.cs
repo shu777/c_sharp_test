@@ -49,8 +49,8 @@ namespace ConsoleApplication_MyLibs
 
             // 2. 델리게이트를 이용한 방식            
             MethodInfo minfo = theType.GetMethod("Output"); 
-            OutputDelegate delSay = (OutputDelegate)Delegate.CreateDelegate(typeof(OutputDelegate), null, minfo);
-            delSay("호출");
+            OutputDelegate _Output = (OutputDelegate)Delegate.CreateDelegate(typeof(OutputDelegate), null, minfo);
+            _Output(@"Hello_2");
 
 
             Console.ReadLine();

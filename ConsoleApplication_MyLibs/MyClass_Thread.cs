@@ -30,8 +30,9 @@ namespace ConsoleApplication_MyLibs
         //private var semaphore = new System.Threading.Semaphore(this.max_thread, this.max_thread);
         public void StartConvertAndWrite(MyClass_Files_Writer fileWriter, string srcString, char delimiter, int fieldNumber)
         {
-            System.Threading.ThreadPool.QueueUserWorkItem((state) =>
-            {
+            // TODO threadpool부분 재확인
+           // System.Threading.ThreadPool.QueueUserWorkItem((state) =>
+           // {
                 semaphore.WaitOne(); // 세마포어 wait
                 try
                 {
@@ -44,7 +45,7 @@ namespace ConsoleApplication_MyLibs
                 {
                     semaphore.Release(); // 세마포어 end
                 }
-            });
+           // });
         }
         /// <summary>
         /// thread run 메인

@@ -149,16 +149,12 @@ namespace ConsoleApplication_MyLibs
             string res = this.readAllText(mFilePath);
             if (res.Contains("\r\n"))
             {
-#if DEBUG_PRINT_ENABLE
-                MyClass_Dprint.debugPrint(" new line with carriage return.");
-#endif
+                Debug.WriteLine(" new line with carriage return.");
                 return "\r\n"; // 캐리지 리턴이 포함됨.
             }
             else if (res.Contains("\n"))
             {
-#if DEBUG_PRINT_ENABLE
-                MyClass_Dprint.debugPrint(" new line");
-#endif
+                Debug.WriteLine(" new line");
                 return "\n";
             }
             return string.Empty;
@@ -167,18 +163,14 @@ namespace ConsoleApplication_MyLibs
         public string readLine()
         {
             string res = file.ReadLine();
-#if DEBUG_PRINT_ENABLE
-            MyClass_Dprint.debugPrint("ReadLine : {0} ", res);
-#endif
+            Debug.WriteLine("ReadLine : {0} ", res);
             return res;
         }
         // 파일 내 전체 텍스트를 한개의 string에 읽어온다
         public string readAllText(string filePath)
         {
             string text = System.IO.File.ReadAllText(filePath);
-#if DEBUG_PRINT_ENABLE
-            MyClass_Dprint.debugPrint("readAllText : {0} ", text);
-#endif
+            Debug.WriteLine("readAllText : {0} ", text);
             return text;
         }
         /// <summary>
@@ -205,48 +197,40 @@ namespace ConsoleApplication_MyLibs
     {
         public static void debugPrint(string str)
         {
-#if DEBUG_PRINT_ENABLE
             // Get call stack
             StackTrace stackTrace = new StackTrace();
             //Console.WriteLine(str);
             string outputStr = "[Debug:" + stackTrace.GetFrame(1).GetMethod().Name + "] ";
             System.Diagnostics.Debug.Write(outputStr);
             System.Diagnostics.Debug.WriteLine(str);
-#endif
         }
         public static void debugPrint(object obj)
         {
-#if DEBUG_PRINT_ENABLE
             // Get call stack
             StackTrace stackTrace = new StackTrace();
             //Console.WriteLine(obj);
             string outputStr = "[Debug:" + stackTrace.GetFrame(1).GetMethod().Name + "] ";
             System.Diagnostics.Debug.Write(outputStr);
             System.Diagnostics.Debug.WriteLine(obj);
-#endif
         }
         public static void debugPrint(string format, params object[] arg)
         {
-#if DEBUG_PRINT_ENABLE
             // Get call stack
             StackTrace stackTrace = new StackTrace();
             //Console.WriteLine(format, arg);
             string outputStr = "[Debug:" + stackTrace.GetFrame(1).GetMethod().Name + "] ";
             System.Diagnostics.Debug.Write(outputStr);
             System.Diagnostics.Debug.WriteLine(format, arg);
-#endif
         }
 
         public static void debugPrint(string format, object arg0)
         {
-#if DEBUG_PRINT_ENABLE
             // Get call stack
             StackTrace stackTrace = new StackTrace();
             //Console.WriteLine(format, arg0);
             string outputStr = "[Debug:" + stackTrace.GetFrame(1).GetMethod().Name + "] ";
             System.Diagnostics.Debug.Write(outputStr);
             System.Diagnostics.Debug.WriteLine(format, arg0);
-#endif
         }
     }
 
@@ -263,17 +247,12 @@ namespace ConsoleApplication_MyLibs
         {
             foreach (string f in System.IO.Directory.GetFiles(sDir))
             {
-#if DEBUG_PRINT_ENABLE
-                MyClass_Dprint.debugPrint("File: " + f); // or some other file processing
-                                                         // 파일 name 출력
-#endif
+                Debug.WriteLine("File: " + f); // or some other file processing
             }
 
             foreach (string d in System.IO.Directory.GetDirectories(sDir))
             {
-#if DEBUG_PRINT_ENABLE
-                MyClass_Dprint.debugPrint("dir: " + d); // 디렉토리 name 출력
-#endif
+                Debug.WriteLine("dir: " + d); // 디렉토리 name 출력
                 TreeScan(d); // recursive call to get files of directory
             }
         }
@@ -290,10 +269,8 @@ namespace ConsoleApplication_MyLibs
             string scanedFileName = string.Empty;
             foreach (string f in System.IO.Directory.GetFiles(targetPath))
             {
-#if DEBUG_PRINT_ENABLE
-                MyClass_Dprint.debugPrint("File: " + f); // or some other file processing
-                                                         // 파일 name 출력
-#endif
+                Debug.WriteLine("File: " + f); // or some other file processing
+                                        // 파일 name 출력
                 scanedFileName = System.IO.Path.GetFileName(f);
                 if (scanedFileName.Equals(fileName))
                 {
@@ -303,9 +280,7 @@ namespace ConsoleApplication_MyLibs
 
             foreach (string d in System.IO.Directory.GetDirectories(targetPath))
             {
-#if DEBUG_PRINT_ENABLE
-                MyClass_Dprint.debugPrint("dir: " + d); // 디렉토리 name 출력
-#endif
+                Debug.WriteLine("dir: " + d); // 디렉토리 name 출력
                 string resSub = findFileFromSubFolder(d, fileName); // recursive call to get files of directory
                 if (!resSub.Equals(string.Empty))
                     return resSub;
@@ -320,9 +295,7 @@ namespace ConsoleApplication_MyLibs
             List<string> strings = new List<string>();
             if (!System.IO.Directory.Exists(targetPath)) // 없으면
             {
-#if DEBUG_PRINT_ENABLE
-                MyClass_Dprint.debugPrint("error. tar folder not found. ");
-#endif
+                Debug.WriteLine("error. tar folder not found. ");
                 return strings.ToArray();
             }
             string[] filePaths = System.IO.Directory.GetFiles(targetPath + "\\", "*." + extension);
@@ -347,9 +320,7 @@ namespace ConsoleApplication_MyLibs
             }
             if (strings.Count <= 0)
             {
-#if DEBUG_PRINT_ENABLE
-                MyClass_Dprint.debugPrint("[scanFolder] error. no file in dir. ");
-#endif
+                Debug.WriteLine("[scanFolder] error. no file in dir. ");
                 return strings.ToArray();
             }
             return strings.ToArray();
@@ -367,13 +338,12 @@ namespace ConsoleApplication_MyLibs
 		/// <param name="name">file path</param>
 		public MyClass_Logger(string name)
         {
-#if DEBUG_PRINT_ENABLE
-            MyClass_Dprint.debugPrint(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location));
-            MyClass_Dprint.debugPrint(System.AppDomain.CurrentDomain.BaseDirectory);
-            MyClass_Dprint.debugPrint(System.Environment.CurrentDirectory);
-            MyClass_Dprint.debugPrint(System.IO.Directory.GetCurrentDirectory());
-            MyClass_Dprint.debugPrint(Environment.CurrentDirectory);
-#endif
+            Debug.WriteLine(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location));
+            Debug.WriteLine(System.AppDomain.CurrentDomain.BaseDirectory);
+            Debug.WriteLine(System.Environment.CurrentDirectory);
+            Debug.WriteLine(System.IO.Directory.GetCurrentDirectory());
+            Debug.WriteLine(Environment.CurrentDirectory);
+
             //To get the location the assembly normally resides on disk or the install directory
             string _path = System.Reflection.Assembly.GetExecutingAssembly().CodeBase;
             //once you have the path you get the directory with:
@@ -410,9 +380,7 @@ namespace ConsoleApplication_MyLibs
             }
             catch (Exception e)
             {
-#if DEBUG_PRINT_ENABLE
-                MyClass_Dprint.debugPrint(e.Message);
-#endif
+                Debug.WriteLine(e.Message);
             }
         }
 
@@ -433,9 +401,7 @@ namespace ConsoleApplication_MyLibs
             }
             catch (Exception e)
             {
-#if DEBUG_PRINT_ENABLE
-                MyClass_Dprint.debugPrint(e.Message);
-#endif
+                Debug.WriteLine(e.Message);
             }
         }
 

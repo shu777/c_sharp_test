@@ -323,36 +323,36 @@ namespace ConsoleApplication_MyLibs
         #endregion
     }
 
-
+    // C#의 리스트를 활용한 클래스 리스트 sorting
     public class Myclass_listData
     {
-        public int nID;
-        string strName;
-        public Myclass_listData()
+        public int nID; // 멤버변수 숫자타입
+        string strName; // 멤버변수 문자열타입
+        public Myclass_listData() // 생성자
         {
 
         }
-        public Myclass_listData(int _nID, string _strName)
+        public Myclass_listData(int _nID, string _strName)// argument가진 생성자
         {
             nID = _nID;
             strName = _strName;
         }
-        public void Print()
+        public void Print() // 디버깅용 메서드
         {
             Debug.Print("ID : " + nID.ToString() + ", Name : " + strName);
         }
 
         public static void testClass()
         {
-            List<Myclass_listData> IData = new List<Myclass_listData>();
+            List<Myclass_listData> IData = new List<Myclass_listData>(); // 클래스 리스트 // 구조체 리스트 보다 더 쉽게 사용
 
-            // 정렬할 데이터 샘플 입력
+            // 정렬할 데이터 샘플 램덤으로 5개 생성/입력
             Random r = new Random();
             for(int nIndex = 0; nIndex < 5; nIndex++)
             {                
                 r.Next();
                 int nID = r.Next(0, 101);//System.Random.(0, 101);
-                IData.Add(new Myclass_listData(nID, nID.ToString()));
+                IData.Add(new Myclass_listData(nID, nID.ToString())); // 리스트에 추가
             }
 
             Debug.Print("<color=red>정렬 전</color>");
@@ -360,14 +360,21 @@ namespace ConsoleApplication_MyLibs
             {
                 IData[nIndex].Print();
             }
-            // 정렬
-            IData.Sort(delegate(Myclass_listData A, Myclass_listData B) // 오름차순 정렬 예제
+            // 정렬 예제
+
+            IData.Sort(delegate (Myclass_listData A, Myclass_listData B) // 1. 오름차순 문자 정렬 예제
+            {
+                return A.strName.CompareTo(B.strName);
+                
+            });
+            
+            IData.Sort(delegate(Myclass_listData A, Myclass_listData B) // 2. 오름차순 숫자 정렬 예제
             {
                 if (A.nID > B.nID) return 1;
                 else if (A.nID < B.nID) return -1;
                 return 0;
             });
-
+            
             Debug.Print("<color=red>정렬 후</color>");
             for (int nIndex = 0; nIndex < IData.Count; nIndex++)
             {
@@ -400,15 +407,11 @@ namespace ConsoleApplication_MyLibs
                 list.AddAfter(node, newNode);
 
             // 리스트 출력
-#if DEBUG_PRINT_ENABLE
-            list.ToList().ForEach(p => MyClass_Dprint.debugPrint(p));
-#endif
+            list.ToList().ForEach(p => Debug.WriteLine(p));
             // Enumerator를 이용한 리스트 출력
             foreach (var m in list)
             {
-#if DEBUG_PRINT_ENABLE
-                MyClass_Dprint.debugPrint(m);
-#endif
+                Debug.WriteLine(m);
             }
         }
     }

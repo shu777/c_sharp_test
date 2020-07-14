@@ -10,6 +10,7 @@ using System.Text;
 //using System.Collections;
 //using System.Diagnostics;
 using System.Text.RegularExpressions;//정규표현식
+using System.Diagnostics;
 
 //1.MyClass_Strings :  문자열 처리하는 클래스
 //2.Address_struct : 전화번호부 관리 예
@@ -56,10 +57,9 @@ namespace ConsoleApplication_MyLibs
             return '\0';
         }
         public static void getStringCombination(string s)
-        {
-            //StringBuilder는 새로운 객체를 생성하지 않고 자신의 내부 버퍼 값만 변경함으로써 값을 추가
-            StringBuilder sb = new StringBuilder();
-            StringCombination(s, sb, 0);
+        {            
+            StringBuilder sb = new StringBuilder();//append 기능 위해 stringbuilder 사용
+            StringCombination(s, sb, 0); // 재귀적으로 실행하여 모든 조합을 찾는다.
         }
 
         private static void StringCombination(string s, StringBuilder sb, int index)
@@ -70,9 +70,7 @@ namespace ConsoleApplication_MyLibs
                 sb.Append(s[i]);
 
                 // 2) 구한 문자조합 출력
-#if DEBUG_PRINT_ENABLE
-                MyClass_Dprint.debugPrint(sb.ToString());
-#endif
+                Debug.WriteLine(sb.ToString());
                 // 3) 나머지 문자들에 대한 조합 구하기
                 StringCombination(s, sb, i + 1);
 
@@ -98,9 +96,7 @@ namespace ConsoleApplication_MyLibs
                 int index = target_tmp.IndexOf(c); // 일치하는 문자 위치 찾음
                 if (index != -1)
                 {
-#if DEBUG_PRINT_ENABLE
-                    MyClass_Dprint.debugPrint("match index:{0}", index);
-#endif
+                    Debug.WriteLine("match index:{0}", index);
                     target_tmp = target_tmp.Remove(index, 1); // 일치하는 문자 제거
                 }
                 else
@@ -267,7 +263,9 @@ namespace ConsoleApplication_MyLibs
         /// <returns></returns>
         public static int charToInt(char c)
         {
-            return (int)(c - '0');
+            //return (int)(c - '0');
+            //return Convert.ToInt32(new string(c, 1));
+            return Convert.ToInt32(c);
         }
         // 구분자로 string을 나눈다.
         public string[] StringSplit(string src, char delimiter)
@@ -279,6 +277,21 @@ namespace ConsoleApplication_MyLibs
         public bool checkContains(string src, string value)
         {
             return src.Contains(value);
+        }
+
+        public static string pad_and_int (int N, int P) // integer값을 string으로 변환시 P로 지정한 자릿수 형식에 맞게 변환 앞은 0으로 채운다.
+        {
+            string s = "{0:";
+            for(int i = 0; i<P; i++)
+            {
+                s += "0";
+            }
+            s += "}";
+
+            // use of string.Format() method
+            string value = string.Format(s, N);
+
+            return value;
         }
 
         /// <summary>
@@ -397,9 +410,14 @@ namespace ConsoleApplication_MyLibs
         {
 
         }
-
-        public void testClass()
+        public static string makeNewFilenameWithVersion(string version)
         {
+            return string.Format("libtest_{0}.dll", version); // 버전명을 추가한 스트링 형식 리턴
+        }
+        public static void testClass()
+        {
+            MyClass_Strings tmp = new MyClass_Strings();
+
             // 문자열 내 문자로 가능한 조합 구하기
             MyClass_Strings.getStringCombination("ABC");
             // string 내 패턴 스트링 카운팅
@@ -408,6 +426,11 @@ namespace ConsoleApplication_MyLibs
             //int countResult = System.Text.RegularExpressions.Regex.Matches(sampleData, "999").Count;
             int countResult = MyClass_Strings.countMatches(sampleData, "999");
             //Match matchRes = Regex.Match(sampleData, "999");
+
+            makeNewFilenameWithVersion("1.1.1");
+
+            string res = pad_and_int(123, 6); // 숫자리 정해진 자릿수 형식으로 문자변환
+            Debug.Print(res);
         }
     }
     /// <summary>

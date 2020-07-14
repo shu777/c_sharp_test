@@ -46,9 +46,7 @@ namespace ConsoleApplication_MyLibs
             string res = srcFile.readLine(); // 1 line read
             string[] line = srcFile.readLines(inputLog); // read all lines
             int num = line.Count(); // total count
-#if DEBUG_PRINT_ENABLE
-            MyClass_Dprint.debugPrint("read lines:" + num);
-#endif
+            Debug.WriteLine("read lines:" + num);
             ///////////////////////////////////////////////////////
             int typeCount = strClass.countingAllTypes(line, delimiter, 1);
             string[] logTypes = { "EE", "WW", "SS" }; // 세개의 로그타입
@@ -63,9 +61,7 @@ namespace ConsoleApplication_MyLibs
                 {
                     //string[] data = strClass.StringSplit(s, delimiter);
                     int cnt = strClass.getCountOfType(line, delimiter, 1, s);
-#if DEBUG_PRINT_ENABLE
-                    MyClass_Dprint.debugPrint("type:" + s + " total num:" + cnt);
-#endif
+                    Debug.WriteLine("type:" + s + " total num:" + cnt);
                     outFile.WriteLine(s + "#" + cnt);
                 }
             }
@@ -79,9 +75,7 @@ namespace ConsoleApplication_MyLibs
             string res = srcFile.readLine(); // 1 line read
             string[] line = srcFile.readLines(inputLog); // read all lines
             int num = line.Count(); // total count
-#if DEBUG_PRINT_ENABLE
-            MyClass_Dprint.debugPrint("read lines:" + num);
-#endif
+            Debug.WriteLine("read lines:" + num);
             int typeCount = strClass.countingAllTypes(line, delimiter, 1);
             string[] logTypes = strClass.getAllTypes(line, delimiter, 1);
             logTypes = strClass.getAllTypes_n(line, delimiter, 1);
@@ -97,9 +91,7 @@ namespace ConsoleApplication_MyLibs
                 {
                     //string[] data = strClass.StringSplit(s, delimiter);
                     int cnt = strClass.getCountOfType(line, delimiter, 1, s);
-#if DEBUG_PRINT_ENABLE
-                    MyClass_Dprint.debugPrint("type:" + s + " total num:" + cnt);
-#endif
+                    Debug.WriteLine("type:" + s + " total num:" + cnt);
                     outFile.WriteLine(s + "#" + cnt);
                 }
             }
@@ -113,9 +105,7 @@ namespace ConsoleApplication_MyLibs
             string res = srcFile.readLine(); // 1 line read
             string[] line = srcFile.readLines(inputLog); // read all lines
             int num = line.Count(); // total count
-#if DEBUG_PRINT_ENABLE
-            MyClass_Dprint.debugPrint("read lines:" + num);
-#endif
+            Debug.WriteLine("read lines:" + num);
             int typeCount = strClass.countingAllTypes(line, delimiter, 1);
             string[] logTypes = strClass.getAllTypes(line, delimiter, 1);
             MyClass_Thread myThread = new MyClass_Thread();
@@ -145,9 +135,7 @@ namespace ConsoleApplication_MyLibs
                         }
 
                     }
-#if DEBUG_PRINT_ENABLE
-                    MyClass_Dprint.debugPrint("type:" + s + " total num:" + cnt);
-#endif
+                    Debug.WriteLine("type:" + s + " total num:" + cnt);
                     outFile.WriteLine(s + "#" + cnt);
                 }
             }
@@ -161,9 +149,7 @@ namespace ConsoleApplication_MyLibs
             string res = srcFile.readLine(); // 1 line read
             string[] line = srcFile.readLines(inputLog); // read all lines
             int num = line.Count(); // total count
-#if DEBUG_PRINT_ENABLE
-            MyClass_Dprint.debugPrint("read lines:" + num);
-#endif
+            Debug.WriteLine("read lines:" + num);
             int typeCount = strClass.countingAllTypes(line, delimiter, 1);
             string[] logTypes = strClass.getAllTypes(line, delimiter, 1);
             MyClass_Thread myThread = new MyClass_Thread();
@@ -185,15 +171,11 @@ namespace ConsoleApplication_MyLibs
                     foreach (string _line in strResult)
                     {
                         // 이부분 multi thread로 바꾼다.
-#if DEBUG_PRINT_ENABLE
-                        MyClass_Dprint.debugPrint("type: " + s);
-                        MyClass_Dprint.debugPrint("line: " + _line);
-#endif
+                        Debug.WriteLine("type: " + s);
+                        Debug.WriteLine("line: " + _line);
                         myThread.StartConvertAndWrite(fileWriter, _line, delimiter, 2);
                     }
-#if DEBUG_PRINT_ENABLE
-                    MyClass_Dprint.debugPrint("type:" + s + " total num:" + cnt);
-#endif
+                    Debug.WriteLine("type:" + s + " total num:" + cnt);
                     outFile.WriteLine(s + "#" + cnt);
                 }
             }
@@ -214,15 +196,11 @@ namespace ConsoleApplication_MyLibs
             // CoinChangeCount c = new CoinChangeCount();
             // 1.  Recursive 방식 해결
             int ans = this.Count(coins, 4, 90);
-#if DEBUG_PRINT_ENABLE
-            MyClass_Dprint.debugPrint("Count={0}", ans);
-#endif
+            Debug.WriteLine("Count={0}", ans);
             // 2. 중간 결과를 저장(Memoization)하여 Lookup하는 방식 해결
             Dictionary<Tuple<int, int>, int> hash = new Dictionary<Tuple<int, int>, int>();
             ans = this.DPCount(coins, 4, 90, hash);
-#if DEBUG_PRINT_ENABLE
-            MyClass_Dprint.debugPrint("DPCount={0}", ans);
-#endif
+            Debug.WriteLine("DPCount={0}", ans);
         }
 
         public int Count(int[] coins, int m, int n)
@@ -230,9 +208,7 @@ namespace ConsoleApplication_MyLibs
             if (n == 0) return 1;
             if (n < 0) return 0;
             if (m <= 0) return 0;
-#if DEBUG_PRINT_ENABLE
-            MyClass_Dprint.debugPrint("m:{0}, n:{1}", m, n);
-#endif
+            Debug.WriteLine("m:{0}, n:{1}", m, n);
             return Count(coins, m - 1, n) + Count(coins, m, n - coins[m - 1]);
         }
 
@@ -385,9 +361,7 @@ namespace ConsoleApplication_MyLibs
 
             if (ht.Contains("tom"))
             {
-#if DEBUG_PRINT_ENABLE
-                MyClass_Dprint.debugPrint(ht["tom"]);
-#endif
+                Debug.WriteLine(ht["tom"]);
             }
             ///////////////////////////////
 
@@ -398,42 +372,30 @@ namespace ConsoleApplication_MyLibs
             htt.Add(15, Character2); // 추가
             Gameharacter Character3 = new Gameharacter(200, 34, 3345000); // 구조체 3
             htt.Add(200, Character3); // 추가
-#if DEBUG_PRINT_ENABLE
-            MyClass_Dprint.debugPrint("before");
-#endif
+            Debug.WriteLine("before");
             foreach (DictionaryEntry entry in htt) // 상태 출력
             {
                 Gameharacter getStr = (Gameharacter)entry.Value;
-#if DEBUG_PRINT_ENABLE
-                MyClass_Dprint.debugPrint(entry.Key + ":" + getStr._CharCd);
-#endif
+                Debug.WriteLine(entry.Key + ":" + getStr._CharCd);
             }
             htt.Remove(200); // key 200 제거
-#if DEBUG_PRINT_ENABLE
-            MyClass_Dprint.debugPrint("after");
-#endif
+            Debug.WriteLine("after");
             foreach (DictionaryEntry entry in htt) // 상태 출력
             {
                 Gameharacter getStr = (Gameharacter)entry.Value;
-#if DEBUG_PRINT_ENABLE
-                MyClass_Dprint.debugPrint(entry.Key + ":" + getStr._CharCd);
-#endif
+                Debug.WriteLine(entry.Key + ":" + getStr._CharCd);
             }
             // IDictionary<string, Gameharacter> d = htt; // your hash table
             //var ordered = d.OrderBy(p => p.Key).ToList();
             // foreach (var p in ordered)
             // {
-#if DEBUG_PRINT_ENABLE
-            //    MyClass_Dprint.debugPrint("Key: {0} Value: {1}", p.Key, p.Value);
-#endif
+            //    Debug.WriteLine("Key: {0} Value: {1}", p.Key, p.Value);
             //  }
             SortedList sorter2 = new SortedList(htt);
             foreach (DictionaryEntry entry in htt) // 상태 출력
             {
                 Gameharacter getStr = (Gameharacter)entry.Value;
-#if DEBUG_PRINT_ENABLE
-                MyClass_Dprint.debugPrint(entry.Key + ":" + getStr._CharCd + "|" + getStr._Level + ":"+getStr._Money);
-#endif
+                Debug.WriteLine(entry.Key + ":" + getStr._CharCd + "|" + getStr._Level + ":"+getStr._Money);
             }
 
 
@@ -560,13 +522,9 @@ namespace ConsoleApplication_MyLibs
             {
                 for(int ii=0; ii< inData[0].GetLength(0); ii++)
                 {
-#if DEBUG_PRINT_ENABLE
-                    MyClass_Dprint.debugPrint("sorted array>" + inData[i][ii]);
-#endif
+                    Debug.WriteLine("sorted array>" + inData[i][ii]);
                 }
-#if DEBUG_PRINT_ENABLE
-                MyClass_Dprint.debugPrint("###");
-#endif
+                Debug.WriteLine("###");
             }
             return inData;
         }
@@ -809,6 +767,7 @@ namespace ConsoleApplication_MyLibs
         //@ 심벌을 문자열 시작 부호전에 사용하면, Backslash를를 그대로 Backslash를로 인식하게 한다.
         public void run_Test()
         {
+            MyClass_Math.testClass();
             Myclass_listData.testClass();
             //MyClass_ScanDirs.testClass();
             string path = Directory.GetCurrentDirectory();
@@ -850,11 +809,8 @@ namespace ConsoleApplication_MyLibs
             //중복되지 않는 첫번째 문자 구하기 // dictionary 사용
             string s = "abcabdefe";
             char ch = MyClass_Strings.GetFirstChar(s.ToCharArray());
-#if DEBUG_PRINT_ENABLE
-            MyClass_Dprint.debugPrint(ch);
-#endif       
-            MyClass_Strings tmp = new MyClass_Strings();
-            tmp.testClass();
+            Debug.WriteLine(ch);
+            MyClass_Strings.testClass();
 
            
             // recursive하게 sub folder에서 유일한 file 찾기 예
@@ -935,9 +891,7 @@ namespace ConsoleApplication_MyLibs
                     }
                 }
             }
-#if DEBUG_PRINT_ENABLE
-            MyClass_Dprint.debugPrint("totalProductCount: " + totalProductCount);
-#endif
+            Debug.WriteLine("totalProductCount: " + totalProductCount);
 
             // 구조체 타입 list의 정렬 예
             //MyClass_list_sort<int> lSortTest = new MyClass_list_sort<int>();
@@ -971,24 +925,18 @@ namespace ConsoleApplication_MyLibs
             String key = "key";
             String en = MyClass_Security.Encrypt(originalText, key);
             String de = MyClass_Security.Decrypt(en, key);
-#if DEBUG_PRINT_ENABLE
-            MyClass_Dprint.debugPrint("Original Text is " + originalText);
-            MyClass_Dprint.debugPrint("Encrypted Text is " + en);
-            MyClass_Dprint.debugPrint("Decrypted Text is " + de);
-#endif
+            Debug.WriteLine("Original Text is " + originalText);
+            Debug.WriteLine("Encrypted Text is " + en);
+            Debug.WriteLine("Decrypted Text is " + de);
             MyClass_Networks.StartServerWithThread();
             //string testSend = MyClass_Networks.StartClientSync("1111111");
             string testSend2 = MyClass_Networks.StartClientSync("send data 111111 ", false);
             //testSend2 = MyClass_Networks.StartClientSync("222222 ", false);
             testSend2 = MyClass_Networks.StartClientSync("test <EOF>", true);
-#if DEBUG_PRINT_ENABLE
-            // MyClass_Dprint.debugPrint("start StartAsyncClient");
-#endif
+            // Debug.WriteLine("start StartAsyncClient");
             //MyClass_Networks.StartAsyncClient("test <EOF>");
             //MyClass_Networks.StartAsyncClient("<EOF>");
-#if DEBUG_PRINT_ENABLE
-            MyClass_Dprint.debugPrint("abort socket server thread");
-#endif
+            Debug.WriteLine("abort socket server thread");
 
             MyClass_Networks.StopServerWithThread();
 

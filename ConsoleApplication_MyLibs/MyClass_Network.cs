@@ -56,9 +56,7 @@ namespace ConsoleApplication_MyLibs
         // run tcp socket server thread
         private static void serverThreaRun()
         {
-#if DEBUG_PRINT_ENABLE
-            MyClass_Dprint.debugPrint("start listening");
-#endif
+            Debug.WriteLine("start listening");
             MyClass_Networks.StartServerListeningAsync();
         }
         public static void StartServerWithThread()
@@ -69,9 +67,7 @@ namespace ConsoleApplication_MyLibs
            /// var 
                 server_t = new System.Threading.Thread(() => serverThreaRun()); // 서버는 별도 thread에서 실행
             server_t.Start(); // 시작
-    #if DEBUG_PRINT_ENABLE
-                MyClass_Dprint.debugPrint("start StartClientSync");
-    #endif
+            Debug.WriteLine("start StartClientSync");
         }
         private static Thread server_t;
         public static void StopServerWithThread()
@@ -102,47 +98,35 @@ namespace ConsoleApplication_MyLibs
                 try
                 {
                     sender.Connect(remoteEP);
-#if DEBUG_PRINT_ENABLE
-                    MyClass_Dprint.debugPrint("Socket connected to {0}", sender.RemoteEndPoint.ToString());
-#endif
+                    Debug.WriteLine("Socket connected to {0}", sender.RemoteEndPoint.ToString());
                     // Encode the data string into a byte array.  
                     byte[] msg = Encoding.ASCII.GetBytes("This is a test<EOF>");
                     // Send the data through the socket.  
                     int bytesSent = sender.Send(msg);
                     // Receive the response from the remote device.  
                     int bytesRec = sender.Receive(bytes);
-#if DEBUG_PRINT_ENABLE
-                    MyClass_Dprint.debugPrint("Echoed test = {0}", Encoding.ASCII.GetString(bytes, 0, bytesRec));
-#endif
+                    Debug.WriteLine("Echoed test = {0}", Encoding.ASCII.GetString(bytes, 0, bytesRec));
                     // Release the socket.  
                     sender.Shutdown(SocketShutdown.Both);
                     sender.Close();
                 }
                 catch (ArgumentNullException ane)
                 {
-#if DEBUG_PRINT_ENABLE
-                    MyClass_Dprint.debugPrint("ArgumentNullException : {0}", ane.ToString());
-#endif
+                    Debug.WriteLine("ArgumentNullException : {0}", ane.ToString());
                 }
                 catch (SocketException se)
                 {
-#if DEBUG_PRINT_ENABLE
-                    MyClass_Dprint.debugPrint("SocketException : {0}", se.ToString());
-#endif
+                    Debug.WriteLine("SocketException : {0}", se.ToString());
                 }
                 catch (Exception e)
                 {
-#if DEBUG_PRINT_ENABLE
-                    MyClass_Dprint.debugPrint("Unexpected exception : {0}", e.ToString());
-#endif
+                    Debug.WriteLine("Unexpected exception : {0}", e.ToString());
                 }
 
             }
             catch (Exception e)
             {
-#if DEBUG_PRINT_ENABLE
-                MyClass_Dprint.debugPrint(e.ToString());
-#endif
+                Debug.WriteLine(e.ToString());
             }
         }
         public static string StartClientSync(string data)
@@ -166,9 +150,7 @@ namespace ConsoleApplication_MyLibs
                 try
                 {
                     sender.Connect(remoteEP);
-#if DEBUG_PRINT_ENABLE
-                    MyClass_Dprint.debugPrint("Socket connected to {0}", sender.RemoteEndPoint.ToString());
-#endif
+                    Debug.WriteLine("Socket connected to {0}", sender.RemoteEndPoint.ToString());
                     // Encode the data string into a byte array.  
                     byte[] msg = Encoding.ASCII.GetBytes(data);
 
@@ -177,9 +159,7 @@ namespace ConsoleApplication_MyLibs
 
                     // Receive the response from the remote device.  
                     int bytesRec = sender.Receive(bytes);
-#if DEBUG_PRINT_ENABLE
-                    MyClass_Dprint.debugPrint("Echoed test = {0}", Encoding.ASCII.GetString(bytes, 0, bytesRec));
-#endif
+                    Debug.WriteLine("Echoed test = {0}", Encoding.ASCII.GetString(bytes, 0, bytesRec));
                     res = Encoding.ASCII.GetString(bytes, 0, bytesRec);
                     // Release the socket.  
                     sender.Shutdown(SocketShutdown.Both);
@@ -188,29 +168,21 @@ namespace ConsoleApplication_MyLibs
                 }
                 catch (ArgumentNullException ane)
                 {
-#if DEBUG_PRINT_ENABLE
-                    MyClass_Dprint.debugPrint("ArgumentNullException : {0}", ane.ToString());
-#endif
+                    Debug.WriteLine("ArgumentNullException : {0}", ane.ToString());
                 }
                 catch (SocketException se)
                 {
-#if DEBUG_PRINT_ENABLE
-                    MyClass_Dprint.debugPrint("SocketException : {0}", se.ToString());
-#endif
+                    Debug.WriteLine("SocketException : {0}", se.ToString());
                 }
                 catch (Exception e)
                 {
-#if DEBUG_PRINT_ENABLE
-                    MyClass_Dprint.debugPrint("Unexpected exception : {0}", e.ToString());
-#endif
+                    Debug.WriteLine("Unexpected exception : {0}", e.ToString());
                 }
 
             }
             catch (Exception e)
             {
-#if DEBUG_PRINT_ENABLE
-                MyClass_Dprint.debugPrint(e.ToString());
-#endif
+                Debug.WriteLine(e.ToString());
             }
             return res;
         }
@@ -237,10 +209,8 @@ namespace ConsoleApplication_MyLibs
                 try
                 {
                     sender.Connect(remoteEP);
-#if DEBUG_PRINT_ENABLE
-                    MyClass_Dprint.debugPrint("[Client] Socket connected to {0}", sender.RemoteEndPoint.ToString());
-                    MyClass_Dprint.debugPrint("[Client] Send data [{0}] to server", data);
-#endif
+                    Debug.WriteLine("[Client] Socket connected to {0}", sender.RemoteEndPoint.ToString());
+                    Debug.WriteLine("[Client] Send data [{0}] to server", data);
                     // Encode the data string into a byte array.  
                     byte[] msg = Encoding.ASCII.GetBytes(data);
 
@@ -249,14 +219,10 @@ namespace ConsoleApplication_MyLibs
                     //bytesSent = sender.Send(msg);
                     if (recvReply == true) // 서버로 부터 reply 받는 경우
                     {
-#if DEBUG_PRINT_ENABLE
                         // Receive the response from the remote device.
-                        MyClass_Dprint.debugPrint("[Client] wait reply...");
-#endif
+                        Debug.WriteLine("[Client] wait reply...");
                         int bytesRec = sender.Receive(bytes);
-#if DEBUG_PRINT_ENABLE
-                        MyClass_Dprint.debugPrint("[Client] Echoed data : {0}", Encoding.ASCII.GetString(bytes, 0, bytesRec));
-#endif
+                        Debug.WriteLine("[Client] Echoed data : {0}", Encoding.ASCII.GetString(bytes, 0, bytesRec));
                         res = Encoding.ASCII.GetString(bytes, 0, bytesRec);
                     }
                     // Release the socket.  
@@ -266,29 +232,21 @@ namespace ConsoleApplication_MyLibs
                 }
                 catch (ArgumentNullException ane)
                 {
-#if DEBUG_PRINT_ENABLE
-                    MyClass_Dprint.debugPrint("[Client] ArgumentNullException : {0}", ane.ToString());
-#endif
+                    Debug.WriteLine("[Client] ArgumentNullException : {0}", ane.ToString());
                 }
                 catch (SocketException se)
                 {
-#if DEBUG_PRINT_ENABLE
-                    MyClass_Dprint.debugPrint("[Client] SocketException : {0}", se.ToString());
-#endif
+                    Debug.WriteLine("[Client] SocketException : {0}", se.ToString());
                 }
                 catch (Exception e)
                 {
-#if DEBUG_PRINT_ENABLE
-                    MyClass_Dprint.debugPrint("[Client] Unexpected exception : {0}", e.ToString());
-#endif
+                    Debug.WriteLine("[Client] Unexpected exception : {0}", e.ToString());
                 }
 
             }
             catch (Exception e)
             {
-#if DEBUG_PRINT_ENABLE
-                MyClass_Dprint.debugPrint("[Client] {0}", e.ToString());
-#endif
+                Debug.WriteLine("[Client] {0}", e.ToString());
             }
             return res;
         }
@@ -334,9 +292,7 @@ namespace ConsoleApplication_MyLibs
                 receiveDone_client_async.WaitOne();
 
                 // Write the response to the console. 
-#if DEBUG_PRINT_ENABLE
-                MyClass_Dprint.debugPrint("Response received : {0}", response);
-#endif
+                Debug.WriteLine("Response received : {0}", response);
 
                 // Release the socket.  
                 client.Shutdown(SocketShutdown.Both);
@@ -345,9 +301,7 @@ namespace ConsoleApplication_MyLibs
             }
             catch (Exception e)
             {
-#if DEBUG_PRINT_ENABLE
-                MyClass_Dprint.debugPrint(e.ToString());
-#endif
+                Debug.WriteLine(e.ToString());
             }
         }
         public static void StartAsyncClient(string data)
@@ -388,9 +342,7 @@ namespace ConsoleApplication_MyLibs
                 receiveDone_client_async.WaitOne();
 
                 // Write the response to the console. 
-#if DEBUG_PRINT_ENABLE
-                MyClass_Dprint.debugPrint("Response received : {0}", response);
-#endif
+                Debug.WriteLine("Response received : {0}", response);
                 // Release the socket.  
                 client.Shutdown(SocketShutdown.Both);
                 client.Close();
@@ -398,9 +350,7 @@ namespace ConsoleApplication_MyLibs
             }
             catch (Exception e)
             {
-#if DEBUG_PRINT_ENABLE
-                MyClass_Dprint.debugPrint(e.ToString());
-#endif
+                Debug.WriteLine(e.ToString());
             }
         }
         public static string StartAsyncClient(string data, bool recvReply)
@@ -444,9 +394,7 @@ namespace ConsoleApplication_MyLibs
                     receiveDone_client_async.WaitOne();
 
                     // Write the response to the console.  
-#if DEBUG_PRINT_ENABLE
-                    MyClass_Dprint.debugPrint("Response received : {0}", response); // 별도 recv thread
-#endif
+                    Debug.WriteLine("Response received : {0}", response); // 별도 recv thread
                     result = response;
                 }
                 // Release the socket.  
@@ -456,9 +404,7 @@ namespace ConsoleApplication_MyLibs
             }
             catch (Exception e)
             {
-#if DEBUG_PRINT_ENABLE
-                MyClass_Dprint.debugPrint(e.ToString());
-#endif
+                Debug.WriteLine(e.ToString());
             }
             return result;
         }
@@ -472,18 +418,14 @@ namespace ConsoleApplication_MyLibs
 
                 // Complete the connection.  
                 client.EndConnect(ar);
-#if DEBUG_PRINT_ENABLE
-                MyClass_Dprint.debugPrint("Socket connected to {0}",
+                Debug.WriteLine("Socket connected to {0}",
                     client.RemoteEndPoint.ToString());
-#endif
                 // Signal that the connection has been made.  
                 connectDone_client_async.Set();
             }
             catch (Exception e)
             {
-#if DEBUG_PRINT_ENABLE
-                MyClass_Dprint.debugPrint(e.ToString());
-#endif
+                Debug.WriteLine(e.ToString());
             }
         }
 
@@ -501,9 +443,7 @@ namespace ConsoleApplication_MyLibs
             }
             catch (Exception e)
             {
-#if DEBUG_PRINT_ENABLE
-                MyClass_Dprint.debugPrint(e.ToString());
-#endif
+                Debug.WriteLine(e.ToString());
             }
         }
 
@@ -541,9 +481,7 @@ namespace ConsoleApplication_MyLibs
             }
             catch (Exception e)
             {
-#if DEBUG_PRINT_ENABLE
-                MyClass_Dprint.debugPrint(e.ToString());
-#endif
+                Debug.WriteLine(e.ToString());
             }
         }
 
@@ -566,18 +504,14 @@ namespace ConsoleApplication_MyLibs
 
                 // Complete sending the data to the remote device.  
                 int bytesSent = client.EndSend(ar);
-#if DEBUG_PRINT_ENABLE
-                MyClass_Dprint.debugPrint("Sent {0} bytes to server.", bytesSent);
-#endif
+                Debug.WriteLine("Sent {0} bytes to server.", bytesSent);
 
                 // Signal that all bytes have been sent.  
                 sendDone_client_async.Set();
             }
             catch (Exception e)
             {
-#if DEBUG_PRINT_ENABLE
-                MyClass_Dprint.debugPrint(e.ToString());
-#endif
+                Debug.WriteLine(e.ToString());
             }
         }
         //////////////////////////////
@@ -614,9 +548,7 @@ namespace ConsoleApplication_MyLibs
                     allDone_server.Reset();
 
                     // Start an asynchronous socket to listen for connections.  
-#if DEBUG_PRINT_ENABLE
-                    MyClass_Dprint.debugPrint("[Server] Waiting for a connection...");
-#endif
+                    Debug.WriteLine("[Server] Waiting for a connection...");
                     listener.BeginAccept(
                         new AsyncCallback(AcceptCallback_server),
                         listener);
@@ -628,14 +560,10 @@ namespace ConsoleApplication_MyLibs
             }
             catch (Exception e)
             {
-#if DEBUG_PRINT_ENABLE
-                MyClass_Dprint.debugPrint(e.ToString());
-#endif
+                Debug.WriteLine(e.ToString());
             }
-#if DEBUG_PRINT_ENABLE
-            //MyClass_Dprint.debugPrint("\nPress ENTER to continue...");
-            MyClass_Dprint.debugPrint("[Server]  \nEnd server...");
-#endif
+            //Debug.WriteLine("\nPress ENTER to continue...");
+            Debug.WriteLine("[Server]  \nEnd server...");
             //			Console.Read();  
 
         }
@@ -682,22 +610,16 @@ namespace ConsoleApplication_MyLibs
                 // Check for end-of-file tag. If it is not there, read   
                 // more data.  
                 content = state.sb.ToString();
-#if DEBUG_PRINT_ENABLE
-                MyClass_Dprint.debugPrint("[server] Receved: {0}", content);
-#endif
+                Debug.WriteLine("[server] Receved: {0}", content);
                 if (content.IndexOf("<EOF>") > -1) // stream end DETECT ***
                 //if(content.IndexOf("\r\n") > -1 || content.IndexOf("\n") > -1  || content.IndexOf("\r") > -1)
                 {
                     // All the data has been read from the   
                     // client. Display it on the console.  
-#if DEBUG_PRINT_ENABLE
-                    MyClass_Dprint.debugPrint("[Server] Read {0} bytes from socket. \n Data : {1}", content.Length, content);
-#endif
+                    Debug.WriteLine("[Server] Read {0} bytes from socket. \n Data : {1}", content.Length, content);
                     if (content.Contains("test")) // check 샘플
                     {
-#if DEBUG_PRINT_ENABLE
-                        MyClass_Dprint.debugPrint("[Server] test command received! ");
-#endif
+                        Debug.WriteLine("[Server] test command received! ");
                     }
                     // 받은 메세지를 다시 client로 보낸다.
                     Send_Server(handler, content);
@@ -715,9 +637,7 @@ namespace ConsoleApplication_MyLibs
         {
             // Convert the string data to byte data using ASCII encoding.  
             byte[] byteData = Encoding.ASCII.GetBytes(data);
-#if DEBUG_PRINT_ENABLE
-            MyClass_Dprint.debugPrint("[Server] send data:[{0}] to client", data);
-#endif
+            Debug.WriteLine("[Server] send data:[{0}] to client", data);
             // Begin sending the data to the remote device.  
             handler.BeginSend(byteData, 0, byteData.Length, 0,
                 new AsyncCallback(SendCallback_Server), handler);
@@ -732,18 +652,14 @@ namespace ConsoleApplication_MyLibs
 
                 // Complete sending the data to the remote device.  
                 int bytesSent = handler.EndSend(ar);
-#if DEBUG_PRINT_ENABLE
-                MyClass_Dprint.debugPrint("Sent {0} bytes to client.", bytesSent);
-#endif
+                Debug.WriteLine("Sent {0} bytes to client.", bytesSent);
                 handler.Shutdown(SocketShutdown.Both);
                 handler.Close();
 
             }
             catch (Exception e)
             {
-#if DEBUG_PRINT_ENABLE
-                MyClass_Dprint.debugPrint("[Server] {0}", e.ToString());
-#endif
+                Debug.WriteLine("[Server] {0}", e.ToString());
             }
         }
     }
