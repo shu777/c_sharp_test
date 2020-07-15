@@ -171,7 +171,11 @@ namespace ConsoleApplication_MyLibs
                         // parsing cmd
                         getDataMain(inputFileName, inputMode, securityKey, ref dataLines, 0);
                         startRequest = true;
-                        writer.WriteLine(dataLines[currentPosition].final_data); writer.Flush();
+
+                        byte[] StrByte = Encoding.UTF8.GetBytes(dataLines[currentPosition].final_data);
+                        stream.Write(StrByte, 0, StrByte.Length);
+                        //writer.WriteLine(dataLines[currentPosition].final_data); 
+                        writer.Flush();
                         currentPosition++;
                     }
                     else
@@ -179,7 +183,10 @@ namespace ConsoleApplication_MyLibs
                         int line_number = 0;
                         if (myCompleteMessage.ToString().Equals("ACK"))
                         {
-                            writer.WriteLine(dataLines[currentPosition].final_data); writer.Flush();
+                            byte[] StrByte = Encoding.UTF8.GetBytes(dataLines[currentPosition].final_data);
+                            stream.Write(StrByte, 0, StrByte.Length);
+                            //writer.WriteLine(dataLines[currentPosition].final_data);
+                            writer.Flush();
                             currentPosition++;
                             if (currentPosition >= dataLines.Count)
                                 break;
@@ -187,7 +194,10 @@ namespace ConsoleApplication_MyLibs
                         else if (myCompleteMessage.ToString().Equals("ERR"))
                         {
                             currentPosition--; // 재송신
-                            writer.WriteLine(dataLines[currentPosition].final_data); writer.Flush();
+                            byte[] StrByte = Encoding.UTF8.GetBytes(dataLines[currentPosition].final_data);
+                            stream.Write(StrByte, 0, StrByte.Length);
+                            //writer.WriteLine(dataLines[currentPosition].final_data);
+                            writer.Flush();
                             currentPosition++;
                             if (currentPosition >= dataLines.Count)
                                 break;
@@ -200,7 +210,10 @@ namespace ConsoleApplication_MyLibs
                             currentPosition = 0;
                             getDataMain(inputFileName, inputMode, securityKey, ref dataLines, line_number - 1);
                             startRequest = true;
-                            writer.WriteLine(dataLines[currentPosition].final_data); writer.Flush();
+                            byte[] StrByte = Encoding.UTF8.GetBytes(dataLines[currentPosition].final_data);
+                            stream.Write(StrByte, 0, StrByte.Length);
+                            //writer.WriteLine(dataLines[currentPosition].final_data);
+                            writer.Flush();
                             currentPosition++;
                         }
                         else

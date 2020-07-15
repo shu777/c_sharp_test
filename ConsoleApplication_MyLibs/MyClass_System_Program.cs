@@ -11,10 +11,14 @@ using System.Collections;
 using System.Diagnostics;
 using System.Text.RegularExpressions;//정규표현식
 using System.Runtime.InteropServices;
-using System;
+
 using System.Reflection;
 
-// 1. MyClass_Program 외부 실행파일 실행 (with argument)후 output 가져옴
+/// <summary>
+/// 0. 외부 DLL을 import하여 method를 실행하는 샘플
+/// // 1. MyClass_Program 외부 실행파일 실행 (with argument)후 output 가져옴
+/// </summary>
+
 
 namespace ConsoleApplication_MyLibs
 {
@@ -53,7 +57,7 @@ namespace ConsoleApplication_MyLibs
             _Output(@"Hello_2");
 
 
-            Console.ReadLine();
+            //Console.ReadLine(); // 사용자 입력대기
         }
 
     }
