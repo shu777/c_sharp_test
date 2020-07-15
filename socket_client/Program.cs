@@ -51,7 +51,7 @@ namespace socket_client
                     byte[] msg = Encoding.ASCII.GetBytes(data);
 
                     // Send the data through the socket.  
-                    int bytesSent = sender.Send(msg);
+                    int bytesSent = sender.Send(msg); // 초기 메세기 send
                     //bytesSent = sender.Send(msg);
                     if (recvReply == true) // 서버로 부터 reply 받는 경우
                     {
@@ -62,6 +62,9 @@ namespace socket_client
                             int bytesRec = sender.Receive(bytes);
                             Console.WriteLine(Encoding.ASCII.GetString(bytes, 0, bytesRec));
                             res = Encoding.ASCII.GetString(bytes, 0, bytesRec);
+                            // 서버로 부터 받은 데이터 parsing 후 proc 여기 추가
+                            // TODO
+                            // process 후 replay send
                             byte[] StrByte = Encoding.UTF8.GetBytes("ACK");
                             sender.Send(StrByte);
                         }
