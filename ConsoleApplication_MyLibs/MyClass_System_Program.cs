@@ -90,6 +90,29 @@ namespace ConsoleApplication_MyLibs
             pProcess.WaitForExit();
             return output;
         }
+        public static void externalProgramStdinoutRedirectionSample() // 외부프로그램을 argument와 함께 실행하고, 순차적으로 명령을 보내는 샘플
+        {
+            System.Diagnostics.Process pProcess = new System.Diagnostics.Process();
+            pProcess.StartInfo.FileName = "..\\externalApp\\externalApp.exe";
+            pProcess.StartInfo.Arguments = "-a 2"; //argument
+            pProcess.StartInfo.UseShellExecute = false;
+            pProcess.StartInfo.RedirectStandardOutput = true;
+            pProcess.StartInfo.RedirectStandardInput = true;
+            pProcess.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+            pProcess.StartInfo.CreateNoWindow = true; //not diplay a windows
+            pProcess.Start();
+            /////////////////////
+
+            pProcess.StandardInput.Write(@"HELLO" + Environment.NewLine);
+            string output = pProcess.StandardOutput.ReadLine();
+            Console.WriteLine(output);
+            pProcess.StandardInput.Write(@"command push" + Environment.NewLine);
+            string output2 = pProcess.StandardOutput.ReadLine();
+            Console.WriteLine(output2);
+
+            pProcess.StandardInput.Close();
+            pProcess.Close();
+        }
         ~MyClass_Program()
         {
 
