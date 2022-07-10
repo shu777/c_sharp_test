@@ -79,8 +79,8 @@ namespace ConsoleApplication_MyLibs
         static string inputFileNameQ1 = "LOGFILE_A.TXT";
         static string inputFileNameQ2_4 = "LOGFILE_B.TXT";
         static string inputFileNameQ5 = "LOGFILE_C.TXT";
-        static string outputFileName = "REPORT_{0}.TXT";// String.Format() 사용해서 자동화  //  QuestionNumber //REPORT_<문항번호>.TXT
-        static string outputTypeLg = "TYPELOG_{0}_{1}.TXT";//TYPELOG_<문항번호>_<타입>.TXT
+        static string outputFileName = "REPORT_{0}.TXT";
+        static string outputTypeLg = "TYPELOG_{0}_{1}.TXT";
         static string external_progName = "CODECONV.EXE";
 
         static void parseLog(string data, ref List<log_parsed_data> logParsedData)
@@ -101,7 +101,7 @@ namespace ConsoleApplication_MyLibs
 
         public static void runAsyncProc(log_parsed_data data, List<type_count_data> logTypesCnt)
         {
-            // 시간 오래 걸린다.
+            // 시간 오래 걸리는 외부 프로그램 실행부
             data.logDetail = runExternalProgram(external_progName, data.logDetail).Replace("\r\n", string.Empty);
             // 타입 별 output 쓰기 (append모드)
 
@@ -113,7 +113,7 @@ namespace ConsoleApplication_MyLibs
             }
             //wfile_type = new System.IO.StreamWriter(String.Format(outputTypeLg, "1", data.logType), true);
 
-            _readWriteLock.EnterWriteLock();
+            _readWriteLock.EnterWriteLock(); // thread safty 위해 lock
             {
 
                 if (wfile_type != null)
@@ -127,11 +127,11 @@ namespace ConsoleApplication_MyLibs
             _readWriteLock.ExitWriteLock();
         }
 
-        public static string runExternalProgram(string program, string argument)
+        public static string runExternalProgram(string program, string argument) // 외부 exe 프로그램 실행
         {
             System.Diagnostics.Process pProcess = new System.Diagnostics.Process();
             pProcess.StartInfo.FileName = program;
-            pProcess.StartInfo.Arguments = argument; //argument
+            pProcess.StartInfo.Arguments = argument; //argument 전달
             pProcess.StartInfo.UseShellExecute = false;
             pProcess.StartInfo.RedirectStandardOutput = true;
             pProcess.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;

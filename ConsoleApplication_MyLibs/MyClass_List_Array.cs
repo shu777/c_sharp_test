@@ -27,10 +27,8 @@ namespace ConsoleApplication_MyLibs
             inputListData.Sort();
 
         }
-        public int GetMaxFromList(List<List<int>> temp)
-        {
-            //List<List<int>> temp = GetTemp(inputData);
-            // 내림차순 정렬 후 첫번째 리스트 겟
+        public int GetMaxFromList(List<List<int>> temp)// 내림차순 정렬 후 첫번째 리스트 겟
+        {               
             int result = temp.OrderByDescending(x => x.Count())
                         .FirstOrDefault<List<int>>()[0];
             return result;

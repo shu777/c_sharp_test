@@ -17,7 +17,7 @@ using System.Diagnostics;
 
 namespace ConsoleApplication_MyLibs
 {
-    class Address_struct
+    class Address_struct // 구조체 샘플
     {
         public string name { get; set; }
         public List<string> phone { get; set; }
@@ -228,7 +228,9 @@ namespace ConsoleApplication_MyLibs
                 tmp.phone.Distinct();
         }
         /// <summary>
-        ///  지정한 위치에서 부터 지정한 길이까지 스트링을 자름
+        ///  지정한 위치에서 부터 지정한 길이까지 스트링을 자름 
+        ///  Substring(9); // 오프셋 9자리부터 끝까지
+        ///  Substring(9, 5); // 오프셋 9부터 5길이 만큼 자르기
         /// </summary>
         /// <param name="input"></param>
         /// <param name="length"></param>
@@ -246,6 +248,20 @@ namespace ConsoleApplication_MyLibs
         public static char[] strToCharArray(string str)
         {
             return str.ToCharArray();
+        }
+
+        // 스트링을 byte array로 바꾼다.
+        public static byte[] strToByteArray(string str)
+        {
+            return System.Text.Encoding.UTF8.GetBytes(str);
+            // test
+            // foreach (var b_data in ret)
+            //     Console.Write(b + " ");
+        }
+        // byte array 를 string으로 바꾼다.
+        public static string byteArrayToString(byte[] inputBytes)
+        {
+            return System.Text.Encoding.UTF8.GetString(inputBytes); 
         }
         /// <summary>
         /// string to int
@@ -279,6 +295,11 @@ namespace ConsoleApplication_MyLibs
             return src.Contains(value);
         }
 
+        // ex입력된 숫자를 10진수 4자리로 출력
+        //    string.Format("{0:D4}", 123);
+        // ex입력된 숫자를 16진수 출력
+        //     string.Format("{0:X2}", 123); // --> 대문자 hex
+        //     string.Format("{0:X2}", {1:x2}, 123, 123); // ->> 대문자 hex, 소문자 hex
         public static string pad_and_int (int N, int P) // integer값을 string으로 변환시 P로 지정한 자릿수 형식에 맞게 변환 앞은 0으로 채운다.
         {
             string s = "{0:";

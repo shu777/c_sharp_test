@@ -20,7 +20,7 @@ namespace ConsoleApplication_MyLibs
     class Project_example2
     {
 
-        public static string findFileFromSubFolder(string targetPath, string fileName)
+        public static string findFileFromSubFolder(string targetPath, string fileName) // 서브폴더를 탐색하여 원하는 파일 찾기
         {
             string res = string.Empty;
             string scanedFileName = string.Empty;
@@ -34,7 +34,6 @@ namespace ConsoleApplication_MyLibs
                     return f;
                 }
             }
-
             foreach (string d in System.IO.Directory.GetDirectories(targetPath))
             {
                 Debug.WriteLine("dir: " + d); // 디렉토리 name 출력
@@ -44,7 +43,7 @@ namespace ConsoleApplication_MyLibs
             }
             return res;
         }
-        static string encryptStrMethod2(string sourceStr, string keyword)
+        static string encryptStrMethod2(string sourceStr, string keyword) // 키워드를 앞에두고 지정한 문자 스왑방식 암호화
         {
             string result = "";
             List<char> keyword_data = keyword.ToCharArray().ToList<char>();
@@ -85,7 +84,7 @@ namespace ConsoleApplication_MyLibs
             return result;
 
         }
-        static string encryptStrMethod1(String sourceStr, int shift)
+        static string encryptStrMethod1(String sourceStr, int shift) // 지정한 문자 방식 암호화
         {
             char[] chars = sourceStr.ToArray();
             string result = "";
@@ -117,7 +116,7 @@ namespace ConsoleApplication_MyLibs
 
             string inputFileName = "ABCDFILE.TXT";
             string outputFileName = inputFileName;
-            string securityKey = "LGCNS";
+            string securityKey = "MYKEY";
             string inputMode = "";
             List<dataLine> dataLines = new List<dataLine>();
 
@@ -254,7 +253,7 @@ namespace ConsoleApplication_MyLibs
 
             // 1. 사용자 입력
             string userName = inputFileName;// Console.ReadLine();                                            
-            string filePath = findFileFromSubFolder("./BIGFILE", userName);// 2. 폴더 스캔하여 찾기
+            string filePath = findFileFromSubFolder("./fildedata/", userName);// 2. 폴더 스캔하여 찾기
 
             // 3. 파일들을 한줄씩 읽어서 array에 저장
             string[] lines = System.IO.File.ReadAllLines(filePath);
