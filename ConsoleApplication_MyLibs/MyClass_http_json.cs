@@ -42,8 +42,26 @@ namespace ConsoleApplication_MyLibs
             var content = new StringContent(json_obj.ToString(), Encoding.UTF8, "application/json");
             var res = client.PostAsync("http://127.0.0.1:8080/postTest", content).Result;
         }
+        public static void client_POST_DIR_INFO()// 폴더내 파일 목록을 JSON으로 변환하여 서버로 POST 하는 샘플
+        {
+            string folder_target = "./folder";
+            string[] files = System.IO.Directory.GetFiles(folder_target); // 디렉토리 내 파일리스트 겟
+            for (int i = 0; i < files.Length; i++)
+            {
+                files[i] = Path.GetFileName(files[i]);  // 파일명만 필요
+            }
+            var file_array_json = new JArray(files); // JARRAY로 변환
+            var reqBody = new JObject();
+            reqBody.Add("Folder_Name", folder_target);
+            reqBody.Add("Files_List", file_array_json);
+            string reqBodyStr = reqBody.ToString();
 
-        public static void server_GET_Context()
+            HttpClient client = new HttpClient();
+            var content = new StringContent(reqBodyStr, Encoding.UTF8, "application/json");
+            var res = client.PostAsync("http://127.0.0.1:8080/postFolderInfo", content).Result;
+        }
+
+        public static void server_GET_POST_Context()  // post와 get을 받는 서버 샘플
         {
             HttpListener server = new HttpListener();
             server.Prefixes.Add("http://127.0.0.1:8080/");
@@ -57,10 +75,11 @@ namespace ConsoleApplication_MyLibs
                 string methodName = context.Request.Url.Segments[1].Replace("/", "");
                 switch (methodName) //
                 {
-                    case "helloworld": // API name
+                    case "helloworld": // API name // GET request 샘플
                         int test1 = 0;
                         break;
-                    case "postTest": // API name
+                    case "postTest": // PORT request 샘플
+                    case "postFolderInfo":
                         if (request.HasEntityBody) // POST의 경우 body가 존재
                         {
                             var body = request.InputStream;
@@ -78,6 +97,20 @@ namespace ConsoleApplication_MyLibs
                             Console.WriteLine("End of data:");
                             reader.Close();
                             body.Close();
+
+                            if (methodName == "postFolderInfo") // 클라이언트에서 받은 폴더내 파일 정보 서버에 파일로 저장하는 샘플
+                            {
+                                DateTime time_now = DateTime.Now; // get current TIME string
+                                string curTime = time_now.ToString("yyyyMMdd_HHmmss"); // 현재시간.json 파일에 POST 로 받은 json 데이타 저장
+                                string filePath = curTime + ".json";
+                                using (System.IO.StreamWriter sw = new System.IO.StreamWriter(filePath, true))
+                                {
+                                    sw.WriteLine(s);
+                                    sw.Close();
+                                }
+
+                            }
+
                         }
 
                         break;

@@ -10,7 +10,7 @@ using System.Security.Cryptography;// 암호화
 using System.Collections;
 using System.Diagnostics;
 using System.Text.RegularExpressions;//정규표현식
-
+using System.IO;
 
 // 네트워크 서버/클라이언트 기능 정리
 
@@ -52,9 +52,137 @@ namespace ConsoleApplication_MyLibs
         private static String response = String.Empty;
 
 
+        /// <summary>
+        /// ////// simple SOCKET server // client
+        /// </summary>
+        static void socket_server_sample1111() // socket 접속을 기다리다가 클라이언트 접속되면 msg 보내고 종료
+        {
+            //byte[] bytes = new Byte[1024];
+            IPAddress ipAddress = IPAddress.Parse("127.0.0.1");
+            IPEndPoint localEndPoint = new IPEndPoint(ipAddress, 8090);
+            Socket listener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            try
+            {
+                listener.Bind(localEndPoint);
+                listener.Listen(100);
 
-        // run tcp socket server thread
-        private static void serverThreaRun()
+                Socket handler = listener.Accept();
+                byte[] msg = Encoding.ASCII.GetBytes("test"); // 클라이언트 접속 시 msg를 보낸다.
+                handler.Send(msg);
+                handler.Shutdown(SocketShutdown.Both);
+                handler.Close();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+            Console.WriteLine("[Server]  \nEnd server...");
+        }
+        static void socket_client_sample1111() // socket 접속 후 서버로 부터 ASCII string 받고 종료
+        {
+            byte[] bytes = new byte[1024];
+            //try
+            //{
+            IPAddress ipAddress = IPAddress.Parse("127.0.0.1");
+            IPEndPoint remoteEP = new IPEndPoint(ipAddress, 8090);
+            Socket sender = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            try
+            {
+                sender.Connect(remoteEP);
+                int bytesRec = sender.Receive(bytes);
+                Console.WriteLine(Encoding.ASCII.GetString(bytes, 0, bytesRec));
+                sender.Shutdown(SocketShutdown.Both);
+                sender.Close();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+        }
+        static void socket_server_sample2222() // socket 접속 기다리다가 클라이언트로 부터 파일 정보와 내용을 받아서 파일로 저장한다.
+        {
+            // 클라이언트로 부터 파일을 수신받아 서버에 기록하는 샘플
+            byte[] bytes = new Byte[1024];
+            IPAddress ipAddress = IPAddress.Parse("127.0.0.1");
+            IPEndPoint localEndPoint = new IPEndPoint(ipAddress, 8090);
+            Socket listener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            try
+            {
+                listener.Bind(localEndPoint);
+                listener.Listen(100);
+
+                Socket handler = listener.Accept();
+
+                NetworkStream nstrm = new NetworkStream(handler);
+                BinaryReader breader = new BinaryReader(nstrm);
+                FileStream fstrm = null;
+
+                string filename;
+                while ((filename = breader.ReadString()) != null)
+                {
+                    // file length recv
+                    int length = (int)breader.ReadInt64();
+                    fstrm = new FileStream("./recv_files" + '/' + filename, FileMode.Create);
+                    while (length > 0)
+                    {
+                        // file body receive
+                        int receiveLength = breader.Read(bytes, 0, Math.Min(1024, length));
+                        fstrm.Write(bytes, 0, receiveLength);
+                        length -= receiveLength;
+                    }
+                    fstrm.Close();
+                    Console.WriteLine(filename + "is received");
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+            Console.WriteLine("[Server]  \nEnd server...");
+        }
+        static void socket_client_sample2222()
+        {
+            byte[] bytes = new byte[1024];
+            IPAddress ipAddress = IPAddress.Parse("127.0.0.1");
+            IPEndPoint remoteEP = new IPEndPoint(ipAddress, 8090);
+            Socket sender = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            try
+            {
+                sender.Connect(remoteEP);
+                NetworkStream nstrm = new NetworkStream(sender);
+                BinaryWriter bwrt = new BinaryWriter(nstrm);
+
+                DirectoryInfo dirInfo = new DirectoryInfo("./clientDir");
+                FileInfo[] files = dirInfo.GetFiles();
+                foreach (FileInfo file in files)
+                {
+                    bwrt.Write(file.Name); // 이름 전송
+                    long fileLength = file.Length;
+                    bwrt.Write(fileLength); // 파일크기 전송
+                    FileStream fstrm = new FileStream(file.FullName, FileMode.Open, FileAccess.Read);
+                    while (fileLength > 0)
+                    {
+                        int nReadLength = fstrm.Read(bytes, 0, Math.Min(1024, (int)fileLength));
+                        bwrt.Write(bytes, 0, nReadLength);
+                        fileLength -= nReadLength;
+                    }
+                    fstrm.Close();
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+
+        }
+
+    
+
+
+
+
+    // run tcp socket server thread
+    private static void serverThreaRun()
         {
             Debug.WriteLine("start listening");
             MyClass_Networks.StartServerListeningAsync();

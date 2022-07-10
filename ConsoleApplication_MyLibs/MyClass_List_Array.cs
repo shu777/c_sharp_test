@@ -6,6 +6,26 @@ using System.Threading.Tasks;
 
 namespace ConsoleApplication_MyLibs
 {
+    class Myclass_Queue
+    {
+        public static void queueSample()
+        {
+            Queue<string> queue = new Queue<string>();
+            queue.Enqueue("first"); //추가
+            queue.Enqueue("second"); //추가
+            queue.Enqueue("third"); //추가
+            Console.WriteLine("Q count: {0}", queue.Count); // 크기 확인
+            foreach (string item in queue)
+            {
+                Console.WriteLine(item); // 아이템 출력
+            }
+            Console.WriteLine("Deque : '{0}'", queue.Dequeue()); //삭제
+            Console.WriteLine("Peek : {0}", queue.Peek()); //조회
+            Console.WriteLine("check Contains : {0}", queue.Contains("third")); // 확인
+            queue.Clear();
+        }
+
+    }
     class MyClass_List_Array
     {
         public List<int> CreatList ()
