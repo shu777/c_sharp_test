@@ -36,6 +36,7 @@ namespace ConsoleApplication_MyLibs
             // 생성자 없음.. method 들은 static 으로 구현
         }
 
+       
         // 중복되지 않는 첫번째 문자 구해서 return하는 method
         public static char GetFirstChar(char[] S)
         {

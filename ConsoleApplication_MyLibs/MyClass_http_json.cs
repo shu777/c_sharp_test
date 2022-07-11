@@ -27,6 +27,26 @@ namespace ConsoleApplication_MyLibs
         }
         ~MyClass_http_json() { }
 
+        public static void requestUrlParsingSample()
+        {
+            // URL 파싱 샘플
+            string testUrl = "rtsp://root:1234@127.0.0.1/token000001?res=1280x720";
+            var uri_parse = new Uri(testUrl); // Uri로 변환
+            var protocol = uri_parse.Scheme; // 프로토콜 종류 rtsp, http, 
+            var loginUserInfo = uri_parse.UserInfo; // root:1234 , id/passwd로 파싱 필요
+            string[] loginUserInfoParsed = loginUserInfo.Split(':');
+            var loginID = loginUserInfoParsed[0]; // root
+            var loginPasswd = loginUserInfoParsed[1]; // 1234
+            var streamHostAddr = uri_parse.Host; // 타겟 host address
+            var stremamPort = uri_parse.Port; // 타겟 서비스 port  ( -1 : null )
+            var streamToken = uri_parse.Segments[1]; // 토큰  [0]은 split string..
+            var streamOptionExtra = uri_parse.Query; // 토큰 뒤에 오는 값, 추가 파싱 필요  ?res=1280x720
+            var tempStr = streamOptionExtra.Remove(0, 5);
+            var resolution = tempStr.Split('x');
+            var width = resolution[0];
+            var height = resolution[1];
+            var streamQueryAll = uri_parse.PathAndQuery; // 옵션 전체  /token000001?res=1280x720
+        }
         public static void client_GET_Request() // GET 샘플
         {
             HttpClient client = new HttpClient();
