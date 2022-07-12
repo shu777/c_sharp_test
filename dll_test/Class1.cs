@@ -14,5 +14,17 @@ namespace dll_test
         {
             Console.WriteLine(s);
         }
+        public int method1(string input_str, out string output_str)
+        {
+            Console.WriteLine("input: {0}", input_str);
+            output_str = input_str;
+            return 3;
+        }
+        public int method2(string input_str, ref string output_str)
+        {
+            Console.WriteLine("input: {0}", input_str);
+            output_str = input_str;
+            return 3;
+        }
     }
 }

@@ -237,6 +237,22 @@ namespace ConsoleApplication_MyLibs
                 // ...
             }
 
+            /*
+             *  // vote.json //
+             * {
+                    "AI": "1",
+                    "AJ": "0",
+                    "AM": "0",
+                    "AN": "0",
+                    "BK": "5",
+                    "BL": "8",
+                    "BM": "0",
+                    "BN": "0",
+                    "BO": "4",
+                    "CJ": "0",
+                    "CK": "2"
+                }
+             */
             ///////////////// jobject 정렬 //////////////
             string voteJson = File.ReadAllText("vote.json"); // file 에서 json 읽기
             JObject voteObj = JObject.Parse(voteJson); // json Object로 파싱

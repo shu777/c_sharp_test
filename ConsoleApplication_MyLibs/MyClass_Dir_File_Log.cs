@@ -26,7 +26,60 @@ using System.IO;
 
 namespace ConsoleApplication_MyLibs
 {
+    class MyClass_FileRW_Simple
+    {
 
+        static void binReadWrite()
+        {
+            const int fileBufSz = 2048;
+            byte[]buf = new byte[fileBufSz];
+            int nfReadLength;
+
+            FileStream inStreamFile = new FileStream("sampleBinFile.bin", FileMode.Open, FileAccess.Read);
+            FileStream outStreamFile = new FileStream("sampleBinOutfile.bin", FileMode.Create, FileAccess.Write);
+
+            while ((nfReadLength =  inStreamFile.Read(buf, 0, fileBufSz)) > 0)
+            {
+                outStreamFile.Write(buf, 0, nfReadLength);
+            }
+            inStreamFile.Close();
+            outStreamFile.Close();
+        }
+
+        static void textReadWrite()
+        {
+            string curLine;
+
+            StreamReader file = new StreamReader("sampleTextFile.txt");
+            StreamWriter outFile = new StreamWriter("sampleOutTextFile.txt"); // Path.Combine(docPath, "WriteLines.txt")
+            while ((curLine = file.ReadLine()) != null)
+            {
+                Console.WriteLine(curLine);
+                outFile.WriteLine(curLine);
+            }
+            file.Close();
+            outFile.Close();
+        }
+
+    }
+    class MyClass_Dir_Simple
+    {
+        static void getDirFileList()
+        {
+            string[] dir_subs = Directory.GetDirectories(".");
+            foreach(string s in dir_subs)
+            {
+                Console.WriteLine("sub: {0}", s);
+            }
+
+            string[] files_in_dir = Directory.GetFiles(".");
+            foreach(String s in files_in_dir)
+            {
+                Console.WriteLine("file: {0}", s);
+            }
+
+        }
+    }
     class MyClass_ScanDirs
     {
         int count = 1;

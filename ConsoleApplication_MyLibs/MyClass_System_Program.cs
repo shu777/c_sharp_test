@@ -12,7 +12,7 @@ using System.Diagnostics;
 using System.Text.RegularExpressions;//정규표현식
 using System.Runtime.InteropServices;
 
-using System.Reflection;
+using System.Reflection; //for  Assembly
 
 /// <summary>
 /// 0. 외부 DLL을 import하여 method를 실행하는 샘플
@@ -36,7 +36,8 @@ namespace ConsoleApplication_MyLibs
         }
 
         delegate void OutputDelegate(string s);//(ref int a, ref int b);
-
+        delegate int method1Delegate(string input_str, out string output_str);
+        delegate int method2_Delegate(string input_str, ref string output_str);
         public static void testClass(string dllPath)
         {
             var DLL = Assembly.LoadFile(dllPath);
@@ -46,16 +47,27 @@ namespace ConsoleApplication_MyLibs
                 // not found calss
             }
 
-            // 1. 메서드 직접 호출이 아닌 type에서 GetMethod로 함수를 찾고 실행시키는 방법  
-            var c = Activator.CreateInstance(theType);
-            var method = theType.GetMethod("Output");         
-            method.Invoke(c, new object[] { @"Hello" });
 
             // 2. 델리게이트를 이용한 방식            
             MethodInfo minfo = theType.GetMethod("Output"); 
             OutputDelegate _Output = (OutputDelegate)Delegate.CreateDelegate(typeof(OutputDelegate), null, minfo);
             _Output(@"Hello_2");
 
+            MethodInfo method1_p = theType.GetMethod("method1");
+            method1Delegate _method1 = (method1Delegate)Delegate.CreateDelegate(typeof(method1Delegate), null, method1_p);
+            string outputStr = "";
+            int result = (int)_method1(@"passArgumentTest", out outputStr);
+
+            MethodInfo method2_p = theType.GetMethod("method2");
+            method2_Delegate _method2 = (method2_Delegate)Delegate.CreateDelegate(typeof(method2_Delegate), null, method1_p);
+            outputStr = "";
+            result = (int)_method2(@"passArgumentTest", ref outputStr);
+            /*
+            // 1. 메서드 직접 호출이 아닌 type에서 GetMethod로 함수를 찾고 실행시키는 방법  
+            var c = Activator.CreateInstance(theType);
+            var method = theType.GetMethod("Output");
+            method.Invoke(c, new object[] { @"Hello" });
+            */
 
             //Console.ReadLine(); // 사용자 입력대기
         }
@@ -70,27 +82,9 @@ namespace ConsoleApplication_MyLibs
         {
 
         }
-        /// <summary>
-        /// 스트링 return 타입의 external program을 실행.
-        /// </summary>
-        /// <param name="program"></param>
-        /// <param name="argument">컨버팅 할 문자열</param>
-        /// <returns>컨버팅 된 문자열</returns>
-        public static string runExternalProgram(string program, string argument)
-        {
-            System.Diagnostics.Process pProcess = new System.Diagnostics.Process();
-            pProcess.StartInfo.FileName = program;
-            pProcess.StartInfo.Arguments = argument; //argument
-            pProcess.StartInfo.UseShellExecute = false;
-            pProcess.StartInfo.RedirectStandardOutput = true;
-            pProcess.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-            pProcess.StartInfo.CreateNoWindow = true; //not diplay a windows
-            pProcess.Start();
-            string output = pProcess.StandardOutput.ReadToEnd(); //The output result
-            pProcess.WaitForExit();
-            return output;
-        }
-        public static void externalProgramStdinoutRedirectionSample() // 외부프로그램을 argument와 함께 실행하고, 순차적으로 명령을 보내는 샘플
+        
+        // 외부프로그램을 argument와 함께 실행하고, 순차적으로 명령을 보내는 샘플
+        public static void externalProgramStdinoutRedirectionSample()
         {
             System.Diagnostics.Process pProcess = new System.Diagnostics.Process();
             pProcess.StartInfo.FileName = "..\\externalApp\\externalApp.exe";
@@ -113,6 +107,28 @@ namespace ConsoleApplication_MyLibs
             pProcess.StandardInput.Close();
             pProcess.Close();
         }
+
+        /// <summary>
+        /// 스트링 return 타입의 external program을 실행.
+        /// </summary>
+        /// <param name="program"></param>
+        /// <param name="argument">컨버팅 할 문자열</param>
+        /// <returns>컨버팅 된 문자열</returns>
+        public static string runExternalProgram(string program, string argument)
+        {
+            System.Diagnostics.Process pProcess = new System.Diagnostics.Process();
+            pProcess.StartInfo.FileName = program;
+            pProcess.StartInfo.Arguments = argument; //argument
+            pProcess.StartInfo.UseShellExecute = false;
+            pProcess.StartInfo.RedirectStandardOutput = true;
+            pProcess.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+            pProcess.StartInfo.CreateNoWindow = true; //not diplay a windows
+            pProcess.Start();
+            string output = pProcess.StandardOutput.ReadToEnd(); //The output result
+            pProcess.WaitForExit();
+            return output;
+        }
+
         ~MyClass_Program()
         {
 

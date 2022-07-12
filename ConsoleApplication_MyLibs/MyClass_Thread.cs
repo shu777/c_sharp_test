@@ -37,7 +37,7 @@ namespace ConsoleApplication_MyLibs
                 try
                 {
                     //DownloadItem(item);
-                    var t = new System.Threading.Thread(() => RealStart(fileWriter, srcString, delimiter, fieldNumber));
+                    var t = new System.Threading.Thread(() => ThreadRunMain(fileWriter, srcString, delimiter, fieldNumber));
                     t.Start();
                     //return t;
                 }
@@ -54,7 +54,7 @@ namespace ConsoleApplication_MyLibs
         /// <param name="srcString"></param>
         /// <param name="delimiter"></param>
         /// <param name="fieldNumber"></param>
-        private void RealStart(MyClass_Files_Writer fileWriter, string srcString, char delimiter, int fieldNumber)
+        private void ThreadRunMain(MyClass_Files_Writer fileWriter, string srcString, char delimiter, int fieldNumber)
         {
             MyClass_Strings strClass = new MyClass_Strings();
             // convert and write to file
