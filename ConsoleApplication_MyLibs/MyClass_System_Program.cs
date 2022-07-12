@@ -82,6 +82,52 @@ namespace ConsoleApplication_MyLibs
         {
 
         }
+
+        public static void multiProcessSample()
+        {
+            ////////////////// create Process 0
+            System.Diagnostics.Process pProcess = new System.Diagnostics.Process();
+            pProcess.StartInfo.FileName = "..\\externalApp\\externalApp.exe";
+            pProcess.StartInfo.Arguments = "1"; //argument
+            pProcess.StartInfo.UseShellExecute = false;
+            pProcess.StartInfo.RedirectStandardOutput = true;
+            pProcess.StartInfo.RedirectStandardInput = true;
+            pProcess.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+            pProcess.StartInfo.CreateNoWindow = true; //not diplay a windows
+            pProcess.Start();
+            ///////////////////// create Process 1
+            System.Diagnostics.Process pProcess2 = new System.Diagnostics.Process();
+            pProcess2.StartInfo.FileName = "..\\externalApp\\externalApp.exe";
+            pProcess2.StartInfo.Arguments = "2"; //argument
+            pProcess2.StartInfo.UseShellExecute = false;
+            pProcess2.StartInfo.RedirectStandardOutput = true;
+            pProcess2.StartInfo.RedirectStandardInput = true;
+            pProcess2.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+            pProcess2.StartInfo.CreateNoWindow = true; //not diplay a windows
+            pProcess2.Start();
+
+            //////////////////// pass command
+            pProcess.StandardInput.Write(@"makeRestThread" + Environment.NewLine);
+            //string output = pProcess.StandardOutput.ReadLine();//Read().ToString();
+            //Console.WriteLine(output);
+            /////////////////// pass value
+            pProcess.StandardInput.Write(@"http://127.0.0.1/request1" + Environment.NewLine);
+            string output2 = pProcess.StandardOutput.ReadLine();//.ToString();
+            Console.WriteLine(output2);
+            ///////////////////// pass command
+            pProcess2.StandardInput.Write(@"makeRestThread" + Environment.NewLine);
+            //string output22 = pProcess2.StandardOutput.ReadLine();//Read().ToString();
+            //Console.WriteLine(output22);
+            //////////////////// pass value
+            pProcess2.StandardInput.Write(@"http://127.0.0.1/request2" + Environment.NewLine);
+            string output222 = pProcess2.StandardOutput.ReadLine();//.ToString();
+            Console.WriteLine(output222);
+
+            pProcess.StandardInput.Close();
+            pProcess.Close();
+            pProcess2.StandardInput.Close();
+            pProcess2.Close();
+        }
         
         // 외부프로그램을 argument와 함께 실행하고, 순차적으로 명령을 보내는 샘플
         public static void externalProgramStdinoutRedirectionSample()
