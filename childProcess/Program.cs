@@ -11,6 +11,8 @@ using System.Threading;
 using System.Management;
 using System.Runtime.InteropServices;
 
+
+// single exe로 argument 분기를 통해 chield process를 복제
 namespace child_test
 {
     internal class Program
@@ -85,7 +87,7 @@ namespace child_test
             int procCount = 2;
 
 
-            if (args.Length == 0) // MAIN PROC run 
+            if (args.Length == 0) // MAIN PROC 
             {
                 Console.WriteLine("MAIN PROC");
                 //
