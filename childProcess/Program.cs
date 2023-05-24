@@ -24,7 +24,7 @@ namespace child_test
         }
 
         /// <summary>
-        /// 메일 프로세스가 kill되면 child process도 강제로 kill 해준다.
+        /// 메인 프로세스가 kill되면 child process도 강제로 kill 해준다.
         /// </summary>
         /// <param name="Handler"></param>
         /// <param name="Add"></param>
@@ -85,7 +85,7 @@ namespace child_test
             int procCount = 2;
 
 
-            if (args.Length == 0) // MAIN PROC
+            if (args.Length == 0) // MAIN PROC run 
             {
                 Console.WriteLine("MAIN PROC");
                 //

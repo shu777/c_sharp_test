@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.2.32616.157
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.33529.622
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApplication_MyLibs", "ConsoleApplication_MyLibs\ConsoleApplication_MyLibs.csproj", "{70177F94-6E87-4D9C-9341-886D33C0E90E}"
 EndProject
@@ -12,6 +12,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "externalApp", "externalApp\externalApp.csproj", "{35C6F92C-2F70-4A4D-A24C-B56AB3ECDAC7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestChildProcess", "childProcess\TestChildProcess.csproj", "{480DC8E8-F943-431F-8E99-7B0AF33FC42E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "externalProcessSample", "externalProcessSample\externalProcessSample.csproj", "{B8375A30-5A53-44FF-9811-122FD1F7147D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "jsonSample", "jsonSample\jsonSample.csproj", "{7116C296-75DC-4F28-8555-945C83E1E079}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "socket server", "socket server\socket server.csproj", "{0C2311BF-0A01-4117-AB67-5144DBF1E87B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +45,18 @@ Global
 		{480DC8E8-F943-431F-8E99-7B0AF33FC42E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{480DC8E8-F943-431F-8E99-7B0AF33FC42E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{480DC8E8-F943-431F-8E99-7B0AF33FC42E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B8375A30-5A53-44FF-9811-122FD1F7147D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8375A30-5A53-44FF-9811-122FD1F7147D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8375A30-5A53-44FF-9811-122FD1F7147D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8375A30-5A53-44FF-9811-122FD1F7147D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7116C296-75DC-4F28-8555-945C83E1E079}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7116C296-75DC-4F28-8555-945C83E1E079}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7116C296-75DC-4F28-8555-945C83E1E079}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7116C296-75DC-4F28-8555-945C83E1E079}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C2311BF-0A01-4117-AB67-5144DBF1E87B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C2311BF-0A01-4117-AB67-5144DBF1E87B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C2311BF-0A01-4117-AB67-5144DBF1E87B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C2311BF-0A01-4117-AB67-5144DBF1E87B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
