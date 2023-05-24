@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+// exe type external App sample
 namespace externalApp
 {
     internal class Program

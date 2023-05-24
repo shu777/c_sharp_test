@@ -5,7 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Reflection;
 
-
+// external .exe process run sample
+// external dll method call sample
+// URL parsing sample
 namespace externalProcessSample
 {
     internal class Program

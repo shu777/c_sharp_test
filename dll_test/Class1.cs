@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace dll_test
 {
     using System;
-
+    // dll type sample
     public class Class1
     {
         public void Output(string s)
