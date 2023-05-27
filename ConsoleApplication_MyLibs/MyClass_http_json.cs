@@ -138,7 +138,7 @@ namespace ConsoleApplication_MyLibs
                         break;
 
                 }
-                // responset data
+                // response data
                 byte[] data = Encoding.UTF8.GetBytes("HelloWorld");
                 context.Response.OutputStream.Write(data, 0, data.Length);
                 context.Response.StatusCode = 200;
