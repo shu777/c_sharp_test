@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{C4C8B654-778C-4447-955A-08F217D8F0C1}</ProjectGuid>
+    <ProjectGuid>{07C0AC69-919A-4336-A9D5-1B99B971D4B4}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>SocketClient</RootNamespace>
     <AssemblyName>socket_client</AssemblyName>
