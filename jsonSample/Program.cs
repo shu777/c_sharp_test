@@ -85,6 +85,91 @@ namespace jsonSample
             JProperty firstProp = sortedObj.Properties().First(); // 제일 큰 값을 get
             Console.WriteLine("Winner: " + firstProp.Name + " (" + firstProp.Value + " votes)");
 
+
+            //https://json2csharp.com/  json -> c# class online converter TOOL
+            string jsonStructureSampleString = @"{
+    ""Class1"":{
+        ""id"":4,
+        ""user_id"":""user_id_value"",
+        ""awesomeobject"":{
+        ""SomeProps1"":1,
+        ""SomeProps2"":""test""
+    },
+    ""created_at"":""2015-06-02 23:33:90"",
+    ""updated_at"":""2015-06-02 23:33:90"",
+    ""users"":[
+        {
+        ""id"":""6"",
+        ""name"":""Test Child 1"",
+        ""created_at"":""2015-06-02 23:33:90"",
+        ""updated_at"":""2015-06-02 23:33:90"",
+        ""email"":""test@gmail.com""
+        },
+        {
+        ""id"":""6"",
+        ""name"":""Test Child 1"",
+        ""created_at"":""2015-06-02 23:33:90"",
+        ""updated_at"":""2015-06-02 23:33:90"",
+        ""email"":""test@gmail.com"",
+        ""testanadditionalfield"":""tet""
+        } ]
+    },
+    ""Class2"":{
+    ""SomePropertyOfClass2"":""SomeValueOfClass2""
+    }
+}";
+            // json format string을 jobject로 변경
+            var jobjectSample = JObject.Parse(jsonStructureSampleString);
+
+            // jobject를 c# class structure로 변경
+            TEST_Class_Root myDeserializedClass = JsonConvert.DeserializeObject<TEST_Class_Root>(jobjectSample.ToString());
+            //TEST_Class_Root myDeserializedClass2 = JsonSerializer.Deserialize<TEST_Class_Root>(jobjectSample.ToString()); //using System.Text.Json;
+            TEST_Class_Root myDeserializedClass2 = JsonConvert.DeserializeObject<TEST_Class_Root>(jsonStructureSampleString);
+            var cteated_at = myDeserializedClass.Class1.created_at;//.Class1
+
+            // c# class structure를 json format string으로 변경
+            string convertedJson = JsonConvert.SerializeObject(myDeserializedClass2);
+            // json string을 jobject로 변경
+            var jobjectSample2 = JObject.Parse(convertedJson);
         }
     }
+
+    public class Awesomeobject
+    {
+        public int SomeProps1 { get; set; }
+        public string SomeProps2 { get; set; }
+    }
+
+    public class Class1
+    {
+        public int id { get; set; }
+        public string user_id { get; set; }
+        public Awesomeobject awesomeobject { get; set; }
+        public string created_at { get; set; }
+        public string updated_at { get; set; }
+        public List<User> users { get; set; }
+    }
+
+    public class Class2
+    {
+        public string SomePropertyOfClass2 { get; set; }
+    }
+
+    public class TEST_Class_Root //Root
+    {
+        public Class1 Class1 { get; set; }
+        public Class2 Class2 { get; set; }
+    }
+
+    public class User
+    {
+        public string id { get; set; }
+        public string name { get; set; }
+        public string created_at { get; set; }
+        public string updated_at { get; set; }
+        public string email { get; set; }
+        public string testanadditionalfield { get; set; }
+    }
+
+
 }

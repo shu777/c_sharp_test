@@ -59,25 +59,33 @@ namespace ConsoleApp2
         {
 
             Stopwatch sw = new Stopwatch();
-            sw.Start();
+            sw.Start(); 
             Console.WriteLine("비동기 3회 시작");
+
             Task<HttpResponseMessage> first = PostAsyncHttp();
             Task<HttpResponseMessage> second = PostAsyncHttp();
             Task<HttpResponseMessage> third = PostAsyncHttp();
 
             for (int i = 0; i < 10; i++)
             {
-                Console.WriteLine("다른 로직 수행 : " + i);
+                Console.WriteLine("다른 작업 수행 : " + i);
             }
-
+            /*
             HttpResponseMessage fr = await first;
             HttpResponseMessage sec = await second;
             HttpResponseMessage th = await third;
             var resStr = fr.Content.ReadAsStringAsync().Result;
+            */
+            List<Task<HttpResponseMessage>> list = new List<Task<HttpResponseMessage>>();
+            list.Add(first);
+            list.Add(second);
+            list.Add(third);
+            HttpResponseMessage[] response = await Task.WhenAll(list);
+
+            var resStr = response[0].Content.ReadAsStringAsync().Result;          
             var jobject = JObject.Parse(resStr);
             string result_recv = jobject.GetValue("result").ToString();
             Console.WriteLine(result_recv.ToString());
-
 
             sw.Stop();
             Console.WriteLine(sw.ElapsedMilliseconds + "ms");
