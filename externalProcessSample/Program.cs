@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Reflection;
 
+using dll_test;
+
 // external .exe process run sample
 // external dll method call sample
 // URL parsing sample
@@ -17,8 +19,6 @@ namespace externalProcessSample
         delegate int method2_Delegate(string input_str, ref string output_str);
         static void Main(string[] args)
         {
-
-
             System.Diagnostics.Process pProcess = new System.Diagnostics.Process();
             pProcess.StartInfo.FileName = "..\\externalApp\\externalApp.exe";
             pProcess.StartInfo.Arguments = "1"; //argument
@@ -61,8 +61,16 @@ namespace externalProcessSample
             pProcess2.Close();
 
 
+            Worker class_worker = new Worker(0);
+            class_worker.Run("TOUCH_01");
+            // dll의 namespace를 project의 namespace와 맞춰주면 바로 호출 가능 or using dll_test; 
+            ClassNameTEST class_t = new ClassNameTEST(1);  //
+            string outputStr5;
+            var res = class_t.method1("intput string !!!", out outputStr5);
+
 
             var DLL = Assembly.LoadFile(Environment.CurrentDirectory + ".\\dll_test.dll");
+            //var theType = DLL.GetType("dll_test.Class1"); // 네임스페이스. 클래스 명
             var theType = DLL.GetType("dll_test.Class1"); // 네임스페이스. 클래스 명
             if (theType == null)
             {
