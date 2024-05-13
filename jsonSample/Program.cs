@@ -118,50 +118,73 @@ namespace jsonSample
     ""SomePropertyOfClass2"":""SomeValueOfClass2""
     }
 }";
-            // json format string을 jobject로 변경
+            // 1. json format string을 jobject로 변경
             var jobjectSample = JObject.Parse(jsonStructureSampleString);
-
-            // jobject를 c# class structure로 변경
+            // 2. jobject를 c# class structure로 변경
             TEST_Class_Root myDeserializedClass = JsonConvert.DeserializeObject<TEST_Class_Root>(jobjectSample.ToString());
             //TEST_Class_Root myDeserializedClass2 = JsonSerializer.Deserialize<TEST_Class_Root>(jobjectSample.ToString()); //using System.Text.Json;
             TEST_Class_Root myDeserializedClass2 = JsonConvert.DeserializeObject<TEST_Class_Root>(jsonStructureSampleString);
             var cteated_at = myDeserializedClass.Class1.created_at;//.Class1
 
+
+
             // c# class structure를 json format string으로 변경
             string convertedJson = JsonConvert.SerializeObject(myDeserializedClass2);
             // json string을 jobject로 변경
             var jobjectSample2 = JObject.Parse(convertedJson);
+
+
+
+            //////SAMPLE2 start
+            /*
+            {
+                "stringVal":"testTitle",
+                "arrayVal": ["srray1", "array2", "array3"           ],
+                "intVal":1000
+            }
+            */
+            //https://jsontostring.com/
+
+            string inputJsonDataSample2 = "{\"stringVal\":\"testTitle\",\"arrayVal\":[\"srray1\",\"array2\",\"array3\"],\"intVal\":1000}";
+            Root_SAMPLE2 myDeserializedClassSample2 = JsonConvert.DeserializeObject<Root_SAMPLE2>(inputJsonDataSample2);
+
+            Root_SAMPLE2 resultSample2 = new Root_SAMPLE2();
+            resultSample2.stringVal = "TEST";
+            List<string> resArray = new List<string>();
+            resArray.Add("Array1");
+            resArray.Add("Array2");
+            resArray.Add("Array2");
+            resultSample2.arrayVal = resArray;
+            resultSample2.intVal = 9999;
+
+            // c# class structure를 json format string으로 변경
+            string convertedJsonSample2 = JsonConvert.SerializeObject(resultSample2);
+            var jobjectSample22 = JObject.Parse(convertedJsonSample2); // json obj
+            int testttt = 0;
         }
     }
 
-    public class Awesomeobject
+
+    // Root myDeserializedClass = JsonConvert.DeserializeObject<Root_SAMPLE2>(myJsonResponse);
+    //https://json2csharp.com/
+    public class Root_SAMPLE2
+    {
+        public string stringVal { get; set; }
+        public List<string> arrayVal { get; set; }
+        public int intVal { get; set; }
+    }
+
+
+    /// <summary>
+    /// SAMPLE 1
+    /// </summary>
+    public class Awesomeobject // depth3 class
     {
         public int SomeProps1 { get; set; }
         public string SomeProps2 { get; set; }
     }
 
-    public class Class1
-    {
-        public int id { get; set; }
-        public string user_id { get; set; }
-        public Awesomeobject awesomeobject { get; set; }
-        public string created_at { get; set; }
-        public string updated_at { get; set; }
-        public List<User> users { get; set; }
-    }
-
-    public class Class2
-    {
-        public string SomePropertyOfClass2 { get; set; }
-    }
-
-    public class TEST_Class_Root //Root
-    {
-        public Class1 Class1 { get; set; }
-        public Class2 Class2 { get; set; }
-    }
-
-    public class User
+    public class User // depth3 class
     {
         public string id { get; set; }
         public string name { get; set; }
@@ -170,6 +193,27 @@ namespace jsonSample
         public string email { get; set; }
         public string testanadditionalfield { get; set; }
     }
+    public class Class1 // depth 1 class
+    {
+        public int id { get; set; } // int
+        public string user_id { get; set; } // string
+        public Awesomeobject awesomeobject { get; set; } // depth3 class
+        public string created_at { get; set; }
+        public string updated_at { get; set; }
+        public List<User> users { get; set; } // depth3 array
+    }
+
+    public class Class2 // depth 1 class
+    {
+        public string SomePropertyOfClass2 { get; set; } // depth2 class
+    }
+
+    public class TEST_Class_Root //Root Main path
+    {
+        public Class1 Class1 { get; set; } // depth1 class
+        public Class2 Class2 { get; set; } // depth1 class
+    }
+
 
 
 }

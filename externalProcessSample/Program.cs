@@ -61,12 +61,15 @@ namespace externalProcessSample
             pProcess2.Close();
 
 
+            //////////////////////// 이것 사용 ///////////////////////////////////////
             Worker class_worker = new Worker(0);
             class_worker.Run("TOUCH_01");
             // dll의 namespace를 project의 namespace와 맞춰주면 바로 호출 가능 or using dll_test; 
             ClassNameTEST class_t = new ClassNameTEST(1);  //
             string outputStr5;
             var res = class_t.method1("intput string !!!", out outputStr5);
+
+
 
 
             var DLL = Assembly.LoadFile(Environment.CurrentDirectory + ".\\dll_test.dll");

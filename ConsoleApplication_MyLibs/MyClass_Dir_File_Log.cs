@@ -28,7 +28,22 @@ namespace ConsoleApplication_MyLibs
 {
     class MyClass_FileRW_Simple
     {
-
+        static void appendTextToFile(string filePath, string textLIne)
+        {
+            using (StreamWriter w = File.AppendText(filePath))
+            {
+                w.WriteLine(textLIne);
+                w.Flush();
+            }
+        }
+        /*
+        static void appendTextLinesToFile(string filePath, string textLIne)
+        {
+            using (StreamWriter w = File.AppendText(filePath))
+            {
+                w.WriteLine(textLIne);
+            }
+        }*/
         static void binReadWrite()
         {
             const int fileBufSz = 2048;
