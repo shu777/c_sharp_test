@@ -13,6 +13,8 @@ namespace jsonSample
 {
     internal class Program
     {
+        public const String inputJSONPATH = ".\\json.txt";
+        
         static void Main(string[] args)
         {
             var dictSample = new Dictionary<string, string>();
@@ -145,9 +147,12 @@ namespace jsonSample
             */
             //https://jsontostring.com/
 
+            // JSON -> CLASS
             string inputJsonDataSample2 = "{\"stringVal\":\"testTitle\",\"arrayVal\":[\"srray1\",\"array2\",\"array3\"],\"intVal\":1000}";
             Root_SAMPLE2 myDeserializedClassSample2 = JsonConvert.DeserializeObject<Root_SAMPLE2>(inputJsonDataSample2);
 
+
+            // CLASS -> JSON
             Root_SAMPLE2 resultSample2 = new Root_SAMPLE2();
             resultSample2.stringVal = "TEST";
             List<string> resArray = new List<string>();
@@ -157,10 +162,17 @@ namespace jsonSample
             resultSample2.arrayVal = resArray;
             resultSample2.intVal = 9999;
 
-            // c# class structure를 json format string으로 변경
+            //  c# class structure를 json format string으로 변경
             string convertedJsonSample2 = JsonConvert.SerializeObject(resultSample2);
             var jobjectSample22 = JObject.Parse(convertedJsonSample2); // json obj
             int testttt = 0;
+
+            //  read from file
+            //  inputJSONPATH
+            string text = System.IO.File.ReadAllText(inputJSONPATH);
+            Console.WriteLine("readAllText : {0} ", text);
+            Root_SAMPLE2 myDeserializedClassSample3 = JsonConvert.DeserializeObject<Root_SAMPLE2>(text);
+            Console.WriteLine("readAllText : {0} ", myDeserializedClassSample3.intVal);
         }
     }
 

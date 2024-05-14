@@ -188,6 +188,15 @@ namespace ConsoleApplication_MyLibs
             }
             _readWriteLock.ExitWriteLock();
         }
+        // 파일에 append로 쓰기 simple 버전
+        public void WriteFileAppendSimple()
+        {
+            //File.AppendAllText(@"c:\path\file.txt", "text content" + Environment.NewLine);
+            using (StreamWriter w = File.AppendText("myFile.txt"))
+            {
+                w.WriteLine("hello");
+            }
+        }
         ~MyClass_Files_Writer()
         {
 
