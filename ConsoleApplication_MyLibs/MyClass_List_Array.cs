@@ -47,6 +47,14 @@ namespace ConsoleApplication_MyLibs
         }
 
     }
+
+    class Request
+    {
+        public string RequestId { get; set; }
+        public string Type { get; set; }  // "P" or "A"
+        public string Data { get; set; }
+    }
+
     class MyClass_List_Array // 리스트와 배열간 변환 샘플
     {
         public List<int> CreatList () // 리스트 생성
@@ -92,6 +100,43 @@ namespace ConsoleApplication_MyLibs
  
         }
 
+        // 리스트를 그룹핑한느 샘플
+        public static void listGroupingSample()
+        {
+            var input = new List<Request> // sample data
+            {
+                new Request { RequestId = "001", Type = "K2", Data = "0" },
+                new Request { RequestId = "002", Type = "K2", Data = "1" },
+                new Request { RequestId = "001", Type = "G1", Data = "0" },
+                new Request { RequestId = "002", Type = "G1", Data = "0" },
+                new Request { RequestId = "003", Type = "G1", Data = "1" }
+            };
+
+            // 특정 값으로 그룹핑해 dictionary로 변환
+            var grouped = input
+                .GroupBy(r => r.RequestId)
+                .ToDictionary(g => g.Key, g => g.ToList());
+
+            int totalRequests = 0;
+            int matchingDataCount = 0;
+
+            foreach (var kvp in grouped) // 그룹내에서 calc
+            {
+                var pair = kvp.Value;
+                // 현재 requestid 그룹(pair)에서 Type이 "K2"인 요청을 찾음
+                var PR = pair.FirstOrDefault(r => r.Type == "K2"); // 첫번째 매칭되는 값 찾음, 없으면 null
+                // 현재 requestid 그룹(pair)에서 Type이 "A1"인 요청을 찾음
+                var AN = pair.FirstOrDefault(r => r.Type == "G1"); // 첫번째 매칭되는 값 찾음, 없으면 null
+
+                if (PR == null) continue;  // "K2" 타입이 없으면 유효한 요청x
+                totalRequests++;
+
+                if (AN != null && PR.Data == AN.Data)
+                    matchingDataCount++;
+            }
+            Console.WriteLine($"request 수: {totalRequests}");
+            Console.WriteLine($"data match: {matchingDataCount}");
+        }
         public int GetMaxFromList(List<List<int>> temp)// 내림차순 정렬 후 첫번째 리스트 얻는다
         {               
             int result = temp.OrderByDescending(x => x.Count())

@@ -144,7 +144,7 @@ namespace ConsoleApplication_MyLibs
 
         public static void runExample1() // 로그파싱하는 example
         {
-
+            MyClass_List_Array.listGroupingSample();
 
             MyClass_Dictionary.dictionarySample();
 
