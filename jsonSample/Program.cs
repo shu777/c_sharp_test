@@ -147,10 +147,24 @@ namespace jsonSample
             */
             //https://jsontostring.com/
 
-            // JSON -> CLASS
+            // JSON -> CLASS 정형화된 구조의 JSON을 class structure로 변환
             string inputJsonDataSample2 = "{\"stringVal\":\"testTitle\",\"arrayVal\":[\"srray1\",\"array2\",\"array3\"],\"intVal\":1000}";
             Root_SAMPLE2 myDeserializedClassSample2 = JsonConvert.DeserializeObject<Root_SAMPLE2>(inputJsonDataSample2);
 
+            // 비정형화된 형식의 JSON을 c# Dietionary로 변환
+            string jsonInput = "{ \"key1\": [\"value1\", \"value2\", \"value3\"], \"key2\": [\"value1\",], \"someOtherKey\": [\"value2\", \"value3\", \"value4\"] }";
+            Dictionary<string, List<string>> data = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(jsonInput);
+            foreach (var kvp in data)
+            {
+                Console.WriteLine($"Key: {kvp.Key}, Values: {string.Join(", ", kvp.Value)}");
+                CalculateSquare(0);
+            }
+
+            int CalculateSquare(int x)
+            {
+                int Square(int n) => n * n;  // 인라인 로컬 함수
+                return Square(x);
+            }
 
             // CLASS -> JSON
             Root_SAMPLE2 resultSample2 = new Root_SAMPLE2();

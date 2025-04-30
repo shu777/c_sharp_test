@@ -82,21 +82,14 @@ namespace socket_server
                         break;
 
                 }
-                // response data
-                //var file_array_json = new JArray([); // JARRAY로 변환
+                // response data ///////////////////////////////
                 var reqBody = new JObject();
                 reqBody.Add("result", "ffffxxdeddc");
-                //reqBody.Add("Files_List", file_array_json);
-                string reqBodyStr = reqBody.ToString();               
-                //var content = new StringContent(reqBodyStr, Encoding.UTF8, "application/json");
-                ///
+                string reqBodyStr = reqBody.ToString();
                 byte[] content = Encoding.UTF8.GetBytes(reqBodyStr);
                 context.Response.OutputStream.Write(content, 0, content.Length);
                 context.Response.StatusCode = 200;
                 context.Response.Close();
-
-                //byte[] data = Encoding.UTF8.GetBytes("HelloWorld");
-                //context.Response.OutputStream.Write(data, 0, data.Length);
 
             }
         }
