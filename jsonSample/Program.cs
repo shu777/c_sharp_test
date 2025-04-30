@@ -157,7 +157,11 @@ namespace jsonSample
             foreach (var kvp in data)
             {
                 Console.WriteLine($"Key: {kvp.Key}, Values: {string.Join(", ", kvp.Value)}");
-                CalculateSquare(0);
+                // 해당 value에 포함여부 체크 루틴
+                if (kvp.Value.Contains("value2"))
+                {
+                    Console.WriteLine($"match Key: {kvp.Key}, value2");
+                }
             }
 
             int CalculateSquare(int x)
