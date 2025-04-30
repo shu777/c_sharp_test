@@ -11,10 +11,14 @@ using System.Collections;
 using System.Diagnostics;
 using System.Text.RegularExpressions;//정규표현식
 
+//#####
+// BASE64 
+//
+
 namespace ConsoleApplication_MyLibs
 {
 
-    public class MyClass_Security
+    public class MyClass_Security // SIMPLE
     {
         public MyClass_Security()
         {
@@ -24,13 +28,23 @@ namespace ConsoleApplication_MyLibs
         {
 
         }
-        public static string encodeBase64(string value)
+        public static string encodeBase64(string value) 
         {
-            return Convert.ToBase64String(Encoding.UTF8.GetBytes(value));
+            byte[] strByte = Encoding.UTF8.GetBytes(value); // Base64로 문자열 인코딩
+            return Convert.ToBase64String(strByte); // 인코딩 결과 문자열 변환
         }
         public static string decodeBase64(string value)
         {
-            return Convert.FromBase64String(value).ToString();
+            byte[] byteDecode = Convert.FromBase64String(value); // Base64로 문자열 디코딩
+            //return byteDecode.ToString();
+            return Encoding.Default.GetString(byteDecode); // 문자열로 디코딩된 결과 변환
+        }
+        public static string encodeSHA256(string value) //one-way hash function
+        {
+            byte[] strByte = Encoding.UTF8.GetBytes(value); // string -> byte 변환
+            SHA256 hSHA256 = SHA256Managed.Create();
+            byte[] resHash = hSHA256.ComputeHash(strByte); // SHA256 변환 암호화
+            return BitConverter.ToString(resHash).Replace("-", "").ToLower(); // Hex 문자열
         }
         public static string CaesarCipherEncrypt(string value, int shift)
         {

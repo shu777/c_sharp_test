@@ -16,6 +16,8 @@ using System.IO;
 
 /// <summary>
 /// 목차
+/// MyClass_FileRW_Simple
+/// MyClass_Dir_Simple
 /// 1. MyClass_Files_Writer : 파일에 문자열 쓰는 클래스 (이어쓰기 지원, thread safty지원)
 /// 2. MyClass_Files_Reader : 파일에서 문자열 읽어오는 클래스
 /// 3. MyClass_Dprint : 디버그 프린트용 클래스
@@ -26,73 +28,71 @@ using System.IO;
 
 namespace ConsoleApplication_MyLibs
 {
-    class MyClass_FileRW_Simple
+    class MyClass_FileRW_Simple // SIMPLE
     {
         static void appendTextToFile(string filePath, string textLIne)
         {
-            using (StreamWriter w = File.AppendText(filePath))
+            using (StreamWriter w = File.AppendText(filePath)) // apend 모드로 파일 뒤에 계속 write 한다.
             {
                 w.WriteLine(textLIne);
                 w.Flush();
             }
         }
-        /*
-        static void appendTextLinesToFile(string filePath, string textLIne)
+        static void binReadWrite() // 바이너리 파일을 읽고 쓰는 예제
         {
-            using (StreamWriter w = File.AppendText(filePath))
-            {
-                w.WriteLine(textLIne);
-            }
-        }*/
-        static void binReadWrite()
-        {
-            const int fileBufSz = 2048;
-            byte[]buf = new byte[fileBufSz];
+            const int fileBufSz = 4096;// 2048; // 버퍼 사이즈
+            byte[]buf = new byte[fileBufSz]; // 바이트 배열 버퍼
             int nfReadLength;
 
-            FileStream inStreamFile = new FileStream("sampleBinFile.bin", FileMode.Open, FileAccess.Read);
-            FileStream outStreamFile = new FileStream("sampleBinOutfile.bin", FileMode.Create, FileAccess.Write);
+            FileStream inStreamFile = new FileStream("sampleBinFile.bin", FileMode.Open, FileAccess.Read); // 입력 스트림 , 바이트 단위
+            FileStream outStreamFile = new FileStream("sampleBinOutfile.bin", FileMode.Create, FileAccess.Write); // 출력 스트림 , 바이트 단위
 
-            while ((nfReadLength =  inStreamFile.Read(buf, 0, fileBufSz)) > 0)
+            while ((nfReadLength =  inStreamFile.Read(buf, 0, fileBufSz)) > 0) // 파일로부터 버퍼로 읽느다.
             {
-                outStreamFile.Write(buf, 0, nfReadLength);
+                outStreamFile.Write(buf, 0, nfReadLength); // 출력 스트림 파일에 쓴다.
             }
             inStreamFile.Close();
             outStreamFile.Close();
         }
 
-        static void textReadWrite()
+        static void textReadWrite() // 텍스트 파일을 읽는다.
         {
             string curLine;
 
-            StreamReader file = new StreamReader("sampleTextFile.txt");
-            StreamWriter outFile = new StreamWriter("sampleOutTextFile.txt"); // Path.Combine(docPath, "WriteLines.txt")
-            while ((curLine = file.ReadLine()) != null)
+            StreamReader file = new StreamReader("sampleTextFile.txt"); // 입력스트림
+            StreamWriter outFile = new StreamWriter("sampleOutTextFile.txt"); // Path.Combine(docPath, "WriteLines.txt") // 출력 스트림
+            while ((curLine = file.ReadLine()) != null) // 한줄씩 읽는다.
             {
-                Console.WriteLine(curLine);
-                outFile.WriteLine(curLine);
+                Console.WriteLine(curLine); // 콘솔
+                outFile.WriteLine(curLine); // 한줄씩 출력 파일에 쓴다.
             }
             file.Close();
             outFile.Close();
         }
 
     }
-    class MyClass_Dir_Simple
+    class MyClass_Dir_Simple // SIMPLE
     {
-        static void getDirFileList()
+        static void getDirFileList() // 파일 디렉토리 리스트를 가져온다.
         {
-            string[] dir_subs = Directory.GetDirectories(".");
+            string[] dir_subs = Directory.GetDirectories("."); // 현재 디렉토리 기준 하위 디렉토리 들을 string list로 저장한다.
             foreach(string s in dir_subs)
             {
                 Console.WriteLine("sub: {0}", s);
             }
 
-            string[] files_in_dir = Directory.GetFiles(".");
+            string[] files_in_dir = Directory.GetFiles("."); // 현재 디렉토리 내 파일들을 string list로 저장한다.
             foreach(String s in files_in_dir)
             {
                 Console.WriteLine("file: {0}", s);
             }
 
+            DirectoryInfo dir_info = new DirectoryInfo(".");
+            FileInfo[] files_with_sub_dir = dir_info.GetFiles("*.*", SearchOption.AllDirectories); // 하위 폴더의 파일 모두 가져온다.
+            foreach (var file in files_with_sub_dir)
+            {
+                Console.WriteLine(file.Name);
+            }
         }
     }
     class MyClass_ScanDirs
@@ -114,7 +114,7 @@ namespace ConsoleApplication_MyLibs
                 {
                     foreach(string dir in dirs)
                     {
-                        DirFileSearch(dir, file);
+                        DirFileSearch(dir, file); // recursive 처리
                     }
                 }
             }
@@ -430,8 +430,8 @@ namespace ConsoleApplication_MyLibs
             string path = directory + "\\log\\";
             string fullname = path + name;
 
-            if (!System.IO.Directory.Exists(path))
-                System.IO.Directory.CreateDirectory(path);
+            if (!System.IO.Directory.Exists(path)) // 디렉토리 확인
+                System.IO.Directory.CreateDirectory(path); // 디렉토리 생성
             output = new System.IO.StreamWriter(fullname, true);
         }
 

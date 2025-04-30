@@ -144,6 +144,10 @@ namespace ConsoleApplication_MyLibs
 
         public static void runExample1() // 로그파싱하는 example
         {
+
+
+            MyClass_Dictionary.dictionarySample();
+
             List<string> logTypes = new List<string>();
             List<log_parsed_data> logParsedData = new List<log_parsed_data>();
             List<type_count_data> logTypesCnt = new List<type_count_data>();

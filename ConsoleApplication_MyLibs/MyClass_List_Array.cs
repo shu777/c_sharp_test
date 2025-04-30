@@ -4,9 +4,30 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+// ##### Queue
+// ##### List
+// ##### Array
+// ##### Map(Dictionary)
+/// <summary>
+/// 
+/// </summary>
 namespace ConsoleApplication_MyLibs
 {
-    class Myclass_Queue
+    class MyClass_Dictionary
+    {
+        public static void dictionarySample()
+        {
+            // key value
+            Dictionary<int, string> d = new Dictionary<int, string>();
+            d.Add(1, "value");
+            foreach(KeyValuePair<int, string> items in d)
+            {
+                Console.WriteLine("key: {0}", items.Key);
+                Console.WriteLine("value {0}", items.Value);
+            }
+        }
+    }
+    class Myclass_Queue // 큐에 대한 샘플
     {
         public static void queueSample()
         {
@@ -26,47 +47,71 @@ namespace ConsoleApplication_MyLibs
         }
 
     }
-    class MyClass_List_Array
+    class MyClass_List_Array // 리스트와 배열간 변환 샘플
     {
-        public List<int> CreatList ()
+        public List<int> CreatList () // 리스트 생성
         {
-            List<int> sub_table2 = new List<int>();//(sub_table);
+            List<int> sub_table2 = new List<int>();// 샘플 타입은 int.
             return sub_table2;
         }
-        public void ClearList(List<int>input)
+        public void ClearList(List<int>input) // 리스트 초기화
         {
             input.Clear();
         }
-        public void AddToList(List<int> input, int data)
+        public void AddToList(List<int> input, int data) // 리스트에 추가
         {
             input.Add(data);
         }
-        public void sortList(List <int>inputListData)
+        public void RemoveFromLIst(List<int> input, int data) // 리스트에서 삭제
         {
-            // 오름차순 정렬
+            input.Remove(data);
+        }
+        public void RemoveFromLIstWithIdx(List<int> input, int idx) // 리스트에서 인덱스로 삭제
+        {
+            input.Remove(input[idx]);
+        }
+        public void sortList(List <int>inputListData) // 리스트 소팅 정렬
+        {
+            // 기본 오름차순 정렬
             inputListData.Sort();
 
         }
-        public int GetMaxFromList(List<List<int>> temp)// 내림차순 정렬 후 첫번째 리스트 겟
+        public void sortList2(List<int> inputListData) // 리스트 소팅 내림차순 정렬
+        {
+            // 내림차순 정렬
+            inputListData.Sort(delegate (int x, int y)
+            {
+                return y.CompareTo(x); // 내림차순
+            });
+
+        }
+        public void sortList3(List<int> inputListData) // 리스트 소팅 람다식 오름차순
+        {
+            // 오름차순 정렬
+            inputListData.Sort((int x, int y) => x.CompareTo(y));
+ 
+        }
+
+        public int GetMaxFromList(List<List<int>> temp)// 내림차순 정렬 후 첫번째 리스트 얻는다
         {               
             int result = temp.OrderByDescending(x => x.Count())
                         .FirstOrDefault<List<int>>()[0];
             return result;
         }
-        public List<List<int>> ParseAndConvertExample(string inputData)
+        public List<List<int>> ParseAndConvertExample(string inputData) // 리스트를 사용해 문자열 파싱하고 변환하는 샘플
         {
             {
-                string[] arrInput = inputData.Split('#');
+                string[] arrInput = inputData.Split('#'); // 입력 데이터 파싱
 
-                List<int> listInput = new List<int>();
+                List<int> listInput = new List<int>(); // int 타입 리스트
 
                 for (int i = 0; i < arrInput.Length; i++)
                 {
-                    listInput.Add(int.Parse(arrInput[i]));
+                    listInput.Add(int.Parse(arrInput[i])); // 문자열을 int 타입 리스트로 변환
                 }
 
                 //오름차순 정렬
-                listInput.Sort();
+                listInput.Sort(); // 정렬
 
                 //자리수별로 배치
                 List<List<int>> temp = new List<List<int>>();
@@ -122,7 +167,8 @@ namespace ConsoleApplication_MyLibs
             }
         }
 
-        public void test_class()
+
+        public void test_class() // array를 list로 변환하여 처리.
         {
 
             // Array to List

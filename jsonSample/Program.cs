@@ -190,13 +190,13 @@ namespace jsonSample
     /// <summary>
     /// SAMPLE 1
     /// </summary>
-    public class Awesomeobject // depth3 class
+    public class Awesomeobject // depth3 class 구조체
     {
         public int SomeProps1 { get; set; }
         public string SomeProps2 { get; set; }
     }
 
-    public class User // depth3 class
+    public class User // depth3 class 구조체
     {
         public string id { get; set; }
         public string name { get; set; }
@@ -205,25 +205,25 @@ namespace jsonSample
         public string email { get; set; }
         public string testanadditionalfield { get; set; }
     }
-    public class Class1 // depth 1 class
+    public class Class1 // depth 1 class // 서브구조체
     {
-        public int id { get; set; } // int
-        public string user_id { get; set; } // string
-        public Awesomeobject awesomeobject { get; set; } // depth3 class
-        public string created_at { get; set; }
-        public string updated_at { get; set; }
-        public List<User> users { get; set; } // depth3 array
+        public int id { get; set; } // int 타입
+        public string user_id { get; set; } // string 타입
+        public Awesomeobject awesomeobject { get; set; } // depth3 class 서브 구조체
+        public string created_at { get; set; } // string 타입
+        public string updated_at { get; set; } // string 타입
+        public List<User> users { get; set; } // depth3 array  서브 구조체
     }
 
-    public class Class2 // depth 1 class
+    public class Class2 // depth 1 class  서브구조체
     {
-        public string SomePropertyOfClass2 { get; set; } // depth2 class
+        public string SomePropertyOfClass2 { get; set; } // depth2 class  서브의 서브 구조체
     }
 
-    public class TEST_Class_Root //Root Main path
+    public class TEST_Class_Root //Root Main path  메인 구조체
     {
-        public Class1 Class1 { get; set; } // depth1 class
-        public Class2 Class2 { get; set; } // depth1 class
+        public Class1 Class1 { get; set; } // depth1 class 서브 구조체
+        public Class2 Class2 { get; set; } // depth1 class 서브 구조체
     }
 
 

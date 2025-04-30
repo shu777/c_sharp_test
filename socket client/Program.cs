@@ -19,9 +19,9 @@ namespace ConsoleApp2
             byte[] bytes = new byte[1024];
            //try
             //{
-            IPAddress ipAddress = IPAddress.Parse("127.0.0.1");
-            IPEndPoint remoteEP = new IPEndPoint(ipAddress, 8090);
-            Socket sender = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            IPAddress ipAddress = IPAddress.Parse("127.0.0.1");  // 주소 
+            IPEndPoint remoteEP = new IPEndPoint(ipAddress, 8090); // 포트
+            Socket sender = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp); // 소켓 open
             try
             {
                 sender.Connect(remoteEP);
