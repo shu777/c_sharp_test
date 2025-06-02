@@ -86,9 +86,9 @@ namespace socket_server
                 var reqBody = new JObject();
                 reqBody.Add("result", "ffffxxdeddc");
                 string reqBodyStr = reqBody.ToString();
-                byte[] content = Encoding.UTF8.GetBytes(reqBodyStr);
+                byte[] content = Encoding.UTF8.GetBytes(reqBodyStr); // json -> string -> UTF8 -> response contents body
                 context.Response.OutputStream.Write(content, 0, content.Length);
-                context.Response.StatusCode = 200;
+                context.Response.StatusCode = 200; // response 결과
                 context.Response.Close();
 
             }

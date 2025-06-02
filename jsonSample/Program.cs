@@ -151,7 +151,7 @@ namespace jsonSample
             string inputJsonDataSample2 = "{\"stringVal\":\"testTitle\",\"arrayVal\":[\"srray1\",\"array2\",\"array3\"],\"intVal\":1000}";
             Root_SAMPLE2 myDeserializedClassSample2 = JsonConvert.DeserializeObject<Root_SAMPLE2>(inputJsonDataSample2);
 
-            // 비정형화된 형식의 JSON을 c# Dietionary로 변환
+            // 비정형화된 형식의 JSON을 c# Dietionary로 변환, 서로다른 크기의 배열을 갖는 경우
             string jsonInput = "{ \"key1\": [\"value1\", \"value2\", \"value3\"], \"key2\": [\"value1\",], \"someOtherKey\": [\"value2\", \"value3\", \"value4\"] }";
             Dictionary<string, List<string>> data = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(jsonInput);
             foreach (var kvp in data)
