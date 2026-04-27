@@ -12,6 +12,7 @@ using System.IO;
 
 namespace ConsoleApp2
 {
+    // ##### 1
     public class QueueInfo // json deserialize를 위한 struct class
     {
         public int inputQueueCount { get; set; }//가변 크기// Add / Remove 가능 // 사용권장
@@ -22,6 +23,7 @@ namespace ConsoleApp2
 
     internal class Program
     {
+        // ##### 2
         public static QueueInfo GetQueueInfo() // detailed.. // http GET 후 response 체크 하고, 200일 경우 가져온 result를 json parsing return.
         {
              string url = "http://127.0.0.1:8080/qInfo";
@@ -49,6 +51,7 @@ namespace ConsoleApp2
              }
              return null;        
          }
+        // ##### 2'
         public static QueueInfo_Easy GetQueueInfo() // easy  // api 에서 제공하는 result check 사용 // 코드 짧음.
         {
             string url = "http://127.0.0.1:8080/qInfo";
@@ -85,7 +88,7 @@ namespace ConsoleApp2
             var res = client.PostAsync("http://127.0.0.1:8080/postTest", content).Result;
             */
 
-            
+            // ##### 3
             QueueInfo queueInfo = GetQueueInfo(); // Http client GET -> response check -> json to struct deserialize
 
 
