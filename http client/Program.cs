@@ -12,8 +12,62 @@ using System.IO;
 
 namespace ConsoleApp2
 {
+    public class QueueInfo // json deserialize를 위한 struct class
+    {
+        public int inputQueueCount { get; set; }//가변 크기// Add / Remove 가능 // 사용권장
+        //public string[] inputQueueURIs;//고정 크기 생성 시 크기 정해짐 추가/삭제 불편
+        public List<string> inputQueueURIs { get; set; }
+        public string outputQueueURI { get; set; }
+    }
+
     internal class Program
     {
+        public static QueueInfo GetQueueInfo() // detailed.. // http GET 후 response 체크 하고, 200일 경우 가져온 result를 json parsing return.
+        {
+             string url = "http://127.0.0.1:8080/qInfo";
+             try
+             {
+                 using (HttpClient client = new HttpClient())
+                 {
+                     var res = client.GetAsync(url).Result;
+                     if (!res.IsSuccessStatusCode)
+                     {
+                         Console.WriteLine($"HTTP Error: {res.StatusCode}");
+                         return null;
+                     }
+                     string json = res.Content.ReadAsStringAsync().Result;
+                     return JsonConvert.DeserializeObject<QueueInfo>(json);
+                 }
+             }
+             catch (HttpRequestException e)
+             {
+                 Console.WriteLine("Request error: " + e.Message);
+             }
+             catch (Exception e)
+             {
+                 Console.WriteLine("Unexpected error: " + e.Message);
+             }
+             return null;        
+         }
+        public static QueueInfo_Easy GetQueueInfo() // easy  // api 에서 제공하는 result check 사용 // 코드 짧음.
+        {
+            string url = "http://127.0.0.1:8080/qInfo";
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    string json = client.GetStringAsync(url).Result;            
+                    QueueInfo queueInfo = JsonConvert.DeserializeObject<QueueInfo>(json);            
+                    return queueInfo;
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Error: " + e.Message);
+                return null;
+            }    
+         }
+
         static void Main(string[] args) // http
         {
 
@@ -30,6 +84,12 @@ namespace ConsoleApp2
             var content = new StringContent(json_obj.ToString(), Encoding.UTF8, "application/json");
             var res = client.PostAsync("http://127.0.0.1:8080/postTest", content).Result;
             */
+
+            
+            QueueInfo queueInfo = GetQueueInfo(); // Http client GET -> response check -> json to struct deserialize
+
+
+            
 
             // 폴더내 파일 목록을 JSON으로 변환하여 서버로 POST 하는 샘플
             string folder_target = "./folder";
