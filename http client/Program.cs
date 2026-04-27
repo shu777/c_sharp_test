@@ -13,7 +13,7 @@ using System.IO;
 namespace ConsoleApp2
 {
     // ##### 1
-    public class QueueInfo // json deserialize를 위한 struct class
+    public class QueueInfo // json deserialize를 위한 구조체 class
     {
         public int inputQueueCount { get; set; }//가변 크기// Add / Remove 가능 // 사용권장
         //public string[] inputQueueURIs;//고정 크기 생성 시 크기 정해짐 추가/삭제 불편
@@ -21,7 +21,7 @@ namespace ConsoleApp2
         public string outputQueueURI { get; set; }
     }
     // @@@@@ 1
-    public class InputData
+    public class InputData // json deserialize를 위한 구조체 class
     {
         public long timestamp { get; set; }
         public string value { get; set; }
@@ -31,7 +31,7 @@ namespace ConsoleApp2
     
     internal class Program
     {
-        // ##### 2
+        // ##### 2 HTTP GET 1
         public static QueueInfo GetQueueInfo() // detailed.. // http GET 후 response 체크 하고, 200일 경우 가져온 result를 json parsing return.
         {
              string url = "http://127.0.0.1:8080/qInfo";
@@ -59,7 +59,7 @@ namespace ConsoleApp2
              }
              return null;        
          }
-        // ##### 2'
+        // ##### 2' HPPT GET 1-1
         public static QueueInfo_Easy GetQueueInfo() // easy  // api 에서 제공하는 result check 사용 // 코드 짧음.
         {
             string url = "http://127.0.0.1:8080/qInfo";
@@ -78,7 +78,7 @@ namespace ConsoleApp2
                 return null;
             }    
          }
-        // @@@@@ 2
+        // @@@@@ 2 // HTTP GET 2
          public static InputData RequestQueueInfo_Easy(string target, string queueNumber) // easy  // api 에서 제공하는 result check 사용 // 코드 짧음.
          {
             string url = target;
@@ -121,7 +121,7 @@ namespace ConsoleApp2
             string url = targetUri;
             try
             {
-                using (HttpClient client = new HttpClient())
+                using (HttpClient client = new HttpClient()) // HTTP POST 1
                 {
                     // JSON 객체 생성
                     var bodyObj = new
