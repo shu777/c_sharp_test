@@ -30,7 +30,98 @@ namespace socket_server
 
     internal class Program
     {
+        ///////////////// 동시처리 개선 버전 ///////
+        static async Task HandleRequestAsync(HttpListenerContext context, RoutingRule rules)
+        {
+            try
+            {
+                string path = context.Request.Url.AbsolutePath;
+        
+                Route matchedRoute = rules.routes
+                    .Where(r => path.StartsWith(r.pathPrefix))
+                    .OrderByDescending(r => r.pathPrefix.Length)
+                    .FirstOrDefault();
+        
+                if (matchedRoute == null)
+                {
+                    context.Response.StatusCode = 404;
+                    context.Response.Close();
+                    return;
+                }
+        
+                await ForwardAsync(context, matchedRoute.url);
+            }
+            catch (Exception e)
+            {
+                var response = context.Response;
+        
+                byte[] errorBytes = Encoding.UTF8.GetBytes("{\"result\":\"" + e.Message + "\"}");
+        
+                response.StatusCode = 500;
+                response.ContentType = "application/json";
+                response.ContentLength64 = errorBytes.Length;
+                await response.OutputStream.WriteAsync(errorBytes, 0, errorBytes.Length);
+        
+                response.Close();
+            }
+        }
+        ////// 동시처리 개선버전 /////
+        static async Task ForwardAsync(HttpListenerContext context, string targetBaseUrl)
+        {
+            var request = context.Request;
+            var response = context.Response;
+        
+            string targetUrl = targetBaseUrl + request.Url.AbsolutePath + request.Url.Query;
+        
+            using (HttpClient client = new HttpClient())
+            {
+                var forwardRequest =
+                    new HttpRequestMessage(new HttpMethod(request.HttpMethod), targetUrl);
+        
+                if (request.HttpMethod == "POST")
+                {
+                    string body = "";
+        
+                    if (request.ContentLength64 > 0)
+                    {
+                        using (var reader = new StreamReader(request.InputStream, request.ContentEncoding))
+                        {
+                            body = await reader.ReadToEndAsync();
+                        }
+                    }
+        
+                    string mediaType = "application/json";
+        
+                    if (!string.IsNullOrEmpty(request.ContentType))
+                        mediaType = request.ContentType.Split(';')[0].Trim();
+        
+                    forwardRequest.Content =
+                        new StringContent(body, Encoding.UTF8, mediaType);
+                }
+        
+                var targetResponse = await client.SendAsync(forwardRequest);
+        
+                response.StatusCode = (int)targetResponse.StatusCode;
+        
+                if (targetResponse.Content != null)
+                {
+                    string contentType = targetResponse.Content.Headers.ContentType?.ToString();
+        
+                    if (!string.IsNullOrEmpty(contentType))
+                        response.ContentType = contentType;
+        
+                    byte[] bodyBytes = await targetResponse.Content.ReadAsByteArrayAsync();
+        
+                    response.ContentLength64 = bodyBytes.Length;
+                    await response.OutputStream.WriteAsync(bodyBytes, 0, bodyBytes.Length);
+                }
+        
+                response.Close();
+            }
+        }  
+        ////////////////////////////
 
+        /// simple
         static void Forward(HttpListenerContext context, string targetBaseUrl)// 실제 요청을 다른 서버로 전달 (프록시 핵심)
         {
             HttpListenerRequest request = context.Request;// 원본 요청
@@ -114,10 +205,9 @@ namespace socket_server
             finally // response.Close는 finally로
             {
                 response.Close();
-            }
-        
-        
+            }      
         }
+        // simple
         static void HandleRequest(HttpListenerContext context, RoutingRule rules)
         {
             // 요청된 URL의 Path (/front/abc)
@@ -139,7 +229,36 @@ namespace socket_server
             Forward(context, matchedRoute.url);// 매칭된 route의 url로 요청 전달
         }
 
-
+        static void sample(){
+            // 더 좋은 구조 (진짜 서버 스타일)
+            while (true)
+            {
+                var context = await listener.GetContextAsync();
+                _ = HandleRequestAsync(context);
+            }
+        }
+        static void sample2(){
+            // 더 좋은 구조 (진짜 서버 스타일)
+            SemaphoreSlim semaphore = new SemaphoreSlim(50); // 최대 50개            
+            while (true)
+            {
+                var context = listener.GetContext();
+            
+                await semaphore.WaitAsync();
+            
+                _ = Task.Run(async () =>
+                {
+                    try
+                    {
+                        await HandleRequestAsync(context);
+                    }
+                    finally
+                    {
+                        semaphore.Release();
+                    }
+                });
+            }
+        }
         
         static void Main(string[] args) // http
         {
@@ -166,8 +285,19 @@ namespace socket_server
             while (true)// 무한 루프로 요청 계속 받기
             {
                 HttpListenerContext context = listener.GetContext(); // 클라이언트 요청 하나 받음 (blocking)
-                //HandleRequest(context, rules); // 요청 처리
-                Task.Run(() => HandleRequest(context, rules));// 비동기 요청처리
+                //1. //HandleRequest(context, rules); // 요청 처리
+                //2. //Task.Run(() => HandleRequest(context, rules));// 비동기 요청처리
+                Task.Run(() =>
+                { // 비동기. 예외처리 보강
+                    try
+                    {
+                        HandleRequest(context, rules);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e.Message);
+                    }
+                });
             }
 
             ///////////////////////////////////////////////////////////////////////
